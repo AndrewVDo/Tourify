@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "A realtime bike race spectator website",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
