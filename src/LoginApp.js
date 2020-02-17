@@ -6,19 +6,15 @@ const LoginApp = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
+  //activePage
+  //  0: login page
+  //  1: register page
+  const [activePage, setActivePage] = useState(0)
 
-  const typeUsername = (event) => {
-    console.log(1)
-    setUsername(event.target.value)
-  }
+  const typeUsername = event => setUsername(event.target.value)
+  const typePassword = event => setPassword(event.target.value)
 
-  const typePassword = (event) => {
-    console.log(2)
-    setPassword(event.target.value)
-  }
-
-  const handleSignIn = (event) => {
-    console.log(3)
+  const clickLogin = (event) => {
     event.preventDefault()  
 
     fetch('/login', {
@@ -34,21 +30,18 @@ const LoginApp = () => {
     })
     .then(resp => {
       resp.json().then(resp => {
-        if(resp.result === 'failure') {
-          setLoginError('Invalid Username/Password')
+        if(!resp.result) {
+          setLoginError(resp.result.error)
+        } else {
+          //login success
         }
       })
     })
-    .catch(err => {
-      console.log(err)
-    })
-
-
+    .catch(err => console.log(err))
   }
 
-  const handleRegister = (event) => {
-    console.log(4)
-
+  const switchRegister = (event) => {
+    setActivePage(1)
   }
 
   return (
@@ -69,8 +62,8 @@ const LoginApp = () => {
             onChange={typePassword}
           />
           <p>{loginError}</p>
-          <button type='submit' onClick={handleSignIn}>Sign In</button><br/>
-          <button type='button' onClick={handleRegister}>Register</button>
+          <button type='submit' onClick={clickLogin}>Sign In</button><br/>
+          <button type='button' onClick={switchRegister}>Register</button>
         </form>
       </header>
     </div>
