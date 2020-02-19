@@ -36,26 +36,32 @@ app.post('/login', async (req, resp) => {
 })
 
 app.post('/register', async (req, resp) => {
+  console.log(req.body)
   let answer
 
   if(await findUsername(req.body.username, client) !== 0) {
     answer = {
       status: false,
-      error: 'User already exists'
+      message: 'User already exists'
     }
   } else {
     if(req.body.password !== req.body.confirmPassword) {
       answer = {
         status: false,
-        error: 'Passwords do not match'
+        message: 'Passwords do not match'
       }
     } else {
       answer = {
         status: true
       }
+
+      await client
+        .query(`insert into users(username, password) values('${req.body.username}', '${await hashPassword(req.body.password)}')`)
+
     }
   }
 
+  console.log(answer)
   resp.send(JSON.stringify(answer))
 })
 
@@ -69,8 +75,7 @@ var verifyLogin = async (username, password, db) => {
   await db
     .query(`select * from users where users.username = '${username}'`)
     .then(async (res) => {
-        console.log(res.rows[0].username)
-        loginVerified = (res.rows[0].username === username && res.rows[0].password === await hashPassword(password)) ? true : false
+      loginVerified = (res.rows.length === 1 && res.rows[0].username === username && await bcrypt.compare(password, res.rows[0].password)) ? true : false
     })
     .catch(err => {
       console.log(err)
@@ -107,7 +112,7 @@ var findUsername = async (username, db) => {
 
   await db
     .query(`select * from users where users.username = '${username}'`)
-    .then(res => found = (res.rows[0].username === username) ? 1 : 0)
+    .then(res => found = (res.rows.length === 1 && res.rows[0].username === username) ? 1 : 0)
     .catch(err => console.log(err))
 
   return found
