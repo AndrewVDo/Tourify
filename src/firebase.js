@@ -2,15 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 
 //populate below from: https://console.firebase.google.com/
-var firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  databaseURL: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
-};
+//populate firbase api
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

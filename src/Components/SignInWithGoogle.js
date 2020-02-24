@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { signInWithGoogle } from "../firebase";
+import React from "react";
+import { signInWithGoogle } from "../firebase.js";
 import GoogleButton from "react-google-button";
 
-class SignInWithGoogle extends Component {
-  render() {
-    return <GoogleButton onClick={signInWithGoogle} />;
-  }
+const SignInWithGoogle = () => {
+  return(
+    <GoogleButton onClick={signInWithGoogle} />
+  )
 }
 
 export default SignInWithGoogle;
