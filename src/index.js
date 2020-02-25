@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './StyleSheets/index.css';
 import LoginPage from './Components/LoginPage/LoginPage.js';
 import * as serviceWorker from './serviceWorker';
 

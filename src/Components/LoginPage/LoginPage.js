@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import '../../LoginApp.css'
+import '../../StyleSheets/LoginApp.css'
 import LoginComponent from './LoginComponent.js'
 import RegisterComponent from './RegisterComponent.js'
 
