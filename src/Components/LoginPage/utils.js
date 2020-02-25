@@ -60,10 +60,3 @@ const clickLogin = (event) => {
     })
     .catch(err => console.log(err))
   }
-
-
-  const switchPage = (pageNum) => {
-    console.log(event)
-    document.getElementById('formId').reset()
-    setActivePage(activePage ? 0: 1)
-  }

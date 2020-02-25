@@ -1,11 +1,18 @@
-import React from "react";
-import { signInWithGoogle } from "../firebase.js";
+import React, {useState, useEffect} from "react";
+import { signInWithGoogle } from "./firebase.js";
 import GoogleButton from "react-google-button";
 
-const SignInWithGoogle = () => {
+const SignInWithGoogleButton = () => {
+  useEffect(() => {
+    let buttonList = document.getElementsByClassName('googleSignInButton')
+    for(let button of buttonList) {
+      button.addEventListener('click', () => signInWithGoogle())
+    }
+  })
+
   return(
-    <GoogleButton onClick={signInWithGoogle} />
+    <GoogleButton className='googleSignInButton'/>
   )
 }
 
-export default SignInWithGoogle;
+export default SignInWithGoogleButton;

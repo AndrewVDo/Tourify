@@ -11,7 +11,6 @@ const LoginComponent = (props) => {
             <h1 className='loginTitle'>Tourify</h1>
             <form className='loginForm' id='formId'>
                 <SignInWithGoogle />
-                <button type='submit'>Sign In</button><br/>
                 <button type='button'>Register</button>
             </form>
         </div>
