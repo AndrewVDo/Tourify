@@ -1,4 +1,4 @@
-const clickLogin = (event) => {
+/*const clickLogin = (event) => {
     event.preventDefault()  
 
     fetch('/login', {
@@ -59,4 +59,4 @@ const clickLogin = (event) => {
       }
     })
     .catch(err => console.log(err))
-  }
+  }*/

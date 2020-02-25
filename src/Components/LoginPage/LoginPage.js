@@ -4,15 +4,25 @@ import LoginComponent from './LoginComponent.js'
 import RegisterComponent from './RegisterComponent.js'
 
 const LoginPage = () => {
-    const [displayRegister, setDisplayRegister] = useState(false)
+    const [registerPage, setRegisterPage] = useState(false)
+    const [loginInfo, setLoginInfo] = useState({})
     console.log('hello')
 
-    if(displayRegister){
+    if(registerPage){
         console.log('register page');
-        return(<RegisterComponent />)
+        return(
+            <RegisterComponent 
+                loginInfo = {loginInfo}
+            />
+        )
     } else {
         console.log('login page')
-        return(<LoginComponent />)
+        return(
+            <LoginComponent 
+                setRegisterPage = {setRegisterPage}
+                setLoginInfo = {setLoginInfo}
+            />
+        )
     }
 
 }

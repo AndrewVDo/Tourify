@@ -6,7 +6,9 @@ const SignInWithGoogleButton = () => {
   useEffect(() => {
     let buttonList = document.getElementsByClassName('googleSignInButton')
     for(let button of buttonList) {
-      button.addEventListener('click', () => signInWithGoogle())
+      button.addEventListener('click', async () => {
+        console.log(await signInWithGoogle())
+      })
     }
   })
 
