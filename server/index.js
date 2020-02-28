@@ -4,7 +4,8 @@ const pino = require('express-pino-logger')();
 const bcrypt = require('bcrypt')
 const { Client } = require('pg')
 
-const client = new Client('postgres://localhost')
+//const client = new Client('postgres://localhost')
+const client = new Client('postgres://at:301248624@localhost/postgres')
 client.connect()
 
 const app = express()
@@ -33,7 +34,23 @@ app.post('/login', async (req, resp) => {
   }
 
   resp.send(JSON.stringify(answer))
-})
+});
+
+//placeholder code. adjust where to recieve request username
+app.get('/getProfile', async (req, resp) => {
+  let answer
+  await client
+      .query(`select * from users where users.username ='asdf';`)
+      .then(async (res)=> {
+          //console.log(res);
+          answer = res.rows[0];
+      })
+      .catch()
+
+  console.log(answer);
+  resp.setHeader('Content-Type', 'application/json');
+  resp.send(JSON.stringify(answer));
+});
 
 app.post('/register', async (req, resp) => {
   console.log(req.body)
