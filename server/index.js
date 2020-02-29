@@ -1,21 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-const bcrypt = require('bcrypt')
 const { Client } = require('pg')
 
-console.log(process.env.PG_URL)
-
-const client = new Client({/*
+/*const client = new Client('postgres://localhost'/*{
   connectionString: process.env.PG_URL,
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT,
-  ssl: true*/
-})
-client.connect()
+  ssl: true
+}*///)
+//client.connect()
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -28,14 +25,14 @@ app.get('/api/greeting', (req, res) => {
   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
 });
 
-app.get('/test', async (req, res) => {
+/*app.get('/test', async (req, res) => {
   console.log(client)
   let x
   await client.query('select * from users').then(res=> x=res.rows[0]).catch(err => console.log(err))
   res.send(JSON.stringify({x: x}))
 })
 
-app.post('/login', async (req, resp) => {
+/*app.post('/login', async (req, resp) => {
   let answer
 
   if(await verifyLogin(req.body.username, req.body.password, client)) {
@@ -81,12 +78,12 @@ app.post('/register', async (req, resp) => {
   console.log(answer)
   resp.send(JSON.stringify(answer))
 })
-
+*/
 app.listen(3001, () =>
   console.log('Express server is running on localhost:3001')
 );
 
-var verifyLogin = async (username, password, db) => {
+/*var verifyLogin = async (username, password, db) => {
   let loginVerified = false
 
   await db
@@ -133,4 +130,4 @@ var findUsername = async (username, db) => {
     .catch(err => console.log(err))
 
   return found
-}
+}*/

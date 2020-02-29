@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import {getNames, getCode} from 'country-list'
 import {Input, InputLabel, Button, Select, MenuItem, TextField} from '@material-ui/core'
+import {clickRegister} from './utils.js'
 
 const nationalityList = getNames()
 const userTypeList = ['Racer', 'Event Organizer']
@@ -18,16 +19,14 @@ const RegisterComponent = (props) => {
     const [userType, setUserType] = useState(userTypeList[0])
 
     useEffect(() => {
-        document.getElementById('nationality').addEventListener('change', event => {
-            setNationality(event.target.value)
-        })
+
     })
     
     return (
         <div className='loginApp'>
             <h1 className='loginTitle'>Tourify</h1>
 
-            <table id='registration-table'>
+            <table id='registration-table'><tbody>
                 <tr>
                     <td>
                         <img 
@@ -54,7 +53,6 @@ const RegisterComponent = (props) => {
                     <td>
                         <TextField 
                             id='alias'
-                            labelId='alias-label'
                             value={alias}
                             onChange={event => setAlias(event.target.value)}
                             InputLabelProps={{shrink: true}}
@@ -68,7 +66,6 @@ const RegisterComponent = (props) => {
                     <td>
                         <TextField
                             id='weight'
-                            labelId='weight-label'
                             onChange={event => setWeight(event.target.value)}
                             InputLabelProps={{shrink: true}}
                         ></TextField>
@@ -81,7 +78,6 @@ const RegisterComponent = (props) => {
                     <td>
                         <TextField
                             id="birthday"
-                            labelId='birthday-label'
                             type="date"
                             onChange={event => setBirthday(event.target.value)}
                             InputLabelProps={{shrink: true}}
@@ -95,7 +91,7 @@ const RegisterComponent = (props) => {
                     <td>
                         <Select 
                             id='nationality'
-                            labelId='nationality-label'
+                            defaultValue={nationalityList[0]}
                             onChange={event => setNationality(event.target.value)}
                         >
                             {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
@@ -109,7 +105,7 @@ const RegisterComponent = (props) => {
                     <td>
                         <Select 
                             id='userType'
-                            labelId='userType-label'
+                            defaultValue={userTypeList[0]}
                             onChange={event => setUserType(event.target.value)}
                         >
                             {userTypeList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
@@ -118,12 +114,23 @@ const RegisterComponent = (props) => {
                 </tr>
                 <tr>
                     <td colSpan='2'>
-                        <Button>
+                        <Button
+                            onClick={event => {
+                                event.preventDefault()
+                                clickRegister(
+                                    props.loginInfo.user.uid,
+                                    alias,
+                                    weight,
+                                    birthday,
+                                    nationality,
+                                    userType
+                            )}}
+                        >
                             Register
                         </Button>
                     </td>
                 </tr>
-            </table>
+            </tbody></table>
         </div>
       )
 }

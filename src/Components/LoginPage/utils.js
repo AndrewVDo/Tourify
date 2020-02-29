@@ -1,62 +1,36 @@
 /*const clickLogin = (event) => {
-    event.preventDefault()  
+event.preventDefault()  
 
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
-    })
-    .then(resp => {
-      console.log(resp)
-      resp.json().then(resp => {
-        console.log(resp)
-        if(!resp.status) {
-          setLoginError(resp.message)
-        } else {
-          //login success
-        }
-      })
-    })
-    .catch(err => console.log(err))
-  }
-
-  const clickRegister = (event) => {
-    event.preventDefault()
-
-    if(!checkPasswordMatch()) {
-      setLoginError('Passwords do not match')
-      return
+fetch('/login', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: username,
+    password: password
+  })
+})
+.then(resp => {
+  console.log(resp)
+  resp.json().then(resp => {
+    console.log(resp)
+    if(!resp.status) {
+      setLoginError(resp.message)
+    } else {
+      //login success
     }
-    if(!username || !email || !password || !confirmPassword) {
-      setLoginError('Please fill in form completely')
-      return
-    }
+  })
+})
+.catch(err => console.log(err))
+}*/
 
-    fetch('/register', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword
-      })
-    })
-    .then(resp => {
-      if(!resp.status) {
-        setLoginError(resp.message)
-      } else {
-        //register success
-      }
-    })
-    .catch(err => console.log(err))
-  }*/
+export const clickRegister =    (uid,
+                                alias,
+                                weight,
+                                birthday,
+                                nationality,
+                                userType) => {  
+    console.log(uid)
+}
