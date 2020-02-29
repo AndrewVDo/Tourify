@@ -1,5 +1,8 @@
 import React,{useState, useEffect} from "react";
-import Button from "@material-ui/core/Button";
+import {Card, Button, Avatar, Container} from "@material-ui/core";
+import classes from "@material-ui/core/Avatar"
+import "/home/at/Documents/470/proj/tourify-project/src/index.css"
+
 
 const Profile = (props) => {
     const [profile, setProfile] = useState({
@@ -26,11 +29,23 @@ const Profile = (props) => {
             })
     }, []);
     return (
-        <div>
-            <h1>username : {profile.name}</h1>
-            <h1>password : {profile.password}</h1>
-            <Button variant="contained">Update</Button>
-        </div>)
+        <Container className="container">
+            <div className = 'profileHeader'>
+                <Avatar id="avatar">A</Avatar>
+                <h1 id="name">{profile.name}</h1>
+            </div>
+            <div><hr/></div>
+            <div className='profileBody'>
+                <p>Date of Birth: {profile.password}</p>
+                <p>email: {profile.name}</p>
+                <p>Height: 9001 lbs</p>
+            </div>
+            <Button variant="contained" onClick={updateProfile}>Edit</Button>
+        </Container>)
+}
+
+function updateProfile(){
+    return alert("hello");
 }
 
 export default Profile;

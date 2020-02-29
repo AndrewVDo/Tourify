@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.container {
+  margin: 20px;
+  padding: 10px;
+  align-content: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+}
+#profileHeader{
+  order: 1;
+  top: 0;
+  position: absolute;
+}
+#profileBody{
+  order: 2;
+}
+#avatar{
+  background-color: aquamarine;
+  float: left;
+  height: 90px;
+  width: 90px;
+}
+#name{
+  margin-left: 100px;
+}
