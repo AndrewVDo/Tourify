@@ -37,17 +37,18 @@ app.post('/login', async (req, resp) => {
 });
 
 //placeholder code. adjust where to recieve request username
+
 app.get('/getProfile', async (req, resp) => {
   let answer
+  let desired_username = req.query.username;
   await client
-      .query(`select * from users where users.username ='asdf';`)
+      .query(`select * from users where users.username ='${desired_username}';`)
       .then(async (res)=> {
-          //console.log(res);
           answer = res.rows[0];
       })
       .catch()
 
-  console.log(answer);
+  //console.log(answer);
   resp.setHeader('Content-Type', 'application/json');
   resp.send(JSON.stringify(answer));
 });
