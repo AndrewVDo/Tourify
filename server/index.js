@@ -4,7 +4,17 @@ const pino = require('express-pino-logger')();
 const bcrypt = require('bcrypt')
 const { Client } = require('pg')
 
-const client = new Client('postgres://localhost')
+console.log(process.env.PG_URL)
+
+const client = new Client({/*
+  connectionString: process.env.PG_URL,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+  ssl: true*/
+})
 client.connect()
 
 const app = express()
@@ -17,6 +27,13 @@ app.get('/api/greeting', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
 });
+
+app.get('/test', async (req, res) => {
+  console.log(client)
+  let x
+  await client.query('select * from users').then(res=> x=res.rows[0]).catch(err => console.log(err))
+  res.send(JSON.stringify({x: x}))
+})
 
 app.post('/login', async (req, resp) => {
   let answer

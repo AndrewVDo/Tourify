@@ -5,7 +5,7 @@ import GoogleButton from "react-google-button";
 
 const LoginComponent = (props) => {
     useEffect(() => {
-        document.getElementById('GoogleSignUpButton').getElementsByTagName('span')[0].innerHTML = 'Sign up with Google'
+        document.getElementById('GoogleSignUpButton').getElementsByTagName('span')[0].innerHTML = 'Register with Google'
 
         document.getElementById('GoogleSignInButton')
             .addEventListener('click', async () => {
