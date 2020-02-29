@@ -7,7 +7,7 @@ import CreateEvent from "./Components/CreateEvent.js";
 
 
 ReactDOM.render(<CreateEvent info="hello"/>, document.getElementById('root'));
-ReactDOM.render(<LoginPage/>, document.getElementById('root'));
+//ReactDOM.render(<LoginPage/>, document.getElementById('root'));
 
 
 // If you want your app to work offline and load faster, you can change
