@@ -4,9 +4,10 @@ import './StyleSheets/index.css';
 import LoginPage from './Components/LoginPage/LoginPage.js';
 import * as serviceWorker from './serviceWorker';
 import CreateEvent from "./Components/CreateEvent.js";
+import {BrowserRouter} from 'react-router-dom'
 
 
-ReactDOM.render(<CreateEvent info="hello"/>, document.getElementById('root'));
+ReactDOM.render(<BrowserRouter><CreateEvent/></BrowserRouter>, document.getElementById('root'));
 //ReactDOM.render(<LoginPage/>, document.getElementById('root'));
 
 
