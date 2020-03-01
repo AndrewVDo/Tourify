@@ -18,12 +18,12 @@ class CreateEvent extends Component {
         var endDate = document.getElementById('end_date').value;
         var endTime = document.getElementById('end_time').value;
 
-        var eventsRef = firebase.database().ref('events');
+        var eventsRef = firebase.firestore().collection("events").doc();
 
         eventsRef.set({
             event_name: eventName,
-            start_time: startTime,
-            end_time: endTime
+            start_time: firebase.firestore.Timestamp.fromDate(new Date(startDate)),
+            end_time: firebase.firestore.Timestamp.fromDate(new Date(endDate))
         })
 
         this.setState({
