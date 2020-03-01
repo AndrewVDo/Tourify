@@ -12,18 +12,31 @@ class CreateEvent extends Component {
     }
 
     setRedirect = () => {
+        // Grab all form data
         var eventName = document.getElementById('event_name').value;
         var startDate = document.getElementById('start_date').value;
         var startTime = document.getElementById('start_time').value;
         var endDate = document.getElementById('end_date').value;
         var endTime = document.getElementById('end_time').value;
 
+        //split all time and date variables for timestamp creation
+        var startTime_parts = startTime.split(':')
+        var endTime_parts = endTime.split(':')
+        var startDate_parts = startDate.split('-')
+        var endDate_parts = endDate.split('-')
+
+        //firebase events collection
         var eventsRef = firebase.firestore().collection("events").doc();
 
+        // create timestamps
+        var startDate = new Date(startDate_parts[0], parseInt(startDate_parts[1], 10) - 1, startDate_parts[2], startTime_parts[0], startTime_parts[1])
+        var endDate = new Date(endDate_parts[0], parseInt(endDate_parts[1], 10) - 1, endDate_parts[2], endTime_parts[0], endTime_parts[1])
+
+        //input data into firebase
         eventsRef.set({
-            event_name: eventName,
-            start_time: firebase.firestore.Timestamp.fromDate(new Date(startDate)),
-            end_time: firebase.firestore.Timestamp.fromDate(new Date(endDate))
+           event_name: eventName,
+           start_time: startDate,
+            end_time: endDate
         })
 
         this.setState({
