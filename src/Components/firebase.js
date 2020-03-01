@@ -1,4 +1,4 @@
-import firebase from "firebase/app";
+import firebase from "firebase";
 import "firebase/auth";
 
 //populate below from: https://console.firebase.google.com/
