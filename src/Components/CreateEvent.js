@@ -30,8 +30,6 @@ class CreateEvent extends Component {
     const {eventName, startDate, endDate} = this.state;
     const eventsRef = firestore.collection("events").doc();
 
-    console.log(startDate);
-
     eventsRef.set({
       event_name: eventName,
       start_time: firebase.firestore.Timestamp.fromDate(new Date(startDate)),
