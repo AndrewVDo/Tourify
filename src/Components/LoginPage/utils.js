@@ -5,13 +5,14 @@ export const clickRegister =(alias,
                             uid,
                             userType,
                             weight) => {  
+    console.log('hi')
     fetch(`/register`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body : {
+        body : JSON.stringify({
             alias: alias,
             dateOfBirth: dateOfBirth,
             nationality: nationality,
@@ -19,7 +20,7 @@ export const clickRegister =(alias,
             uid: uid,
             userType: userType,
             weight: weight
-        }
+        })
     })
         .then(resp => resp.json())
         .then(response => {

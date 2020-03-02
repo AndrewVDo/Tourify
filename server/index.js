@@ -17,16 +17,18 @@ app.get('/api/greeting', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    let newUserRef = fb.collection('users').doc(req.query.uid)
+    console.log(req.body)
+    let newUserRef = fb.collection('users').doc(`user-${req.body.uid}`)
     await newUserRef.set({
-        alias: req.query.alias,
-        dateOfBirth: req.query.birthday,
-        nationality: req.query.nationality,
-        profilePicUrl: req.query.profilePicUrl,
-        uid: req.query.uid,
-        userType: req.query.userType,
-        weight: req.query.weight
+        alias: req.body.alias,
+        //dateOfBirth: req.body.birthday, <- type needs to be enforced from frontend
+        nationality: req.body.nationality,
+        profilePicUrl: req.body.profilePicUrl,
+        uid: req.body.uid,
+        userType: req.body.userType,
+        weight: req.body.weight
     })
+    res.send('success')
 })
 
 app.post('/profileInfo', async (req, res) => {
