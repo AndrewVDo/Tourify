@@ -9,9 +9,6 @@ const userTypeList = ['Racer', 'Event Organizer']
 
 const RegisterComponent = (props) => {
     console.log(props.loginInfo)
-    //const [nationalityList, setNationalityList] = useState(getNames())
-    //const [userTypeList, setUserTypeList] = useState(['Racer', 'Event Organizer'])
-
     const [alias, setAlias] = useState(props.loginInfo.additionalUserInfo.profile.name)
     const [weight, setWeight] = useState()
     const [birthday, setBirthday] = useState(new Date())
@@ -118,13 +115,15 @@ const RegisterComponent = (props) => {
                             onClick={event => {
                                 event.preventDefault()
                                 clickRegister(
-                                    props.loginInfo.user.uid,
                                     alias,
-                                    weight,
                                     birthday,
                                     nationality,
-                                    userType
-                            )}}
+                                    props.loginInfo.additionalUserInfo.profile.picture,
+                                    props.loginInfo.user.uid,
+                                    userType,
+                                    weight
+                                )
+                            }}
                         >
                             Register
                         </Button>

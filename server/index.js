@@ -16,6 +16,19 @@ app.get('/api/greeting', (req, res) => {
     res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
 });
 
+app.post('/register', async (req, res) => {
+    let newUserRef = fb.collection('users').doc(req.query.uid)
+    await newUserRef.set({
+        alias: req.query.alias,
+        dateOfBirth: req.query.birthday,
+        nationality: req.query.nationality,
+        profilePicUrl: req.query.profilePicUrl,
+        uid: req.query.uid,
+        userType: req.query.userType,
+        weight: req.query.weight
+    })
+})
+
 app.post('/profileInfo', async (req, res) => {
     let usersRef = fb.collection("users").doc(req.query.uid)
     let resDocument
