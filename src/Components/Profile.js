@@ -13,9 +13,9 @@ const Profile = (props) => {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: {
+        body: JSON.stringify({
             uid: props.uid
-        }
+        })
     })
         .then(resp => resp.json())
         .then(response => {

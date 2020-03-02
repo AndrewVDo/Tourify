@@ -37,7 +37,7 @@ const UpdateProfile = () => {
                 <TextField
                     required
                     label="Name"
-                    variant="outlined"
+                    variant="filled"
                     value={name}
                     onChange={e => setName(e.target.value)}
                 />
@@ -45,7 +45,7 @@ const UpdateProfile = () => {
                     required
                     label="Weight(kg)"
                     type="number"
-                    variant="outlined"
+                    variant="filled"
                     value={weight}
                     onChange={e => setWeight(e.target.value)}
                 />
@@ -53,14 +53,14 @@ const UpdateProfile = () => {
                     required
                     label="Age"
                     type="number"
-                    variant="outlined"
+                    variant="filled"
                     value={age}
                     onChange={e => setAge(e.target.value)}
                 />
                 <TextField
                     required
                     label="Nationality"
-                    variant="outlined"
+                    variant="filled"
                     value={nationality}
                     onChange={e => setNationality(e.target.value)}
                 />
