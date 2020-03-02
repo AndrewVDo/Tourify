@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import { Redirect } from 'react-router-dom'
-import firebase from './firebase'
+import {firestore} from './firebase'
 
 class CreateEvent extends Component {
     state = {
@@ -26,7 +26,7 @@ class CreateEvent extends Component {
         var endDate_parts = endDate.split('-')
 
         //firebase events collection
-        var eventsRef = firebase.firestore().collection("events").doc();
+        var eventsRef = firestore.collection("events").doc();
 
         // create timestamps
         var startDate = new Date(startDate_parts[0], parseInt(startDate_parts[1], 10) - 1, startDate_parts[2], startTime_parts[0], startTime_parts[1])
