@@ -53,9 +53,8 @@ class CreateEvent extends Component {
 
         return (
             <div class="CreateEvent">
-                <h1 class="title">Create Event</h1>
+                <h1 class="title">Create Your Event</h1>
                 <form id="event" onSubmit={this.setRedirect}>
-                    <br></br>
                     <TextField id="event_name" label="Event Name" variant="filled"/>
                     <br></br><br></br>
 
