@@ -11,7 +11,7 @@ const UpdateProfile = () => {
 
     const handleSubmit = (event) =>{
         event.preventDefault();
-        fetch("/profileInfo",{
+        fetch("/updateProfileInfo",{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
