@@ -1,122 +1,108 @@
-import React, {useState, useEffect,Component} from 'react'
-import '../StyleSheets/CreateEvent.css'
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import { Redirect } from 'react-router-dom'
-import {firestore} from '../firebase'
+import React, {Component} from "react";
+import "../StyleSheets/CreateEvent.css";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import {Redirect} from "react-router-dom";
+import firebase, {firestore} from "../firebase";
 
 class CreateEvent extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {redirect: false}
+    this.state = {
+      redirect: false,
+      eventName: "",
+      startDate: "2020-05-24T10:30",
+      endDate: "2020-05-24T17:30"
+    };
+  }
+
+  handleInputChange = event => {
+    const {target} = event;
+    const {name, value} = target;
+
+    this.setState({
+      [name]: value
+    });
+  };
+
+  handleSubmit = event => {
+    const {eventName, startDate, endDate} = this.state;
+    const eventsRef = firestore.collection("events").doc();
+
+    console.log(startDate);
+
+    eventsRef.set({
+      event_name: eventName,
+      start_time: firebase.firestore.Timestamp.fromDate(new Date(startDate)),
+      end_time: firebase.firestore.Timestamp.fromDate(new Date(endDate))
+    });
+
+    this.setState({
+      redirect: true
+    });
+
+    event.preventDefault();
+  };
+
+  render() {
+    if (this.state.redirect) {
+      return <Redirect to="/"/>;
     }
 
-    setRedirect = () => {
-        // Grab all form data
-        var eventName = document.getElementById('event_name').value;
-        var startDate = document.getElementById('start_date').value;
-        var startTime = document.getElementById('start_time').value;
-        var endDate = document.getElementById('end_date').value;
-        var endTime = document.getElementById('end_time').value;
+    const spacing = {
+      marginBottom: "30px",
+      display: "flex"
+    };
 
-        //split all time and date variables for timestamp creation
-        var startTime_parts = startTime.split(':')
-        var endTime_parts = endTime.split(':')
-        var startDate_parts = startDate.split('-')
-        var endDate_parts = endDate.split('-')
+    return (
+        <div className="CreateEvent">
+          <h1 className="title">Create Your Event</h1>
+          <form id="event" onSubmit={this.handleSubmit} noValidate>
+            <TextField
+                id="event_name"
+                name="eventName"
+                style={spacing}
+                label="Event Name"
+                variant="filled"
+                onChange={this.handleInputChange}
+            />
 
-        //firebase events collection
-        var eventsRef = firestore.collection("events").doc();
+            <TextField
+                id="start-date"
+                name="startDate"
+                label="Start Date"
+                type="datetime-local"
+                defaultValue={this.state.startDate}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                style={spacing}
+                variant="filled"
+                onChange={this.handleInputChange}
+            />
 
-        // create timestamps
-        var startDate = new Date(startDate_parts[0], parseInt(startDate_parts[1], 10) - 1, startDate_parts[2], startTime_parts[0], startTime_parts[1])
-        var endDate = new Date(endDate_parts[0], parseInt(endDate_parts[1], 10) - 1, endDate_parts[2], endTime_parts[0], endTime_parts[1])
+            <TextField
+                id="end-date"
+                name="endDate"
+                label="End Date"
+                type="datetime-local"
+                defaultValue={this.state.endDate}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                style={spacing}
+                variant="filled"
+                onChange={this.handleInputChange}
+            />
 
-        //input data into firebase
-        eventsRef.set({
-           event_name: eventName,
-           start_time: startDate,
-            end_time: endDate
-        })
-
-        this.setState({
-          redirect: true
-        })
-    }
-
-
-    render() {
-
-        if (this.state.redirect) {
-            return <Redirect to='/' />
-        }
-
-        const spacing = {
-            marginBottom: "30px"
-        }
-
-        return (
-            <div class="CreateEvent">
-                <h1 class="title">Create Your Event</h1>
-                <form id="event" onSubmit={this.setRedirect}>
-
-                    <TextField id="event_name" style={spacing} label="Event Name" variant="filled"/><br/>
-
-                    <TextField
-                        id="start_date"
-                        style={spacing}
-                        label="Start Date"
-                        type="date"
-                        defaultValue="2020-12-01"
-                        variant="filled"
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    />
-
-                    <TextField
-                        id="start_time"
-                        label="Start Time"
-                        type="time"
-                        defaultValue="07:30"
-                        variant="filled"
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    /><br/>       
-
-                    <TextField
-                        id="end_date"
-                        style={spacing}
-                        label="End Date"
-                        type="date"
-                        defaultValue="2020-12-01"
-                        variant="filled"
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    />
-
-                    <TextField
-                        id="end_time"
-                        label="End Time"
-                        type="time"
-                        defaultValue="07:30"
-                        variant="filled"
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                    /><br/>
-
-                    <Button type="submit" variant="contained" color="primary">
-                    Create Event
-                    </Button>
-                </form>
-            </div>
-        )
-    }
+            <Button type="submit" variant="contained" color="primary">
+              Create Event
+            </Button>
+          </form>
+        </div>
+    );
+  }
 }
 
 export default CreateEvent;
