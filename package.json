@@ -17,12 +17,12 @@
     "react-scripts": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "node-env-run server --exec nodemon | pino-colada",
-    "dev": "run-p server start"
+    "start": "HTTPS=true react-scripts start",
+    "dev": "HTTPS=true run-p server start"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -17,7 +17,6 @@ app.get('/api/greeting', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    console.log(req.body)
     let newUserRef = fb.collection('users').doc(`user-${req.body.uid}`)
     await newUserRef.set({
         alias: req.body.alias,
