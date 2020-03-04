@@ -1,16 +1,20 @@
 import React, {useState, useEffect} from 'react'
-//import SignInWithGoogle from '../SignInWithGoogle'
-import { signInWithGoogle } from "../firebase.js";
 import GoogleButton from "react-google-button";
+import { signInWithGoogle } from "../firebase.js";
 
 const LoginComponent = (props) => {
     useEffect(() => {
         document.getElementById('GoogleSignUpButton').getElementsByTagName('span')[0].innerHTML = 'Register with Google'
 
         document.getElementById('GoogleSignInButton')
-            .addEventListener('click', async () => {
-                console.log(await signInWithGoogle())
-                //send user to events page
+            .addEventListener('click', () => {
+                signInWithGoogle()
+                    .then(res => {
+                        //redirect to events page with sign in credentials
+                    })
+                    .catch(err => {
+                        //send incorrect login error
+                    })
             })
 
         document.getElementById('GoogleSignUpButton')
@@ -20,7 +24,9 @@ const LoginComponent = (props) => {
                         props.setLoginInfo(loginInfo)
                         props.setRegisterPage(true)
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => {
+                        //send incorrect register error
+                    })
             })
     })
 
