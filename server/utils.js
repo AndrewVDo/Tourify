@@ -17,9 +17,14 @@ const firebaseConnect = () => {
     //     })
 }
 
+const stampBirthday = birthday => {
+    const {firestore} = require('firebase-admin')
+    return firestore.Timestamp.fromDate(new Date(birthday))
+}
+
 const age = birthday => {
     birthday = new Date(birthday);
     return new Number((new Date().getTime() - birthday.getTime()) / 31536000000).toFixed(0);
 }
 
-module.exports = {firebaseConnect, age}
+module.exports = {firebaseConnect, age, stampBirthday}

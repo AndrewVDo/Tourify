@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-const {firebaseConnect, age} = require('./utils.js')
+const {firebaseConnect, age, stampBirthday} = require('./utils.js')
 
 const fb = firebaseConnect()
 
@@ -20,7 +20,8 @@ app.post('/register', async (req, res) => {
     let newUserRef = fb.collection('users').doc(`user-${req.body.uid}`)
     await newUserRef.set({
         alias: req.body.alias,
-        //dateOfBirth: req.body.birthday, <- type needs to be enforced from frontend
+        dateOfBirth: stampBirthday(req.body.dateOfBirth),
+        idToken: req.body.idToken,
         nationality: req.body.nationality,
         profilePicUrl: req.body.profilePicUrl,
         uid: req.body.uid,

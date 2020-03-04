@@ -1,7 +1,19 @@
 import React, {useState, useEffect} from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import {getNames, getCode} from 'country-list'
-import {Input, InputLabel, Button, Select, MenuItem, TextField} from '@material-ui/core'
+import {
+    InputLabel, 
+    Button,
+    Select, 
+    MenuItem, 
+    TextField
+} from '@material-ui/core'
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker
+} from '@material-ui/pickers'
 import {clickRegister} from './utils.js'
 
 const nationalityList = getNames()
@@ -73,12 +85,18 @@ const RegisterComponent = (props) => {
                         <InputLabel id='birthday-label'>Date of birth</InputLabel>
                     </td>
                     <td>
-                        <TextField
-                            id="birthday"
-                            type="date"
-                            onChange={event => setBirthday(event.target.value)}
-                            InputLabelProps={{shrink: true}}
-                        ></TextField>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                disableToolbar
+                                variant="inline"
+                                format="MM/dd/yyyy"
+                                id="birthday"
+                                onChange={event => setBirthday(event)}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </MuiPickersUtilsProvider>
                     </td>
                 </tr>
                 <tr>
@@ -117,6 +135,7 @@ const RegisterComponent = (props) => {
                                 clickRegister(
                                     alias,
                                     birthday,
+                                    props.loginInfo.credential.idToken,
                                     nationality,
                                     props.loginInfo.additionalUserInfo.profile.picture,
                                     props.loginInfo.user.uid,
