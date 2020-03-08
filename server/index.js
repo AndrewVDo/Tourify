@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-const {firebaseConnect, age, stampBirthday} = require('./utils.js')
+const {firebaseConnect, age, stampBirthday, verifyLogin} = require('./utils.js')
+const {OAuth2Client} = require('google-auth-library');
 
-const fb = firebaseConnect()
-
+const firebaseClient = firebaseConnect()
+const authClient = new OAuth2Client(process.env.CLIENT_ID)
 const app = express()
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(pino);
@@ -16,53 +18,68 @@ app.get('/api/greeting', (req, res) => {
     res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
 });
 
+app.post('/login', async (req, res) => {
+    try {
+        let uid = await verifyLogin(req.body.idToken, authClient)
+        console.log('uid: ', uid)
+    }
+    catch(err) {
+        console.error('err: ', err)
+    }
+})
+
 app.post('/register', async (req, res) => {
-    let result = {}
-    let newUserRef = fb.collection('users').doc(`user-${req.body.uid}`)
-    await newUserRef.get()
-        .then(async docSnapShot => {
-            if(docSnapShot.exists) {
-                result.error = "user already exists"
-            }
-            else {
-                //might not need to send this timeStamp to client
-                result.timeStamp = await newUserRef.set({
-                    alias: req.body.alias,
-                    dateOfBirth: stampBirthday(req.body.dateOfBirth),
-                    idToken: req.body.idToken,
-                    nationality: req.body.nationality,
-                    profilePicUrl: req.body.profilePicUrl,
-                    uid: req.body.uid,
-                    userType: req.body.userType,
-                    weight: req.body.weight
-                })
-            }
-        })
-        .catch(err => {
-            result.error = err
-        })
+    let result
+    let newUserRef = firebaseClient.collection('users').doc(`user-${req.body.uid}`)
+
+    try {
+        let uid = await verifyLogin(req.body.idToken, authClient)
+        console.log('uid: ', uid)
+        if((await newUserRef.get()).exists) {
+            throw new Error('user already exists')
+        }
+        else {
+            //might not need to send this timeStamp to client
+            result = await newUserRef.set({
+                alias: req.body.alias,
+                dateOfirebaseClientirth: stampBirthday(req.body.dateOfirebaseClientirth),
+                nationality: req.body.nationality,
+                profilePicUrl: req.body.profilePicUrl,
+                uid: req.body.uid,
+                userType: req.body.userType,
+                weight: req.body.weight
+            })
+        }
+    }
+    catch(err) {
+        console.log('err: ', err)
+    }
 
     console.log(result)
     res.send(JSON.stringify(result))
 })
 
 app.post('/profileInfo', async (req, res) => {
-    let usersRef = fb.collection("users").doc(req.query.uid)
+    let usersRef = firebaseClient.collection("users").doc(req.query.uid)
     let resDocument
-    await usersRef.get()
-        .then(doc => {
-            let rawDocument = doc.data()
+
+    let documentSnapShot = await usersRef.get()
+    if(documentSnapShot.exists) {
+        try {
+            let rawDocument = documentSnapShot.data()
             resDocument = {
                 alias: rawDocument.alias,
                 weight: rawDocument.weight,
                 userType: rawDocument.userType,
                 profilePicUrl: rawDocument.profilePicUrl,
-                age: age(rawDocument.dateOfBirth),
+                age: age(rawDocument.dateOfirebaseClientirth),
                 nationality: rawDocument.nationality
             }
-            console.log(resDocument)
-        })
-        .catch(err => console.log(err))
+        }
+        catch(err) {
+            console.err('err: ', err)
+        }
+    }
     res.send(JSON.stringify(resDocument))
 });
 

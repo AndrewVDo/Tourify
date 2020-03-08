@@ -20,7 +20,6 @@ const nationalityList = getNames()
 const userTypeList = ['Racer', 'Event Organizer']
 
 const RegisterComponent = (props) => {
-    console.log(props.loginInfo)
     const [formData, setFormData] = useState({
         alias: props.loginInfo.additionalUserInfo.profile.name,
         idToken: props.loginInfo.credential.idToken,
@@ -31,10 +30,6 @@ const RegisterComponent = (props) => {
         weight: ''
     })
     const [dateOfBirth, setdateOfBirth] = useState(new Date())
-
-    useEffect(() => {
-
-    })
     
     return (
         <div className='loginApp'>
@@ -158,10 +153,15 @@ const RegisterComponent = (props) => {
                     <td>
                         <Button
                             onClick={async event => {
-                                event.preventDefault()
-                                let result = await clickRegister(formData, dateOfBirth)
-                                if(result === 'success') {
-                                    props.setRedirect(true)
+                                try {
+                                    event.preventDefault()
+                                    let result = await clickRegister(formData, dateOfBirth)
+                                    if(result === 'success') {
+                                        props.setRedirect(true)
+                                    }
+                                }
+                                catch(err) {
+                                    console.error('err: ', err)
                                 }
                             }}
                         >

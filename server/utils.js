@@ -8,13 +8,6 @@ const firebaseConnect = () => {
     });
 
     return admin.firestore();
-
-    // Sample get from firebase
-    // var usersRef = db.collection("users").doc("7QGMmUx1q51F3HqQTovL(test)")
-    // let getDoc = usersRef.get()
-    //     .then(doc => {
-    //         console.log(doc.data())
-    //     })
 }
 
 const stampBirthday = birthday => {
@@ -24,7 +17,16 @@ const stampBirthday = birthday => {
 
 const age = birthday => {
     birthday = new Date(birthday);
-    return new Number((new Date().getTime() - birthday.getTime()) / 31536000000).toFixed(0);
+    return Number((new Date().getTime() - birthday.getTime()) / 31536000000).toFixed(0);
 }
 
-module.exports = {firebaseConnect, age, stampBirthday}
+const verifyLogin = async (idToken, authClient) => {
+    const ticket = await authClient.verifyIdToken({
+        idToken: idToken,
+        audience: process.env.CLIENT_ID
+    })
+    const payload = ticket.getPayload()
+    return payload.sub
+}
+
+module.exports = {firebaseConnect, age, stampBirthday, verifyLogin}
