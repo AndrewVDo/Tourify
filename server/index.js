@@ -32,20 +32,29 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/profileInfo', async (req, res) => {
-    let usersRef = fb.collection("users").doc(req.query.uid)
+    //let usersRef = fb.collection("users").where('uid', '==', `user-${req.body.uid}`)
+    let userRef = fb.collection("users");
     let resDocument
-    await usersRef.get()
-        .then(doc => {
-            let rawDocument = doc.data()
-            resDocument = {
-                alias: rawDocument.alias,
-                weight: rawDocument.weight,
-                userType: rawDocument.userType,
-                profilePicUrl: rawDocument.profilePicUrl,
-                age: age(rawDocument.dateOfBirth),
-                nationality: rawDocument.nationality
+    let queryRef = userRef.where('uid', '==', '6liodl1i0dQoPaDATMpT3a0qRnb2').get()
+        .then(snapshot => {
+            if (snapshot.empty){
+                console.log("no matching docs");
+                return;
             }
-            console.log(resDocument)
+            snapshot.forEach(doc => {
+                //console.log(doc.id, '=>', doc.data());
+                let docData = doc.data();
+                resDocument = {
+                    "alias" : docData.alias,
+                    "dateOfBirth" : docData.dateOfBirth,
+                    "name" : docData.name,
+                    "nationality": docData.nationality,
+                    "profilePicURL": docData.profilePicUrl,
+                    "userType" : docData.userType,
+                    "weight": docData.weight,
+                }
+                let test = "se";
+            });
         })
         .catch(err => console.log(err))
     res.send(JSON.stringify(resDocument))
