@@ -26,7 +26,14 @@ const verifyLogin = async (idToken, authClient) => {
         audience: process.env.CLIENT_ID
     })
     const payload = ticket.getPayload()
-    return payload.sub
+    console.log(payload)
+    return payload.email_verified
 }
 
-module.exports = {firebaseConnect, age, stampBirthday, verifyLogin}
+const responseObject = {
+    success: false,
+    error: false,
+    msg: ''
+}
+
+module.exports = {firebaseConnect, age, stampBirthday, verifyLogin, responseObject}
