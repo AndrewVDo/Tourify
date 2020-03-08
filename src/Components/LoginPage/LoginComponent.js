@@ -13,8 +13,13 @@ const LoginComponent = (props) => {
                 try {
                     let loginInfo = await signInWithGoogle()
                     props.setLoginInfo(loginInfo)
-                    let verify = await clickLogin(loginInfo.credential.idToken)
-                    console.log('verify: ', verify)
+                    let response = await clickLogin(loginInfo.credential.idToken)
+                    if(response.error) {
+                        console.log(response.msg)
+                    } 
+                    else if (response.success) {
+                        props.setRedirect(true)
+                    }
                 }
                 catch(err) {
                     console.error('err: ', err)

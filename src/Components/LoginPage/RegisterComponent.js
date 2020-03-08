@@ -155,8 +155,11 @@ const RegisterComponent = (props) => {
                             onClick={async event => {
                                 try {
                                     event.preventDefault()
-                                    let result = await clickRegister(formData, dateOfBirth)
-                                    if(result === 'success') {
+                                    let response = await clickRegister(formData, dateOfBirth)
+                                    if(response.error) {
+                                        console.log(response.msg)
+                                    } 
+                                    else if(response.success) {
                                         props.setRedirect(true)
                                     }
                                 }

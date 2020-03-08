@@ -18,8 +18,7 @@ export const clickRegister = async (formData, dateOfBirth) => {
             })
         })
 
-        let respObject = await respString.json()
-        console.log('respObject: ', respObject)
+        return await respString.json()
     }
     catch(err) {
         console.error('err: ', err)
@@ -39,8 +38,7 @@ export const clickLogin = async idToken => {
             })
         })
 
-        let respObject = await respString.json()
-        console.log('respObject: ', respObject)
+        return await respString.json() 
     }
     catch(err) {
         console.error('err: ', err)
