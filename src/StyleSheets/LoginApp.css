@@ -43,6 +43,7 @@ body {
 
 #registration-table > tbody > tr > td {
   width: 10em;
+  padding: 0.25em 0em;
 }
 
 #registration-table > tbody > tr > td > div {

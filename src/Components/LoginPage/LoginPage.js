@@ -16,6 +16,7 @@ const LoginPage = () => {
     if(registerPage){
         return(
             <RegisterComponent 
+                setRegisterPage = {setRegisterPage}
                 loginInfo = {loginInfo}
                 setRedirect = {setRedirect}
             />

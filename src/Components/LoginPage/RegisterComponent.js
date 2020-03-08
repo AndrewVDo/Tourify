@@ -155,7 +155,7 @@ const RegisterComponent = (props) => {
                     </td>
                 </tr>
                 <tr>
-                    <td colSpan='2'>
+                    <td>
                         <Button
                             onClick={async event => {
                                 event.preventDefault()
@@ -167,6 +167,12 @@ const RegisterComponent = (props) => {
                         >
                             Register
                         </Button>
+                    </td>
+                    <td>
+                        <Button onClick={event => {
+                            event.preventDefault()
+                            props.setRegisterPage(false)
+                        }}>Cancel</Button>
                     </td>
                 </tr>
             </tbody></table>
