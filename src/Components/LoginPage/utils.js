@@ -1,31 +1,34 @@
-export const clickRegister =(alias,
-                            dateOfBirth,
-                            idToken,
-                            nationality,
-                            profilePicUrl,
-                            uid,
-                            userType,
-                            weight) => {  
-    console.log('hi')
-    fetch(`/register`, {
+export const clickRegister = async (formData, dateOfBirth) => {  
+    let result, error
+    await fetch(`/register`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body : JSON.stringify({
-            alias: alias,
+            alias: formData.alias,
             dateOfBirth: dateOfBirth,
-            idToken: idToken,
-            nationality: nationality,
-            profilePicUrl: profilePicUrl,
-            uid: uid,
-            userType: userType,
-            weight: weight
+            idToken: formData.idToken,
+            nationality: formData.nationality,
+            profilePicUrl: formData.profilePicUrl,
+            uid: formData.uid,
+            userType: formData.userType,
+            weight: formData.weight
         })
     })
         .then(resp => resp.json())
         .then(response => {
-            console.log('registered')
+            console.log(response)
+            if(response.error) {
+                error = response.error
+            } else {
+                result = 'success'
+            }
         })
+    .catch(err => {
+        error = err
+    })
+
+    return (result? result : error)
 }

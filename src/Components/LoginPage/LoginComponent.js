@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import GoogleButton from "react-google-button";
 import { signInWithGoogle } from "../firebase.js";
+import {Redirect} from "react-router-dom";
 
 const LoginComponent = (props) => {
     useEffect(() => {
@@ -10,7 +11,7 @@ const LoginComponent = (props) => {
             .addEventListener('click', () => {
                 signInWithGoogle()
                     .then(res => {
-                        //redirect to events page with sign in credentials
+                        props.setRedirect(true)
                     })
                     .catch(err => {
                         //send incorrect login error

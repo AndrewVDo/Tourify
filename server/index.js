@@ -17,18 +17,33 @@ app.get('/api/greeting', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
+    let result = {}
     let newUserRef = fb.collection('users').doc(`user-${req.body.uid}`)
-    await newUserRef.set({
-        alias: req.body.alias,
-        dateOfBirth: stampBirthday(req.body.dateOfBirth),
-        idToken: req.body.idToken,
-        nationality: req.body.nationality,
-        profilePicUrl: req.body.profilePicUrl,
-        uid: req.body.uid,
-        userType: req.body.userType,
-        weight: req.body.weight
-    })
-    res.send('success')
+    await newUserRef.get()
+        .then(async docSnapShot => {
+            if(docSnapShot.exists) {
+                result.error = "user already exists"
+            }
+            else {
+                //might not need to send this timeStamp to client
+                result.timeStamp = await newUserRef.set({
+                    alias: req.body.alias,
+                    dateOfBirth: stampBirthday(req.body.dateOfBirth),
+                    idToken: req.body.idToken,
+                    nationality: req.body.nationality,
+                    profilePicUrl: req.body.profilePicUrl,
+                    uid: req.body.uid,
+                    userType: req.body.userType,
+                    weight: req.body.weight
+                })
+            }
+        })
+        .catch(err => {
+            result.error = err
+        })
+
+    console.log(result)
+    res.send(JSON.stringify(result))
 })
 
 app.post('/profileInfo', async (req, res) => {
