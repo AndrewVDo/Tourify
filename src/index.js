@@ -5,7 +5,7 @@ import LoginPage from './Components/LoginPage/LoginPage.js';
 import * as serviceWorker from './serviceWorker';
 import Profile from "./Components/profile";
 
-ReactDOM.render(<Profile uid={"user-WG4iABL5TFQU7XeFiL80ZjaJM1p1"}/>, document.getElementById('root'));
+ReactDOM.render(<Profile uid={"6liodl1i0dQoPaDATMpT3a0qRnb2"}/>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

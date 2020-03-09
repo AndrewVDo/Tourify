@@ -34,8 +34,14 @@ app.post('/register', async (req, res) => {
 app.post('/profileInfo', async (req, res) => {
     //let usersRef = fb.collection("users").where('uid', '==', `user-${req.body.uid}`)
     let userRef = fb.collection("users");
-    let resDocument
-    let queryRef = userRef.where('uid', '==', '6liodl1i0dQoPaDATMpT3a0qRnb2').get()
+    let resDocument = {
+        "alias": "placeholder",
+        "dateOfBirth" : "placeholder",
+        "nationality": "placeholder",
+        "profilePicURL": "placeholder",
+        "userType" : "placeholder",
+        "weight" : 0}
+    await userRef.where('uid', '==', req.body.uid).get()
         .then(snapshot => {
             if (snapshot.empty){
                 console.log("no matching docs");
@@ -44,16 +50,12 @@ app.post('/profileInfo', async (req, res) => {
             snapshot.forEach(doc => {
                 //console.log(doc.id, '=>', doc.data());
                 let docData = doc.data();
-                resDocument = {
-                    "alias" : docData.alias,
-                    "dateOfBirth" : docData.dateOfBirth,
-                    "name" : docData.name,
-                    "nationality": docData.nationality,
-                    "profilePicURL": docData.profilePicUrl,
-                    "userType" : docData.userType,
-                    "weight": docData.weight,
-                }
-                let test = "se";
+                resDocument.alias = docData.alias;
+                resDocument.dateOfBirth = docData.dateOfBirth;
+                resDocument.nationality = docData.nationality;
+                resDocument.profilePicURL = docData.profilePicUrl;
+                resDocument.userType = docData.userType;
+                resDocument.weight = docData.weight;
             });
         })
         .catch(err => console.log(err))
