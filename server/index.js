@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-const {firebaseConnect, age, stampBirthday, verifyLogin, responseObject} = require('./utils.js')
+const {firebaseConnect, age, stampBirthday, verifyLogin} = require('./utils.js')
 const {OAuth2Client} = require('google-auth-library');
 
 const firebaseClient = firebaseConnect()
@@ -19,7 +19,11 @@ app.get('/api/greeting', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    let response = new responseObject()
+    let response = {
+        success: false,
+        error: false,
+        msg: ''
+    }
     try {
         if(!await verifyLogin(req.body.idToken, authClient)) {
             throw new Error('login not valid')
@@ -30,13 +34,17 @@ app.post('/login', async (req, res) => {
     }
     catch(err) {
         response.error = true
-        response.msg = err
+        response.msg = err.toString
     }
     res.send(JSON.stringify(response))
 })
 
 app.post('/register', async (req, res) => {
-    let response = new responseObject()
+    let response = {
+        success: false,
+        error: false,
+        msg: ''
+    }
     let newUserRef = firebaseClient.collection('users').doc(`user-${req.body.uid}`)
 
     try {
@@ -50,7 +58,7 @@ app.post('/register', async (req, res) => {
             //might not need to send this timeStamp to client
             let timeReceipt = await newUserRef.set({
                 alias: req.body.alias,
-                dateOfirebaseClientirth: stampBirthday(req.body.dateOfirebaseClientirth),
+                dateOfBirth: stampBirthday(req.body.dateOfBirth),
                 nationality: req.body.nationality,
                 profilePicUrl: req.body.profilePicUrl,
                 uid: req.body.uid,
@@ -63,13 +71,17 @@ app.post('/register', async (req, res) => {
     }
     catch(err) {
         response.error = true
-        response.msg = err
+        response.msg = err.toString()
     }
     res.send(JSON.stringify(response))
 })
 
 app.post('/profileInfo', async (req, res) => {
-    let response = new responseObject()
+    let response = {
+        success: false,
+        error: false,
+        msg: ''
+    }
     let usersRef = firebaseClient.collection("users").doc(req.query.uid)
 
     let documentSnapShot = await usersRef.get()
@@ -88,7 +100,7 @@ app.post('/profileInfo', async (req, res) => {
         }
         catch(err) {
             response.error = true
-            response.msg = err
+            response.msg = err.toString()
         }
     }
     res.send(JSON.stringify(response))

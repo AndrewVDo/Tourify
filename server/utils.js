@@ -30,10 +30,4 @@ const verifyLogin = async (idToken, authClient) => {
     return payload.email_verified
 }
 
-function responseObject() {
-    this.success = false
-    this.error = false
-    this.msg = ''
-}
-
-module.exports = {firebaseConnect, age, stampBirthday, verifyLogin, responseObject}
+module.exports = {firebaseConnect, age, stampBirthday, verifyLogin}

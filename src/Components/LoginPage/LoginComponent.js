@@ -16,6 +16,7 @@ const LoginComponent = (props) => {
                     let response = await clickLogin(loginInfo.credential.idToken)
                     if(response.error) {
                         console.log(response.msg)
+                        alert(response.msg)
                     } 
                     else if (response.success) {
                         props.setRedirect(true)
@@ -34,7 +35,7 @@ const LoginComponent = (props) => {
                     props.setRegisterPage(true)
                 }
                 catch(err) {
-                    console.error('err: ', err)
+                    console.error('err: ', err.msg)
                 }
             })
     })

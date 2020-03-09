@@ -158,6 +158,7 @@ const RegisterComponent = (props) => {
                                     let response = await clickRegister(formData, dateOfBirth)
                                     if(response.error) {
                                         console.log(response.msg)
+                                        alert(response.msg)
                                     } 
                                     else if(response.success) {
                                         props.setRedirect(true)
