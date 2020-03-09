@@ -44,3 +44,19 @@ export const clickLogin = async idToken => {
         console.error('err: ', err)
     }
 }
+
+export const populateEvents = async () => {
+    try {
+        let respString = await fetch('/EventsList', {
+            method: "POST",
+            headers: {
+                'Accecpt': 'application/json',
+                'Content-type': 'application/json'
+            }
+        })
+        return (await respString.json()).events;
+    }
+    catch(err) {
+        console.log(err)
+    }
+}

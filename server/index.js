@@ -106,6 +106,24 @@ app.post('/profileInfo', async (req, res) => {
     res.send(JSON.stringify(response))
 });
 
+app.post('/EventsList', async (req, res) => {
+    let response = {
+        success: false,
+        error: false,
+        msg: ''
+    }
+    try {
+        let eventRef = await firebaseClient.collection("events").get();
+        response.events = eventRef.docs.map(doc => doc.data());
+        response.success = true;
+    }
+    catch(err) {
+        response.error = true
+        response.msg = err.toString()
+    }
+    res.send(JSON.stringify(response))
+});
+
 app.listen(3001, () =>
     console.log('Express server is running on localhost:3001')
 )
