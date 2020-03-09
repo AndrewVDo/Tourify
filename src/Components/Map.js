@@ -49,14 +49,15 @@ class Map extends Component {
       .onSnapshot(querySnapshot => {
         querySnapshot.forEach(doc => {
           const data = doc.data();
-
           this.setState(prev => {
             let pointsData = prev.pointsData;
+
             pointsData[data.user_uuid] = {
               lat: data.latlng.latitude,
               long: data.latlng.longitude
             };
-            return pointsData;
+
+            return { pointsData };
           });
 
           this._animatePoint();
