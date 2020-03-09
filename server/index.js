@@ -82,7 +82,7 @@ app.post('/profileInfo', async (req, res) => {
         error: false,
         msg: ''
     }
-    let usersRef = firebaseClient.collection("users").doc(req.query.uid)
+    let usersRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
 
     let documentSnapShot = await usersRef.get()
     if(documentSnapShot.exists) {
@@ -107,7 +107,7 @@ app.post('/profileInfo', async (req, res) => {
 });
 
 app.post('/updateProfileInfo', async (req, res)=>{
-    let userRef = fb.collection("users");
+    let userRef = firebaseClient.collection("users");
     let riderInfo = userRef.doc(`user-${req.body.uid}`)
     let updateData = {
         alias : req.body.name,
@@ -116,9 +116,7 @@ app.post('/updateProfileInfo', async (req, res)=>{
         nationality : req.body.nationality
     };
 
-    //console.log(req.body.name)
-
-    await fb.collection("users").doc(`user-${req.body.uid}`).update(updateData);
+    await riderInfo.update(updateData);
         //.catch(err => console.log(`ERROR OCCURED ${err}`))
         res.send("Success!");
 });

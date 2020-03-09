@@ -10,8 +10,8 @@ class App extends Component {
     return (
         <BrowserRouter>
           <Route path="/CreateEvent" component={CreateEvent}/>
-          <Route path="/ProfilePage"
-          <Route path="/" component={LoginPage}/>
+          <Route path="/Profile/:userId" component={ProfilePage}/>
+          <Route path="/" exact component={LoginPage}/>
         </BrowserRouter>
     )
   }

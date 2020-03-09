@@ -1,7 +1,12 @@
 import React,{useState, useEffect} from "react";
-import {Container, Button, TextField} from "@material-ui/core";
+import {Container, Button, TextField, Select, MenuItem} from "@material-ui/core";
+import {getNames, getCode} from 'country-list'
 
 import "../StyleSheets/index.css"
+import DateFnsUtils from "@date-io/date-fns";
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+
+const nationalityList = getNames()
 
 const UpdateProfile = (props) => {
     const [name, setName] = useState("speed racer");
@@ -18,7 +23,8 @@ const UpdateProfile = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                uid: props.uid,
+                //uid: props.uid,
+                uid: "WG4iABL5TFQU7XeFiL80ZjaJM1p1",
                 name: name,
                 weight: weight,
                 age: age,
@@ -50,21 +56,25 @@ const UpdateProfile = (props) => {
                     value={weight}
                     onChange={e => setWeight(e.target.value)}
                 />
-                <TextField
-                    required
-                    label="Age"
-                    type="number"
-                    variant="outlined"
-                    value={age}
-                    onChange={e => setAge(e.target.value)}
-                />
-                <TextField
-                    required
-                    label="Nationality"
-                    variant="outlined"
-                    value={nationality}
-                    onChange={e => setNationality(e.target.value)}
-                />
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                        autoOk
+                        variant="inline"
+                        inputVariant="outlined"
+                        label="With keyboard"
+                        format="MM/dd/yyyy"
+                        value={age}
+                        InputAdornmentProps={{ position: "start" }}
+                        onChange={date => setAge(date)}/>
+                </MuiPickersUtilsProvider>
+
+                <Select
+                    id='nationality'
+                    defaultValue={nationalityList[0]}
+                    onChange={event => setNationality(event.target.value)}
+                >
+                    {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
+                </Select>
             </form>
             <Button onClick={handleSubmit}>Submit</Button>
         </Container>
