@@ -6,24 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/core/styles';
 import { Table } from '@material-ui/core';
 
+import { Redirect } from 'react-router-dom'
+import {firestore} from './firebase'
+
 import '../StyleSheets/EventList.css'
 
-// const myButton = styled(({ color, ...other }) => <Button {...other} />)({
-//     background: props =>
-//       props.color === 'red'
-//         ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
-//         : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-//     border: 0,
-//     borderRadius: 3,
-//     boxShadow: props =>
-//       props.color === 'red'
-//         ? '0 3px 5px 2px rgba(255, 105, 135, .3)'
-//         : '0 3px 5px 2px rgba(33, 203, 243, .3)',
-//     color: 'white',
-//     height: 48,
-//     padding: '0 30px',
-//     margin: 8,
-//   });
 
 function ListElements(prop) {
     return (
@@ -50,11 +37,11 @@ function ListElements(prop) {
     )
 }
 
-function EventsList(prop) {
-    //access inouts
-    //prop.username
-    // console.log(prop.username)
-    //const [password, setPassword] = useState('')
+//async function EventsList(prop) {
+const EventsList = async (prop) => {
+    var userData = await firestore.collection("users").doc();
+    var eventData = await firestore.collection("events");
+
 
     var events = [];
     var event;
@@ -73,6 +60,7 @@ function EventsList(prop) {
 
     var button_createEvent = null;
     var isAdmin = true;
+    // if (userData.get(userType) == "Event Organizer") {
     if (isAdmin) {
         button_createEvent = <Button id="createeventbutton" color="red">Create New Event</Button>
     }
