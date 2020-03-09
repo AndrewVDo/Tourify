@@ -1,9 +1,9 @@
 import React,{useState, useEffect} from "react";
 import {Container, Button, TextField} from "@material-ui/core";
 
-import "../index.css"
+import "../StyleSheets/index.css"
 
-const UpdateProfile = () => {
+const UpdateProfile = (props) => {
     const [name, setName] = useState("speed racer");
     const [weight, setWeight] = useState(0);
     const [age, setAge] = useState(0);
@@ -18,6 +18,7 @@ const UpdateProfile = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                uid: props.uid,
                 name: name,
                 weight: weight,
                 age: age,

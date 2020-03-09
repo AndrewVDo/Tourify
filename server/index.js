@@ -62,6 +62,23 @@ app.post('/profileInfo', async (req, res) => {
     res.send(JSON.stringify(resDocument))
 });
 
+app.post('/updateProfileInfo', async (req, res)=>{
+    let userRef = fb.collection("users");
+    let riderInfo = userRef.doc(`user-${req.body.uid}`)
+    let updateData = {
+        alias : req.body.name,
+        weight : req.body.weight,
+        age : req.body.age,
+        nationality : req.body.nationality
+    };
+
+    //console.log(req.body.name)
+
+    await fb.collection("users").doc(`user-${req.body.uid}`).update(updateData);
+        //.catch(err => console.log(`ERROR OCCURED ${err}`))
+        res.send("Success!");
+});
+
 app.listen(3001, () =>
     console.log('Express server is running on localhost:3001')
 )
