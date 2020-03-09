@@ -41,6 +41,11 @@ body {
   border-radius: 100px;
 }
 
-#registration-table > tr > td, #nationality, #userType {
-  width: 7.5em;
+#registration-table > tbody > tr > td {
+  width: 10em;
+  padding: 0.25em 0em;
+}
+
+#registration-table > tbody > tr > td > div {
+  width: 100%;
 }

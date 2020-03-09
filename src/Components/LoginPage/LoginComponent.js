@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
-//import SignInWithGoogle from '../SignInWithGoogle'
-import { signInWithGoogle } from "../firebase.js";
 import GoogleButton from "react-google-button";
+import { signInWithGoogle } from "../firebase.js";
+import {Redirect} from "react-router-dom";
+import {clickLogin} from './utils.js'
 
 const LoginComponent = (props) => {
     useEffect(() => {
@@ -9,18 +10,33 @@ const LoginComponent = (props) => {
 
         document.getElementById('GoogleSignInButton')
             .addEventListener('click', async () => {
-                console.log(await signInWithGoogle())
-                //send user to events page
+                try {
+                    let loginInfo = await signInWithGoogle()
+                    props.setLoginInfo(loginInfo)
+                    let response = await clickLogin(loginInfo.credential.idToken)
+                    if(response.error) {
+                        console.log(response.msg)
+                        alert(response.msg)
+                    } 
+                    else if (response.success) {
+                        props.setRedirect(true)
+                    }
+                }
+                catch(err) {
+                    console.error('err: ', err)
+                }
             })
 
         document.getElementById('GoogleSignUpButton')
-            .addEventListener('click', () => {
-                signInWithGoogle()
-                    .then(loginInfo => {
-                        props.setLoginInfo(loginInfo)
-                        props.setRegisterPage(true)
-                    })
-                    .catch(err => console.log(err))
+            .addEventListener('click', async () => {
+                try {
+                    let loginInfo = await signInWithGoogle()
+                    props.setLoginInfo(loginInfo)
+                    props.setRegisterPage(true)
+                }
+                catch(err) {
+                    console.error('err: ', err.msg)
+                }
             })
     })
 

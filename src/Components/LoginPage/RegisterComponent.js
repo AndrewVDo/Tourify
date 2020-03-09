@@ -1,23 +1,35 @@
 import React, {useState, useEffect} from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import {getNames, getCode} from 'country-list'
-import {Input, InputLabel, Button, Select, MenuItem, TextField} from '@material-ui/core'
+import {
+    InputLabel, 
+    Button,
+    Select, 
+    MenuItem, 
+    TextField
+} from '@material-ui/core'
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    MuiPickersUtilsProvider,
+    KeyboardDatePicker
+} from '@material-ui/pickers'
 import {clickRegister} from './utils.js'
 
 const nationalityList = getNames()
 const userTypeList = ['Racer', 'Event Organizer']
 
 const RegisterComponent = (props) => {
-    console.log(props.loginInfo)
-    const [alias, setAlias] = useState(props.loginInfo.additionalUserInfo.profile.name)
-    const [weight, setWeight] = useState()
-    const [birthday, setBirthday] = useState(new Date())
-    const [nationality, setNationality] = useState(nationalityList[0])
-    const [userType, setUserType] = useState(userTypeList[0])
-
-    useEffect(() => {
-
+    const [formData, setFormData] = useState({
+        alias: props.loginInfo.additionalUserInfo.profile.name,
+        idToken: props.loginInfo.credential.idToken,
+        nationality: nationalityList[0],
+        profilePicUrl: props.loginInfo.additionalUserInfo.profile.picture,
+        uid: props.loginInfo.user.uid,
+        userType: userTypeList[0],
+        weight: ''
     })
+    const [dateOfBirth, setdateOfBirth] = useState(new Date())
     
     return (
         <div className='loginApp'>
@@ -35,7 +47,7 @@ const RegisterComponent = (props) => {
                     <td>
                         <ReactCountryFlag
                             className='countryImage'
-                            countryCode={getCode(nationality)}
+                            countryCode={getCode(formData.nationality)}
                             svg
                             style={{width:'100px', height:'100px', borderRadius:'100px'}}
                             cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
@@ -50,35 +62,55 @@ const RegisterComponent = (props) => {
                     <td>
                         <TextField 
                             id='alias'
-                            value={alias}
-                            onChange={event => setAlias(event.target.value)}
+                            defaultValue={formData.alias}
+                            onChange={event => {
+                                let newFormData = formData
+                                newFormData.alias = event.target.value
+                                setFormData(newFormData)
+                            }}
                             InputLabelProps={{shrink: true}}
                         ></TextField>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <InputLabel id='weight-label'>Weight(KG)</InputLabel>
+                        <InputLabel id='weight-label'>Weight (KG)</InputLabel>
                     </td>
                     <td>
                         <TextField
                             id='weight'
-                            onChange={event => setWeight(event.target.value)}
+                            onChange={event => {
+                                let val = Number(event.target.value)
+                                if(event.target.value !== '' && (isNaN(val) || val <= 0 || val >= 1000)){
+                                    document.getElementById('weight').value = formData.weight
+                                    return
+                                }
+                                let newFormData = formData
+                                newFormData.weight = Number(event.target.value)
+                                setFormData(newFormData)
+                            }}
                             InputLabelProps={{shrink: true}}
                         ></TextField>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <InputLabel id='birthday-label'>Date of birth</InputLabel>
+                        <InputLabel id='dateOfBirth-label'>Date of Birth</InputLabel>
                     </td>
                     <td>
-                        <TextField
-                            id="birthday"
-                            type="date"
-                            onChange={event => setBirthday(event.target.value)}
-                            InputLabelProps={{shrink: true}}
-                        ></TextField>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                disableToolbar
+                                variant="inline"
+                                format="MM/dd/yyyy"
+                                id="dateOfBirth"
+                                value={dateOfBirth}
+                                onChange={date => setdateOfBirth(date)}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                            />
+                        </MuiPickersUtilsProvider>
                     </td>
                 </tr>
                 <tr>
@@ -89,7 +121,11 @@ const RegisterComponent = (props) => {
                         <Select 
                             id='nationality'
                             defaultValue={nationalityList[0]}
-                            onChange={event => setNationality(event.target.value)}
+                            onChange={event => {
+                                let newFormData = formData
+                                newFormData.nationality = event.target.value
+                                setFormData(newFormData)
+                            }}
                         >
                             {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
                         </Select>
@@ -103,30 +139,44 @@ const RegisterComponent = (props) => {
                         <Select 
                             id='userType'
                             defaultValue={userTypeList[0]}
-                            onChange={event => setUserType(event.target.value)}
+                            onChange={event => {
+                                let newFormData = formData
+                                newFormData.userType = event.target.value
+                                setFormData(newFormData)
+                            }}
                         >
                             {userTypeList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
                         </Select>
                     </td>
                 </tr>
                 <tr>
-                    <td colSpan='2'>
+                    <td>
                         <Button
-                            onClick={event => {
-                                event.preventDefault()
-                                clickRegister(
-                                    alias,
-                                    birthday,
-                                    nationality,
-                                    props.loginInfo.additionalUserInfo.profile.picture,
-                                    props.loginInfo.user.uid,
-                                    userType,
-                                    weight
-                                )
+                            onClick={async event => {
+                                try {
+                                    event.preventDefault()
+                                    let response = await clickRegister(formData, dateOfBirth)
+                                    if(response.error) {
+                                        console.log(response.msg)
+                                        alert(response.msg)
+                                    } 
+                                    else if(response.success) {
+                                        props.setRedirect(true)
+                                    }
+                                }
+                                catch(err) {
+                                    console.error('err: ', err)
+                                }
                             }}
                         >
                             Register
                         </Button>
+                    </td>
+                    <td>
+                        <Button onClick={event => {
+                            event.preventDefault()
+                            props.setRegisterPage(false)
+                        }}>Cancel</Button>
                     </td>
                 </tr>
             </tbody></table>

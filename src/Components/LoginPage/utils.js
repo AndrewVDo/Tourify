@@ -1,29 +1,46 @@
-export const clickRegister =(alias,
-                            dateOfBirth,
-                            nationality,
-                            profilePicUrl,
-                            uid,
-                            userType,
-                            weight) => {  
-    console.log('hi')
-    fetch(`/register`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body : JSON.stringify({
-            alias: alias,
-            dateOfBirth: dateOfBirth,
-            nationality: nationality,
-            profilePicUrl: profilePicUrl,
-            uid: uid,
-            userType: userType,
-            weight: weight
+export const clickRegister = async (formData, dateOfBirth) => {  
+    try {
+        let respString = await fetch(`/register`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body : JSON.stringify({
+                alias: formData.alias,
+                dateOfBirth: dateOfBirth,
+                idToken: formData.idToken,
+                nationality: formData.nationality,
+                profilePicUrl: formData.profilePicUrl,
+                uid: formData.uid,
+                userType: formData.userType,
+                weight: formData.weight
+            })
         })
-    })
-        .then(resp => resp.json())
-        .then(response => {
-            console.log('registered')
+
+        return await respString.json()
+    }
+    catch(err) {
+        console.error('err: ', err)
+    }
+}
+
+export const clickLogin = async idToken => {
+    try {
+        let respString = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                idToken: idToken
+            })
         })
+
+        return await respString.json() 
+    }
+    catch(err) {
+        console.error('err: ', err)
+    }
 }
