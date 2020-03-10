@@ -40,44 +40,57 @@ function ListElements(prop) {
 
 //async function EventsList(prop) {
 const EventsList = (prop) => {
+    const [eventsList, setEventsList] = useState()
+
+    useEffect( () => {
+        //async function nested inside because useEffect must be a callback
+        async function blockingCall(){
+            setEventsList(await populateEvents())
+        }
+        blockingCall()
+    }, [])
 
     var button_createEvent = null;
     var isAdmin = true;
     // if (userData.get(userType) == "Event Organizer") {
     if (isAdmin) {
-        button_createEvent = <Button id="createeventbutton" color="red">Create New Event</Button>
+        button_createEvent = <Button id="createeventbutton">Create New Event</Button>
     }
 
-    var button_viewProfile = <Button id="viewprofilebutton" color="blue">View Your Profile</Button>
+    var button_viewProfile = <Button id="viewprofilebutton">View Your Profile</Button>
 
     const buttons = (
-        <div class="btn-group">
+        <div className="btn-group">
             {button_viewProfile}
             {button_createEvent}
         </div>
     )
 
-    if (prop.events) {
-        const table = (
+    if (eventsList) {
+        return (
             <div className="listofevents">
                 {/* <React.Fragment> */}
                     {buttons}
                 {/* </React.Fragment> */}
                 <Table border="1" id="listofevent">
-                    <tr>
-                        <th colspan="6">Ongoing Events</th>
-                    </tr>
-                    <tr>
-                        <th width="">Event #</th>
-                        <th width="">Event Name</th>
-                        <th width="">Host</th>
-                        <th width=""># Participants</th>
-                        <th width="">Event Date</th>
-                        <th width=""></th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th colSpan="6">Ongoing Events</th>
+                        </tr>
+                        <tr>
+                            <th width="">Event #</th>
+                            <th width="">Event Name</th>
+                            <th width="">Host</th>
+                            <th width=""># Participants</th>
+                            <th width="">Event Date</th>
+                            <th width=""></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {
-                        events.forEach(element => (
+                        eventsList.map(element => (
                             <ListElements
+                                key = {element.event_name}
                                 number = {1}
                                 name = {element.event_name}
                                 host = {1}
@@ -86,16 +99,15 @@ const EventsList = (prop) => {
                             />
                         ))
                     }
+                    </tbody>
                 </Table>
             </div>
         );
-
-        return (
-            table
-        )
-    } else {
-        return (<p>hi</p>)
     }
+    else {
+        return <div className='listofevents'></div>
+    }
+
 }
 
 export default EventsList
