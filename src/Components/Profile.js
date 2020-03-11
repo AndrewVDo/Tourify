@@ -7,6 +7,7 @@ import {Redirect} from 'react-router-dom'
 import "../StyleSheets/Profile.css"
 
 //TODO: PASS UID WITH PROPS TO SPECIFY WHICH TO UPDATE
+//TODO: enable/ disable edit button based on whether you are viewing your profile or another rider's profile
 const Profile  = (props) => {
 
     const [profile, setProfile] = useState({
