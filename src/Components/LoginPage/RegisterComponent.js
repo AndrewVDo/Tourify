@@ -29,6 +29,18 @@ const RegisterComponent = (props) => {
         userType: userTypeList[0],
         weight: ''
     })
+    const setFormDataField = (event, field, isNum=false) => {
+        if(isNum) {
+            const val = Number(event.target.value)
+            if(event.target.value !== '' && (isNaN(val) || val <= 0 || val >= 1000)){
+                document.getElementById('weight').value = formData.weight
+                return
+            }
+        }
+        let newFormData = formData
+        newFormData[field] = isNum ? Number(event.target.value) : event.target.value
+        setFormData(newFormData)
+    }
     const [dateOfBirth, setdateOfBirth] = useState(new Date())
     
     return (
@@ -63,11 +75,7 @@ const RegisterComponent = (props) => {
                         <TextField 
                             id='alias'
                             defaultValue={formData.alias}
-                            onChange={event => {
-                                let newFormData = formData
-                                newFormData.alias = event.target.value
-                                setFormData(newFormData)
-                            }}
+                            onChange={event => setFormDataField(event, 'alias')}
                             InputLabelProps={{shrink: true}}
                         ></TextField>
                     </td>
@@ -79,16 +87,7 @@ const RegisterComponent = (props) => {
                     <td>
                         <TextField
                             id='weight'
-                            onChange={event => {
-                                let val = Number(event.target.value)
-                                if(event.target.value !== '' && (isNaN(val) || val <= 0 || val >= 1000)){
-                                    document.getElementById('weight').value = formData.weight
-                                    return
-                                }
-                                let newFormData = formData
-                                newFormData.weight = Number(event.target.value)
-                                setFormData(newFormData)
-                            }}
+                            onChange={event => setFormDataField(event, 'weight', true)}
                             InputLabelProps={{shrink: true}}
                         ></TextField>
                     </td>
@@ -121,11 +120,7 @@ const RegisterComponent = (props) => {
                         <Select 
                             id='nationality'
                             defaultValue={nationalityList[0]}
-                            onChange={event => {
-                                let newFormData = formData
-                                newFormData.nationality = event.target.value
-                                setFormData(newFormData)
-                            }}
+                            onChange={event => setFormDataField(event, 'nationality')}
                         >
                             {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
                         </Select>
@@ -139,11 +134,7 @@ const RegisterComponent = (props) => {
                         <Select 
                             id='userType'
                             defaultValue={userTypeList[0]}
-                            onChange={event => {
-                                let newFormData = formData
-                                newFormData.userType = event.target.value
-                                setFormData(newFormData)
-                            }}
+                            onChange={event => setFormDataField(event, 'userType')}
                         >
                             {userTypeList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
                         </Select>
@@ -157,7 +148,6 @@ const RegisterComponent = (props) => {
                                     event.preventDefault()
                                     let response = await clickRegister(formData, dateOfBirth)
                                     if(response.error) {
-                                        console.log(response.msg)
                                         alert(response.msg)
                                     } 
                                     else if(response.success) {
@@ -175,7 +165,7 @@ const RegisterComponent = (props) => {
                     <td>
                         <Button onClick={event => {
                             event.preventDefault()
-                            props.setRegisterPage(false)
+                            props.setIsRegisterPage(false)
                         }}>Cancel</Button>
                     </td>
                 </tr>

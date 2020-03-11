@@ -12,12 +12,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(pino);
 
-app.get('/api/greeting', (req, res) => {
-    const name = req.query.name || 'World';
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-});
-
 app.post('/login', async (req, res) => {
     let response = {
         success: false,
@@ -36,7 +30,7 @@ app.post('/login', async (req, res) => {
         response.error = true
         response.msg = err.toString
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 })
 
 app.post('/register', async (req, res) => {
@@ -65,7 +59,6 @@ app.post('/register', async (req, res) => {
                 userType: req.body.userType,
                 weight: req.body.weight
             })
-            console.log(timeReceipt)
             response.success = true
         }
     }
@@ -73,10 +66,10 @@ app.post('/register', async (req, res) => {
         response.error = true
         response.msg = err.toString()
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 })
 
-app.post('/profileInfo', async (req, res) => {
+app.post('/profile-info', async (req, res) => {
     let response = {
         success: false,
         error: false,
@@ -103,7 +96,7 @@ app.post('/profileInfo', async (req, res) => {
             response.msg = err.toString()
         }
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 });
 
 app.listen(3001, () =>
