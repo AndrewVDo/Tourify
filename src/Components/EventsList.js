@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, Component} from "react"
 import ReactDOM from 'react-dom'
 
 import Button from '@material-ui/core/Button'
@@ -47,9 +47,18 @@ function ListElements(prop) {
     )
 }
 
-//async function EventsList(prop) {
 const EventsList = (prop) => {
     const [eventsList, setEventsList] = useState()
+
+    const [toCreateEvent, setToCreateEvent] = useState(false)
+    function handleCreateEvent() {
+        setToCreateEvent(true);
+    }
+
+    const [toProfile, setToProfile] = useState(false)
+    function handleProfile() {
+        setToProfile(true);
+    }
 
     useEffect( () => {
         //async function nested inside because useEffect must be a callback
@@ -63,10 +72,10 @@ const EventsList = (prop) => {
     var isAdmin = true;
     // if (userData.get(userType) == "Event Organizer") {
     if (isAdmin) {
-        button_createEvent = <Button id="createeventbutton">Create New Event</Button>
+        button_createEvent = <Button id="createeventbutton" onClick={handleCreateEvent}>Create New Event</Button>
     }
 
-    var button_viewProfile = <Button id="viewprofilebutton">View Your Profile</Button>
+    var button_viewProfile = <Button id="viewprofilebutton" onClick={handleProfile}>View Your Profile</Button>
 
     const buttons = (
         <div className="btn-group">
@@ -76,11 +85,18 @@ const EventsList = (prop) => {
     )
 
     if (eventsList) {
+        if (toCreateEvent) {
+            return <Redirect to="/CreateEvent"/>
+        }
+
+        if (toProfile) {
+            return <Redirect to="/Profile"/>
+        }
+
         return (
             <div className="listofevents">
-                {/* <React.Fragment> */}
-                    {buttons}
-                {/* </React.Fragment> */}
+                {buttons}
+
                 <TableContainer component={Paper}>
                     <Table border="1" id="listofevent">
                         <TableHead>
@@ -116,8 +132,7 @@ const EventsList = (prop) => {
                 </TableContainer>
             </div>
         );
-    }
-    else {
+    } else {
         return <div className='listofevents'></div>
     }
 
