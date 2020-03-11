@@ -22,6 +22,7 @@
     "eject": "react-scripts eject",
     "server": "node-env-run server --exec nodemon | pino-colada",
     "dev": "run-p server start"
+    "production": "run server start"
   },
   "eslintConfig": {
     "extends": "react-app"
