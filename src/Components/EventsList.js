@@ -1,5 +1,4 @@
 import React, {useState, useEffect, Component} from "react"
-import ReactDOM from 'react-dom'
 
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,6 +14,8 @@ import Paper from '@material-ui/core/Paper';
 import { Redirect } from 'react-router-dom'
 // import {firestore} from './firebase'
 import {populateEvents} from './LoginPage/utils'
+
+
 
 import '../StyleSheets/EventsList.css'
 
@@ -50,14 +51,22 @@ function ListElements(prop) {
 const EventsList = (prop) => {
     const [eventsList, setEventsList] = useState()
 
+    // state for redirecting to create event page
     const [toCreateEvent, setToCreateEvent] = useState(false)
     function handleCreateEvent() {
         setToCreateEvent(true);
     }
 
+    // state for redirecting to profile page
     const [toProfile, setToProfile] = useState(false)
     function handleProfile() {
         setToProfile(true);
+    }
+
+    // state for redirecting to map page
+    const [toMap, setToMap] = useState(false)
+    function handleMap() {
+        setToMap(true);
     }
 
     useEffect( () => {
@@ -122,8 +131,8 @@ const EventsList = (prop) => {
                                     name = {element.event_name}
                                     // host = {1}
                                     // numParticipants = {1}
-                                    startTime = {element.start_time._seconds}
-                                    endTime = {element.end_time._seconds}
+                                    startTime = {new Date(element.start_time._seconds).toDateString()}
+                                    endTime = {new Date(element.end_time._seconds).toDateString()}
                                 />
                             ))
                         }

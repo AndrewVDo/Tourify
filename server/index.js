@@ -106,7 +106,7 @@ app.post('/profileInfo', async (req, res) => {
     res.send(JSON.stringify(response))
 });
 
-app.post('/EventsList', async (req, res) => {
+app.get('/EventsList', async (req, res) => {
     let response = {
         success: false,
         error: false,

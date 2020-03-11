@@ -48,7 +48,7 @@ export const clickLogin = async idToken => {
 export const populateEvents = async () => {
     try {
         let respString = await fetch('/EventsList', {
-            method: "POST",
+            method: "GET",
             headers: {
                 'Accecpt': 'application/json',
                 'Content-type': 'application/json'
