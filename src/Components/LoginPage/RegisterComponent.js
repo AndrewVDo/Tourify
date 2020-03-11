@@ -162,7 +162,7 @@ const RegisterComponent = (props) => {
                                         alert(response.msg)
                                     } 
                                     else if(response.success) {
-                                        props.setRedirect(true)
+                                        props.setShouldRedirect(true)
                                     }
                                 }
                                 catch(err) {

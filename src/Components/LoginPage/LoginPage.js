@@ -7,9 +7,9 @@ import {Redirect} from 'react-router-dom'
 const LoginPage = () => {
     const [isRegisterPage, setIsRegisterPage] = useState(false)
     const [loginInfo, setLoginInfo] = useState({})
-    const [redirect, setRedirect] = useState(false)
+    const [shouldRedirect, setShouldRedirect] = useState(false)
 
-    if(redirect){
+    if(shouldRedirect){
         return(<Redirect to='/CreateEvent'></Redirect>)
     }
 
@@ -18,13 +18,13 @@ const LoginPage = () => {
         <RegisterComponent 
             setRegisterPage = {setIsRegisterPage}
             loginInfo = {loginInfo}
-            setRedirect = {setRedirect}
+            setShouldRedirect = {setShouldRedirect}
         />
     ) : (
         <LoginComponent 
             setIsRegisterPage = {setIsRegisterPage}
             setLoginInfo = {setLoginInfo}
-            setRedirect = {setRedirect}
+            setShouldRedirect = {setShouldRedirect}
         />
     )
 }
