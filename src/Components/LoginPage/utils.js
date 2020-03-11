@@ -45,9 +45,25 @@ export const clickLogin = async idToken => {
     }
 }
 
+export const getUserInfo = async () => {
+    try {
+        let respString = await fetch('/userInfo', {
+            method: "GET",
+            headers: {
+                'Accecpt': 'application/json',
+                'Content-type': 'application/json'
+            }
+        })
+        return (await respString.json()).users;
+    }
+    catch(err) {
+        console.log(err)
+    }
+}
+
 export const populateEvents = async () => {
     try {
-        let respString = await fetch('/EventsList', {
+        let respString = await fetch('/eventsList', {
             method: "GET",
             headers: {
                 'Accecpt': 'application/json',

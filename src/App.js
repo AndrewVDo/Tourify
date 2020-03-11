@@ -10,10 +10,10 @@ class App extends Component {
   render() {
     return (
         <BrowserRouter>
-          <Route path="/CreateEvent" component={CreateEvent}/>
-          <Route path="/EventsList" component={EventsList}/>
-          {/* <Route path="/Profile" component={Profile}/>
-          <Route path='UpdateProfile' component={UpdateProfile}/> */}
+          <Route path="/create-event" component={CreateEvent}/>
+          <Route path="/events-list" component={EventsList}/>
+          {/* <Route path="/profile" component={Profile}/>
+          <Route path='update-profile' component={UpdateProfile}/> */}
           <Route path="/" exact component={LoginPage}/>
         </BrowserRouter>
     )

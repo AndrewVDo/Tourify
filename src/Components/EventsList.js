@@ -12,9 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
-// import {firestore} from './firebase'
 import {populateEvents} from './LoginPage/utils'
-
 
 
 import '../StyleSheets/EventsList.css'
@@ -23,9 +21,9 @@ import '../StyleSheets/EventsList.css'
 function ListElements(prop) {
     return (
         <TableRow>
-            {/* <td>
-                {prop.number}       // link that when clicked on, prompt user to join event
-            </td> */}
+            <TableCell align="center"e>
+                {prop.number}       {/* link that when clicked on, prompt user to join event */}
+            </TableCell>
             <TableCell align="center">
                 {prop.name}         {/* link that when clicked on, direct to event page */}
             </TableCell>
@@ -63,10 +61,10 @@ const EventsList = (prop) => {
         setToProfile(true);
     }
 
-    // state for redirecting to map page
-    const [toMap, setToMap] = useState(false)
-    function handleMap() {
-        setToMap(true);
+    // state for redirecting to events page
+    const [toEvents, setToEvents] = useState(false)
+    function handleEvents() {
+        setToEvents(true);
     }
 
     useEffect( () => {
@@ -95,11 +93,11 @@ const EventsList = (prop) => {
 
     if (eventsList) {
         if (toCreateEvent) {
-            return <Redirect to="/CreateEvent"/>
+            return <Redirect to="/create-event"/>
         }
 
         if (toProfile) {
-            return <Redirect to="/Profile"/>
+            return <Redirect to="/profile"/>
         }
 
         return (
@@ -110,10 +108,10 @@ const EventsList = (prop) => {
                     <Table border="1" id="listofevent">
                         <TableHead>
                             <TableRow>
-                                <TableCell colSpan="4" align="center">Ongoing Events</TableCell> {/* 7 in total */}
+                                <TableCell colSpan="5" align="center">Ongoing Events</TableCell> {/* 7 in total */}
                             </TableRow>
                             <TableRow>
-                                {/* <th width="">Event #</th> */}
+                                <TableCell width="" align="center">Event #</TableCell>
                                 <TableCell width="" align="center">Event Name</TableCell>
                                 {/* <th width="">Host</th>
                                 <th width=""># Participants</th> */}
@@ -123,19 +121,19 @@ const EventsList = (prop) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        {
-                            eventsList.map(element => (
-                                <ListElements
-                                    key = {element.event_name}
-                                    // number = {numEvents}
-                                    name = {element.event_name}
-                                    // host = {1}
-                                    // numParticipants = {1}
-                                    startTime = {new Date(element.start_time._seconds).toDateString()}
-                                    endTime = {new Date(element.end_time._seconds).toDateString()}
-                                />
-                            ))
-                        }
+                                {
+                                    eventsList.map(element => (
+                                        <ListElements
+                                            key = {element.event_name}
+                                            number = {element.event_id}
+                                            name = {element.event_name}
+                                            // host = {1}
+                                            // numParticipants = {1}
+                                            startTime = {new Date(element.start_time._seconds).toDateString()}
+                                            endTime = {new Date(element.end_time._seconds).toDateString()}
+                                        />
+                                    ))
+                                }
                         </TableBody>
                     </Table>
                 </TableContainer>
