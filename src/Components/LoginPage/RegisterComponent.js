@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import {getNames, getCode} from 'country-list'
 import {
@@ -18,6 +18,13 @@ import {clickRegister} from './utils.js'
 
 const nationalityList = getNames()
 const userTypeList = ['Racer', 'Event Organizer']
+
+//Force render required for changing nationality as this component
+//does not re-render when it's nationality is changed.
+const useForceRender = () => {
+    const [value, setValue] = useState(0)
+    return () => setValue(value+1)
+}
 
 const RegisterComponent = (props) => {
     const [formData, setFormData] = useState({
@@ -42,6 +49,7 @@ const RegisterComponent = (props) => {
         setFormData(newFormData)
     }
     const [dateOfBirth, setdateOfBirth] = useState(new Date())
+    const forceRender = useForceRender()
     
     return (
         <div className='loginApp'>
@@ -120,7 +128,10 @@ const RegisterComponent = (props) => {
                         <Select 
                             id='nationality'
                             defaultValue={nationalityList[0]}
-                            onChange={event => setFormDataField(event, 'nationality')}
+                            onChange={event => {
+                                setFormDataField(event, 'nationality')
+                                forceRender()
+                            }}
                         >
                             {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
                         </Select>

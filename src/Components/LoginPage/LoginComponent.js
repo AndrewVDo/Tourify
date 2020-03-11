@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import GoogleButton from "react-google-button";
-import { signInWithGoogle } from "../../firebase.js/index.js";
-import {Redirect} from "react-router-dom";
+import { signInWithGoogle } from "../../firebase.js";
 import {clickLogin} from './utils.js'
 
 const LoginComponent = (props) => {

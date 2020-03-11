@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {BrowserRouter, Route, Router} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import CreateEvent from './Components/CreateEvent';
 import LoginPage from './Components/LoginPage/LoginPage'
 
