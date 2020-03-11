@@ -5,36 +5,45 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles';
 import { styled } from '@material-ui/core/styles';
 import { Table } from '@material-ui/core';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
 // import {firestore} from './firebase'
 import {populateEvents} from './LoginPage/utils'
 
-// import '../StyleSheets/EventList.css'
+import '../StyleSheets/EventsList.css'
 
 
 function ListElements(prop) {
     return (
-        <tr>
-            <td>
-                {prop.number}       {/* link that when clicked on, prompt user to join event */}
-            </td>
-            <td>
+        <TableRow>
+            {/* <td>
+                {prop.number}       // link that when clicked on, prompt user to join event
+            </td> */}
+            <TableCell align="center">
                 {prop.name}         {/* link that when clicked on, direct to event page */}
-            </td>
-            <td>
-                {prop.host}         {/* link that when clicked on, direct to host's profile */}
+            </TableCell>
+            {/* <td>
+                {prop.host}         // link that when clicked on, direct to host's profile
             </td>
             <td>
                 {prop.numParticipants}
-            </td>
-            <td>
-                {prop.date}
-            </td>
-            <td>
+            </td> */}
+            <TableCell align="center">
+                {prop.startTime}
+            </TableCell>
+            <TableCell align="center">
+                {prop.endTime}
+            </TableCell>
+            <TableCell align="center">
                 <Button className="eventpages">View Event</Button>      {/* need to make GET request along with event # or any identifier */}
-            </td>
-        </tr>
+            </TableCell>
+        </TableRow>
     )
 }
 
@@ -44,7 +53,7 @@ const EventsList = (prop) => {
 
     useEffect( () => {
         //async function nested inside because useEffect must be a callback
-        async function blockingCall(){
+        async function blockingCall() {
             setEventsList(await populateEvents())
         }
         blockingCall()
@@ -72,35 +81,39 @@ const EventsList = (prop) => {
                 {/* <React.Fragment> */}
                     {buttons}
                 {/* </React.Fragment> */}
-                <Table border="1" id="listofevent">
-                    <thead>
-                        <tr>
-                            <th colSpan="6">Ongoing Events</th>
-                        </tr>
-                        <tr>
-                            <th width="">Event #</th>
-                            <th width="">Event Name</th>
-                            <th width="">Host</th>
-                            <th width=""># Participants</th>
-                            <th width="">Event Date</th>
-                            <th width=""></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        eventsList.map(element => (
-                            <ListElements
-                                key = {element.event_name}
-                                number = {1}
-                                name = {element.event_name}
-                                host = {1}
-                                numParticipants = {1}
-                                date = {1}
-                            />
-                        ))
-                    }
-                    </tbody>
-                </Table>
+                <TableContainer component={Paper}>
+                    <Table border="1" id="listofevent">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell colSpan="4" align="center">Ongoing Events</TableCell> {/* 7 in total */}
+                            </TableRow>
+                            <TableRow>
+                                {/* <th width="">Event #</th> */}
+                                <TableCell width="" align="center">Event Name</TableCell>
+                                {/* <th width="">Host</th>
+                                <th width=""># Participants</th> */}
+                                <TableCell width="" align="center">Event Start Time</TableCell>
+                                <TableCell width="" align="center">Event End Time</TableCell>
+                                <TableCell width=""></TableCell>    {/* for event page button */}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {
+                            eventsList.map(element => (
+                                <ListElements
+                                    key = {element.event_name}
+                                    // number = {numEvents}
+                                    name = {element.event_name}
+                                    // host = {1}
+                                    // numParticipants = {1}
+                                    startTime = {element.start_time._seconds}
+                                    endTime = {element.end_time._seconds}
+                                />
+                            ))
+                        }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
         );
     }

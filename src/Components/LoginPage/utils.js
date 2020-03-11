@@ -38,7 +38,7 @@ export const clickLogin = async idToken => {
             })
         })
 
-        return await respString.json() 
+        return await respString.json()
     }
     catch(err) {
         console.error('err: ', err)
