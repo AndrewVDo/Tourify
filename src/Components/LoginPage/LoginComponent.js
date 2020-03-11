@@ -14,7 +14,7 @@ const LoginComponent = (props) => {
                             let loginInfo = await signInWithGoogle()
                             props.setLoginInfo(loginInfo)
                             let response = await clickLogin(loginInfo.credential.idToken)
-                            if(response.error) {
+                            if(!response.success) {
                                 alert(response.msg)
                             } 
                             else if (response.success) {

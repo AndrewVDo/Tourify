@@ -158,7 +158,7 @@ const RegisterComponent = (props) => {
                                 try {
                                     event.preventDefault()
                                     let response = await clickRegister(formData, dateOfBirth)
-                                    if(response.error) {
+                                    if(!response.success) {
                                         alert(response.msg)
                                     } 
                                     else if(response.success) {
