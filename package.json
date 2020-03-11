@@ -49,5 +49,5 @@
     "pino-colada": "^1.5.1",
     "prettier": "^1.19.1"
   },
-  "proxy": "https://tourify-project.herokuapp.com:5000"
+  "proxy": "https://tourify-project.herokuapp.com"
 }
