@@ -56,40 +56,49 @@ const UpdateProfile = (props) => {
                     <hr/>
                 </div>
                 <form id="updateProfileForm">
-                    <TextField
-                        required
-                        label="Name"
-                        variant="outlined"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                    />
-                    <TextField
-                        required
-                        label="Weight(kg)"
-                        type="number"
-                        variant="outlined"
-                        value={weight}
-                        onChange={e => setWeight(e.target.value)}
-                    />
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardDatePicker
-                            autoOk
-                            variant="inline"
-                            inputVariant="outlined"
-                            label="With keyboard"
-                            format="MM/dd/yyyy"
-                            value={age}
-                            InputAdornmentProps={{position: "start"}}
-                            onChange={date => setAge(date)}/>
-                    </MuiPickersUtilsProvider>
-
-                    <Select
-                        id='nationality'
-                        defaultValue={nationalityList[0]}
-                        onChange={event => setNationality(event.target.value)}
-                    >
-                        {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
-                    </Select>
+                    <table>
+                        <tr>
+                            <TextField
+                                required
+                                label="Name"
+                                variant="outlined"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                            />
+                        </tr>
+                        <tr>
+                            <TextField
+                                required
+                                label="Weight(kg)"
+                                type="number"
+                                variant="outlined"
+                                value={weight}
+                                onChange={e => setWeight(e.target.value)}
+                            />
+                        </tr>
+                        <tr>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                <KeyboardDatePicker
+                                    autoOk
+                                    variant="inline"
+                                    inputVariant="outlined"
+                                    label="With keyboard"
+                                    format="MM/dd/yyyy"
+                                    value={age}
+                                    InputAdornmentProps={{position: "start"}}
+                                    onChange={date => setAge(date)}/>
+                            </MuiPickersUtilsProvider>
+                        </tr>
+                        <tr>
+                            <Select
+                                id='nationality'
+                                defaultValue={nationalityList[0]}
+                                onChange={event => setNationality(event.target.value)}
+                            >
+                                {nationalityList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
+                            </Select>
+                        </tr>
+                    </table>
                 </form>
                 <Button onClick={handleSubmit}>Submit</Button>
             </div>

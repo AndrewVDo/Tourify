@@ -9,13 +9,21 @@
     margin-right: 50%;
     background-image: linear-gradient(to left, rgba(200, 200, 200, 0.5), rgba(200, 200, 200, 1.0));
 }
+
 #name{
     align-content: center;
+    margin:0;
+    padding-top: 10px;
+    border: 0;
 }
-
 #avatar{
     width: 100px;
     height: 100px;
     border-radius: 100px;
-    margin: auto;
+    margin: 0;
+    align-content: center;
+}
+
+td{
+    padding: 10px;
 }

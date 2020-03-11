@@ -46,10 +46,18 @@ const Profile  = (props) => {
         else {
             return (
             <div id="profile">
-                <div className='profileHeader'>
-                    <Avatar id="avatar" src={profile.profilePicUrl}/>
-                    <h1 id="name">{profile.alias}</h1>
+                <div id='profileHeader'>
+                    <td><Avatar id="avatar" src={profile.profilePicUrl}/></td>
+                    <td>                    <ReactCountryFlag
+                        id ='countryImage'
+                        countryCode={getCode(profile.nationality)}
+                        svg
+                        style={{width:'100px', height:'100px', borderRadius:'100px', float:'right'}}
+                        cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
+                        cdnSuffix="svg"
+                    /></td>
                 </div>
+                <h1 id="name">{profile.alias}</h1>
                 <div>
                     <hr/>
                 </div>
@@ -57,7 +65,6 @@ const Profile  = (props) => {
                     <p>Age: {profile.age}</p>
                     <p>Weight: {profile.weight}</p>
                     <p id="nationality">Nationality: {profile.nationality}</p>
-                    <ReactCountryFlag id="flag" countryCode={getCode(profile.nationality)}/>
                     <p>user type: {profile.userType}</p>
                 </div>
                 <Button variant="contained" onClick={handleClick}>Edit</Button>
