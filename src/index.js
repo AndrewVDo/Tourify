@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './StyleSheets/index.css';
 import App from './App.js';
 import * as serviceWorker from './serviceWorker';
-import Profile from "./Components/profile";
+import Profile from "./Components/Profile";
 import UpdateProfile from "./Components/updateProfile";
 
 ReactDOM.render(<App/>, document.getElementById('root'));

@@ -93,7 +93,7 @@ app.post('/profileInfo', async (req, res) => {
                 weight: rawDocument.weight,
                 userType: rawDocument.userType,
                 profilePicUrl: rawDocument.profilePicUrl,
-                age: age(rawDocument.dateOfBirth),
+                age: age(rawDocument.dateOfBirth._seconds),
                 nationality: rawDocument.nationality
             }
             response.success = true
