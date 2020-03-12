@@ -1,8 +1,7 @@
 import React, {useState, useEffect, Component} from "react"
 
 import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/core/styles';
-import { styled } from '@material-ui/core/styles';
+import { Link } from '@material-ui/core';
 import { Table } from '@material-ui/core';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,8 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
-import {populateEvents} from './LoginPage/utils'
-import {getUserInfo} from './LoginPage/utils'
+import { populateEvents } from './LoginPage/utils'
+import { getUserInfo } from './LoginPage/utils'
 
 import '../StyleSheets/EventsList.css'
 
@@ -49,19 +48,19 @@ const EventsList = (prop) => {
 
     // state for redirecting to create event page
     const [shouldRedirectToCreateEvent, setRedirectToCreateEvent] = useState(false)
-    function handleCreateEvent() {
+    function handleRedirectToCreateEvent() {
         setRedirectToCreateEvent(true);
     }
 
     // state for redirecting to profile page
     const [shouldRedirectToProfile, setRedirectToProfile] = useState(false)
-    function handleProfile() {
+    function handleRedirectToProfile() {
         setRedirectToProfile(true);
     }
 
     // state for redirecting to events page
     const [shouldRedirectToEvents, setRedirectToEvents] = useState(false)
-    function handleEvents() {
+    function handleRedirectToEvents() {
         setRedirectToEvents(true);
     }
 
@@ -73,23 +72,10 @@ const EventsList = (prop) => {
         blockingCall()
     }, [])
 
-    var button_createEvent = null;
-    var isAdmin = true;
-    // if (userData.get(userType) == "Event Organizer") {
-    if (isAdmin) {
-        button_createEvent = <Button id="create-event-button" onClick={handleCreateEvent}>Create New Event</Button>
-    }
 
-    var button_viewProfile = <Button id="view-profile-button" onClick={handleProfile}>View Your Profile</Button>
-
-    const buttons = (
-        <div className="btn-group">
-            {button_viewProfile}
-            {button_createEvent}
-        </div>
-    )
-
-    if (eventsList) {
+    if (!eventsList) {
+        return <div className='list-of-events'></div>
+    } else {
         if (shouldRedirectToCreateEvent) {
             return <Redirect to="/create-event"/>
         }
@@ -105,7 +91,16 @@ const EventsList = (prop) => {
 
         return (
             <div className="list-of-events">
-                {buttons}
+
+                <div className="btn-group">
+                    <Button id="view-profile-button" onClick={handleRedirectToProfile}>
+                        View Your Profile
+                    </Button>
+                    <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>
+                        Create New Event
+                    </Button>
+                </div>
+
 
                 <TableContainer component={Paper}>
                     <Table border="1" id="list-of-event">
@@ -138,10 +133,7 @@ const EventsList = (prop) => {
                 </TableContainer>
             </div>
         );
-    } else {
-        return <div className='list-of-events'></div>
     }
-
 }
 
 export default EventsList
