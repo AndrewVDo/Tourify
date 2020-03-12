@@ -52,21 +52,21 @@ const RegisterComponent = (props) => {
     const forceRender = useForceRender()
     
     return (
-        <div className='loginApp'>
-            <h1 className='loginTitle'>Tourify</h1>
+        <div className='login-app'>
+            <h1 className='title'>Tourify</h1>
 
             <table id='registration-table'><tbody>
                 <tr>
                     <td>
                         <img 
-                            className='profileImage'
+                            className='profile-image'
                             src={props.loginInfo.additionalUserInfo.profile.picture}
                             alt='user profile'
                         ></img>
                     </td>
                     <td>
                         <ReactCountryFlag
-                            className='countryImage'
+                            className='country-image'
                             countryCode={getCode(formData.nationality)}
                             svg
                             style={{width:'100px', height:'100px', borderRadius:'100px'}}
@@ -102,7 +102,7 @@ const RegisterComponent = (props) => {
                 </tr>
                 <tr>
                     <td>
-                        <InputLabel id='dateOfBirth-label'>Date of Birth</InputLabel>
+                        <InputLabel id='date-of-birth-label'>Date of Birth</InputLabel>
                     </td>
                     <td>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -110,7 +110,7 @@ const RegisterComponent = (props) => {
                                 disableToolbar
                                 variant="inline"
                                 format="MM/dd/yyyy"
-                                id="dateOfBirth"
+                                id="date-of-birth"
                                 value={dateOfBirth}
                                 onChange={date => setdateOfBirth(date)}
                                 KeyboardButtonProps={{
@@ -139,13 +139,13 @@ const RegisterComponent = (props) => {
                 </tr>
                 <tr>
                     <td>
-                        <InputLabel id='userType-label'>User Type</InputLabel>
+                        <InputLabel id='user-type-label'>User Type</InputLabel>
                     </td>
                     <td>
                         <Select 
-                            id='userType'
+                            id='user-type'
                             defaultValue={userTypeList[0]}
-                            onChange={event => setFormDataField(event, 'userType')}
+                            onChange={event => setFormDataField(event, 'user-type')}
                         >
                             {userTypeList.map(elem => <MenuItem key={elem} value={elem}>{elem}</MenuItem>)}
                         </Select>
@@ -160,10 +160,9 @@ const RegisterComponent = (props) => {
                                     let response = await clickRegister(formData, dateOfBirth)
                                     if(!response.success) {
                                         alert(response.msg)
+                                        return
                                     } 
-                                    else if(response.success) {
-                                        props.setShouldRedirect(true)
-                                    }
+                                    props.setShouldRedirect(true)
                                 }
                                 catch(err) {
                                     console.error('err: ', err)

@@ -5,9 +5,9 @@ import {clickLogin} from './utils.js'
 
 const LoginComponent = (props) => {
     return (
-        <div className='loginApp'>
-            <h1 className='loginTitle'>Tourify</h1>
-            <form className='loginForm' id='formId'>
+        <div className='login-app'>
+            <h1 className='title'>Tourify</h1>
+            <form className='login-form' id='form-id'>
                 <GoogleButton
                     onClick={async () => {
                         try {
@@ -16,10 +16,9 @@ const LoginComponent = (props) => {
                             let response = await clickLogin(loginInfo.credential.idToken)
                             if(!response.success) {
                                 alert(response.msg)
+                                return
                             } 
-                            else if (response.success) {
-                                props.setShouldRedirect(true)
-                            }
+                            props.setShouldRedirect(true)
                         }
                         catch(err) {
                             console.error('err: ', err)

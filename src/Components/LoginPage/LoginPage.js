@@ -16,7 +16,7 @@ const LoginPage = () => {
     return (isRegisterPage) ? 
     (
         <RegisterComponent 
-            setRegisterPage = {setIsRegisterPage}
+            setIsRegisterPage = {setIsRegisterPage}
             loginInfo = {loginInfo}
             setShouldRedirect = {setShouldRedirect}
         />
