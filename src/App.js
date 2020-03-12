@@ -11,7 +11,7 @@ class App extends Component {
     return (
         <BrowserRouter>
           <Route path="/create-event" component={CreateEvent}/>
-          <Route path="/events-list" component={EventsList}/>
+          <Route path="/events" component={EventsList}/>
           {/* <Route path="/profile" component={Profile}/>
           <Route path='/update-profile' component={UpdateProfile}/> */}
           <Route path="/" exact component={LoginPage}/>

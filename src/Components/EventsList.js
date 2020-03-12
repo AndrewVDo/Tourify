@@ -13,26 +13,24 @@ import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
 import {populateEvents} from './LoginPage/utils'
-
+import {getUserInfo} from './LoginPage/utils'
 
 import '../StyleSheets/EventsList.css'
 
 
-function ListElements(prop) {
+function foo(num) {
+    console.log(num)
+}
+
+function EventInfo(prop) {
     return (
         <TableRow>
-            <TableCell align="center"e>
-                {prop.number}       {/* link that when clicked on, prompt user to join event */}
+            <TableCell align="center">
+                {prop.number}
             </TableCell>
             <TableCell align="center">
-                {prop.name}         {/* link that when clicked on, direct to event page */}
+                {prop.name}
             </TableCell>
-            {/* <td>
-                {prop.host}         // link that when clicked on, direct to host's profile
-            </td>
-            <td>
-                {prop.numParticipants}
-            </td> */}
             <TableCell align="center">
                 {prop.startTime}
             </TableCell>
@@ -40,7 +38,7 @@ function ListElements(prop) {
                 {prop.endTime}
             </TableCell>
             <TableCell align="center">
-                <Button className="eventpages">View Event</Button>      {/* need to make GET request along with event # or any identifier */}
+                <Button className="event-pages" onClick={foo(prop.number)}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
             </TableCell>
         </TableRow>
     )
@@ -50,21 +48,21 @@ const EventsList = (prop) => {
     const [eventsList, setEventsList] = useState()
 
     // state for redirecting to create event page
-    const [toCreateEvent, setToCreateEvent] = useState(false)
+    const [shouldRedirectToCreateEvent, setRedirectToCreateEvent] = useState(false)
     function handleCreateEvent() {
-        setToCreateEvent(true);
+        setRedirectToCreateEvent(true);
     }
 
     // state for redirecting to profile page
-    const [toProfile, setToProfile] = useState(false)
+    const [shouldRedirectToProfile, setRedirectToProfile] = useState(false)
     function handleProfile() {
-        setToProfile(true);
+        setRedirectToProfile(true);
     }
 
     // state for redirecting to events page
-    const [toEvents, setToEvents] = useState(false)
+    const [shouldRedirectToEvents, setRedirectToEvents] = useState(false)
     function handleEvents() {
-        setToEvents(true);
+        setRedirectToEvents(true);
     }
 
     useEffect( () => {
@@ -79,10 +77,10 @@ const EventsList = (prop) => {
     var isAdmin = true;
     // if (userData.get(userType) == "Event Organizer") {
     if (isAdmin) {
-        button_createEvent = <Button id="createeventbutton" onClick={handleCreateEvent}>Create New Event</Button>
+        button_createEvent = <Button id="create-event-button" onClick={handleCreateEvent}>Create New Event</Button>
     }
 
-    var button_viewProfile = <Button id="viewprofilebutton" onClick={handleProfile}>View Your Profile</Button>
+    var button_viewProfile = <Button id="view-profile-button" onClick={handleProfile}>View Your Profile</Button>
 
     const buttons = (
         <div className="btn-group">
@@ -92,29 +90,32 @@ const EventsList = (prop) => {
     )
 
     if (eventsList) {
-        if (toCreateEvent) {
+        if (shouldRedirectToCreateEvent) {
             return <Redirect to="/create-event"/>
         }
 
-        if (toProfile) {
+        if (shouldRedirectToProfile) {
             return <Redirect to="/profile"/>
         }
 
+        if (shouldRedirectToEvents) {
+            // var path = "/events" + 
+            return <Redirect to="/events/"/>
+        }
+
         return (
-            <div className="listofevents">
+            <div className="list-of-events">
                 {buttons}
 
                 <TableContainer component={Paper}>
-                    <Table border="1" id="listofevent">
+                    <Table border="1" id="list-of-event">
                         <TableHead>
                             <TableRow>
-                                <TableCell colSpan="5" align="center">Ongoing Events</TableCell> {/* 7 in total */}
+                                <TableCell colSpan="5" align="center">Ongoing Events</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell width="" align="center">Event #</TableCell>
                                 <TableCell width="" align="center">Event Name</TableCell>
-                                {/* <th width="">Host</th>
-                                <th width=""># Participants</th> */}
                                 <TableCell width="" align="center">Event Start Time</TableCell>
                                 <TableCell width="" align="center">Event End Time</TableCell>
                                 <TableCell width=""></TableCell>    {/* for event page button */}
@@ -123,12 +124,10 @@ const EventsList = (prop) => {
                         <TableBody>
                                 {
                                     eventsList.map(element => (
-                                        <ListElements
+                                        <EventInfo
                                             key = {element.event_name}
                                             number = {element.event_id}
                                             name = {element.event_name}
-                                            // host = {1}
-                                            // numParticipants = {1}
                                             startTime = {new Date(element.start_time._seconds).toDateString()}
                                             endTime = {new Date(element.end_time._seconds).toDateString()}
                                         />
@@ -140,7 +139,7 @@ const EventsList = (prop) => {
             </div>
         );
     } else {
-        return <div className='listofevents'></div>
+        return <div className='list-of-events'></div>
     }
 
 }

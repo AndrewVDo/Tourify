@@ -55,5 +55,5 @@
     "pino-colada": "^1.5.1",
     "prettier": "^1.19.1"
   },
-  "proxy": "http://0.0.0.0:3001"
+  "proxy": "http://localhost:3001"
 }

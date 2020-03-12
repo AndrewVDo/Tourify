@@ -106,7 +106,31 @@ app.post('/profileInfo', async (req, res) => {
     res.send(JSON.stringify(response))
 });
 
-app.get('/events-list', async (req, res) => {
+// app.get('/userInfo', async (req, res) => {
+//     let response = {
+//         success: false,
+//         error: false,
+//         msg: ''
+//     }
+
+//     try {
+//         let userRef = await firebaseClient.collection("users").get()
+//         response.user = userRef.docs.
+//         let userData = {
+//             "user_id": userRef.uid,
+//             "user_type": userRef.userType
+//         }
+//         response.success = true;
+//         return userData;
+//     }
+//     catch(err) {
+//         response.error = true
+//         response.msg = err.toString()
+//     }
+//     res.send(JSON.stringify(response))
+// });
+
+app.get('/events', async (req, res) => {
     let response = {
         success: false,
         error: false,
