@@ -76,7 +76,7 @@ app.post('/register', async (req, res) => {
     res.send(JSON.stringify(response))
 })
 
-app.post('/profileInfo', async (req, res) => {
+app.post('/profile-info', async (req, res) => {
     let response = {
         success: false,
         error: false,
@@ -103,10 +103,10 @@ app.post('/profileInfo', async (req, res) => {
             response.msg = err.toString()
         }
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 });
 
-app.post('/updateProfileInfo', async (req, res)=>{
+app.put('/update-profile-info', async (req, res)=>{
     let userRef = firebaseClient.collection("users");
     let riderInfo = userRef.doc(`user-${req.body.uid}`)
     let updateData = {
@@ -118,7 +118,7 @@ app.post('/updateProfileInfo', async (req, res)=>{
 
     await riderInfo.update(updateData);
         //.catch(err => console.log(`ERROR OCCURED ${err}`))
-        res.send("Success!");
+        res.send({success: true});
 });
 
 app.listen(3001, () =>

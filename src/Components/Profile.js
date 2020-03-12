@@ -23,45 +23,51 @@ const Profile  = (props) => {
         setToUpdate(true);
     }
    useEffect(() => {
-       fetch(`/profileInfo`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                uid: props.match.params.userId
-            })
-        })
-        .then(resp => resp.json())
-           .then(data => {
-               setProfile(data.resDocument)
-           })
-        .catch(err => console.log(err));
+       try{
+           blockFetch()
+               //.then(resp => resp.json())
+               .then(data => setProfile(data.resDocument))
+           async function blockFetch(){
+               let respString = await fetch('/profile-info',{
+                   method: 'POST',
+                   headers:{
+                       'Accept': 'application/json',
+                       'Content-type' : 'application/json'
+                   },
+                   body: JSON.stringify({
+                       uid: props.match.params.userId
+                   })
+               })
+               return await respString.json()
+           }
+       }
+       catch(err) {
+           console.error('err: ', err)
+       }
     },[]);
 
         if(toUpdate){ //intial : false
-            return <Redirect to='/UpdateProfile'/>
+            return <Redirect to='/update-profile'/>
         }
-        else {
-            return (
-            <div id="profile">
-                <div id='profileHeader'>
-                    <td><Avatar id="avatar" src={profile.profilePicUrl}/></td>
-                    <td>                    <ReactCountryFlag
-                        id ='countryImage'
+
+        return (<div id="profile">
+                <div id='profile-header'>
+                    <td className="profile-image"><Avatar id="avatar" src={profile.profilePicUrl}/></td>
+                    <td className="profile-image">
+                        <ReactCountryFlag
+                        id='country-image'
                         countryCode={getCode(profile.nationality)}
                         svg
-                        style={{width:'100px', height:'100px', borderRadius:'100px', float:'right'}}
                         cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
                         cdnSuffix="svg"
-                    /></td>
+                        />
+                    </td>
                 </div>
-                <h1 id="name">{profile.alias}</h1>
+                    <h1 id="name">{profile.alias}</h1>
                 <div>
                     <hr/>
                 </div>
-                <div className='profileBody'>
+                <div className='profile-body'>
                     <p>Age: {profile.age}</p>
                     <p>Weight: {profile.weight}</p>
                     <p id="nationality">Nationality: {profile.nationality}</p>
@@ -69,8 +75,7 @@ const Profile  = (props) => {
                 </div>
                 <Button variant="contained" onClick={handleClick}>Edit</Button>
             </div>
-            )
-        }
+        )
 };
 
 export default Profile;

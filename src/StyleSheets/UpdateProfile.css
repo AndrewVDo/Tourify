@@ -1,4 +1,4 @@
-#updateProfile {
+#update-profile {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
     background-image: linear-gradient(to left, rgba(200, 200, 200, 0.5), rgba(200, 200, 200, 1.0));
 }
 
-table {
+.update-profile-table{
     border-collapse:separate;
     border-spacing: 0 1em;
 }
