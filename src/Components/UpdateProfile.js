@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from "react";
 import {Button, TextField, Select, MenuItem} from "@material-ui/core";
 import {getNames, getCode} from 'country-list'
-import {auth} from './firebase.js'
+import {auth} from '../firebase.js'
 
 import "../StyleSheets/UpdateProfile.css"
 import DateFnsUtils from "@date-io/date-fns";
