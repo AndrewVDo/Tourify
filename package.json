@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start": "concurrently --kill-others \"node --max_old_space_size=513 server\" \"react-scripts --max_old_space_size=512 start\""
+    "start": "concurrently --kill-others \"node --max_old_space_size=512 server\" \"react-scripts --max_old_space_size=512 start\""
   },
   "eslintConfig": {
     "extends": "react-app"
