@@ -29,7 +29,7 @@
     "eject": "react-scripts eject",
     "server": "node-env-run server --exec nodemon | pino-colada",
     "dev": "HTTPS=true run-p server start",
-    "start": "concurrently --kill-others \"npm run server start\" \"HTTPS=true npm run react-scripts-start\""
+    "start": "concurrently --kill-others \"npm run server start\" \"HTTPS=true npm run react-scripts start\""
   },
   "eslintConfig": {
     "extends": "react-app"
