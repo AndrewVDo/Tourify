@@ -30,6 +30,7 @@ const verifyLogin = async (idToken, authClient) => {
     return payload.email_verified
 }
 
+<<<<<<< HEAD
 const getUserType = async (uid, firebaseClient) => {
     let userRef = firebaseClient.collection('users').doc(`user-${uid}`)
     let docSnapshot = await userRef.get()
@@ -42,3 +43,10 @@ const getUserType = async (uid, firebaseClient) => {
 }
 
 module.exports = {firebaseConnect, age, stampBirthday, verifyLogin, getUserType}
+=======
+// const getUserInfo = (uid) {
+//     return usertype
+// }
+
+module.exports = {firebaseConnect, age, stampBirthday, verifyLogin}
+>>>>>>> origin/sam/newEventList
