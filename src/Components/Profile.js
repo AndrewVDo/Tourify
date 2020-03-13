@@ -42,10 +42,9 @@ const Profile  = (props) => {
        }
     },[]);
 
-        if(toUpdate){ //intial : false
-            return <Redirect to='/update-profile'/>
+        if(toUpdate) { //intial : false
+            return <Redirect to={`/profile/${props.match.params.userId}/edit`}/>
         }
-
         return (<div id="profile">
                 <div id='profile-header'>
                     <td className="profile-image"><Avatar id="avatar" src={profile.profilePicUrl}/></td>

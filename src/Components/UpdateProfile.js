@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from "react";
-import {Container, Button, TextField, Select, MenuItem} from "@material-ui/core";
+import {Button, TextField, Select, MenuItem} from "@material-ui/core";
 import {getNames, getCode} from 'country-list'
+import {auth} from './firebase.js'
 
 import "../StyleSheets/UpdateProfile.css"
 import DateFnsUtils from "@date-io/date-fns";
@@ -18,11 +19,11 @@ const UpdateProfile = (props) => {
     const [age, setAge] = useState(0);
     const [nationality, setNationality] = useState("canadian");
     const [profileRedirect, setProfileRedirect] = useState(false)
+    const [UId, setUId] = useState();
 
     function handleOnSubmitEvent() {
         setProfileRedirect(true);
     }
-
     const handleSubmit = (event) => {
         event.preventDefault();
         fetch("/update-profile-info", {
@@ -32,20 +33,25 @@ const UpdateProfile = (props) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                //uid: props.uid,
-                uid: "WG4iABL5TFQU7XeFiL80ZjaJM1p1",
+                uid: UId,
                 name: name,
                 weight: weight,
                 age: age,
                 nationality: nationality
             })
         });
-        handleOnSubmitEvent()
+        handleOnSubmitEvent();
     }
 
-    if (profileRedirect) {
-        return <Redirect to='/update-profile'/>
+auth.onAuthStateChanged(user => {
+    if (user.uid !== props.match.params.userId) {
+        return (<Redirect to={`/profile/${user.uid}`}/>)
     }
+    setUId(user.uid);
+})
+if(profileRedirect){
+    return (<Redirect to={`/profile/${UId}`}/>)
+}
     return (
         <div id='update-profile'>
             <h1>Update Profile</h1>
