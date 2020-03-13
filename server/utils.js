@@ -1,5 +1,6 @@
 const admin = require("firebase-admin");
-const serviceAccount = require("../tourify-ddf38-firebase-adminsdk-y4uye-9666de5e0f.json")
+console.log('heh: ', process.env.firebase_admin_sdk)
+const serviceAccount = JSON.parse(process.env.firebase_admin_sdk)
 const {firestore} = require('firebase-admin')
 
 const firebaseConnect = () => {
