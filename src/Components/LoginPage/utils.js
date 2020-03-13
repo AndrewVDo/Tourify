@@ -61,6 +61,6 @@ export const populateEvents = async (uid) => {
         return (await respString.json());
     }
     catch(err) {
-        console.log(err)
+        console.error(err)
     }
 }

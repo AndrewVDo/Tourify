@@ -89,7 +89,7 @@ app.post('/profile-info', async (req, res) => {
     catch(err) {
         response.msg = err.toString()
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 });
 
 app.post('/events', async (req, res) => {

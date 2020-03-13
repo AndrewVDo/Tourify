@@ -21,26 +21,29 @@ const EventsList = (prop) => {
 
     // state for redirecting to create event page
     const [shouldRedirectToCreateEvent, setRedirectToCreateEvent] = useState(false)
-    function handleRedirectToCreateEvent() {
-        setRedirectToCreateEvent(true);
-    }
 
     // state for redirecting to profile page
     const [shouldRedirectToProfile, setRedirectToProfile] = useState(false)
-    function handleRedirectToProfile() {
-        setRedirectToProfile(true);
-    }
 
     // state for redirecting to events page
     const [shouldRedirectToEvents, setRedirectToEvents] = useState(false)
     const [eventPageLocation, setEventPageLocation] = useState()
+    
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [userID, setUserID] = useState("")
+
+    function handleRedirectToCreateEvent() {
+        setRedirectToCreateEvent(true);
+    }
+
+    function handleRedirectToProfile() {
+        setRedirectToProfile(true);
+    }
+
     function handleRedirectToEvents(eventID) {
         setRedirectToEvents(true);
         setEventPageLocation(eventID);
     }
-
-    const [isAdmin, setIsAdmin] = useState(false)
-    const [userID, setUserID] = useState("")
 
     useEffect( () => {
         //async function nested inside because useEffect must be a callback
