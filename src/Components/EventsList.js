@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
 import { populateEvents } from './LoginPage/utils'
-import { getUserInfo } from './LoginPage/utils'
+import * as firebase from 'firebase'
 
 import '../StyleSheets/EventsList.css'
 
@@ -34,8 +34,10 @@ const EventsList = (prop) => {
 
     // state for redirecting to events page
     const [shouldRedirectToEvents, setRedirectToEvents] = useState(false)
-    function handleRedirectToEvents() {
+    const [eventPageLocation, setEventPageLocation] = useState()
+    function handleRedirectToEvents(eventID) {
         setRedirectToEvents(true);
+        setEventPageLocation(eventID);
     }
 
     useEffect( () => {
@@ -64,14 +66,16 @@ const EventsList = (prop) => {
                     {prop.endTime}
                 </TableCell>
                 <TableCell align="center">
-                    <Button className="event-pages" onclick={handleRedirectToEvents}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
+                    <Button className="event-pages" onClick={() => handleRedirectToEvents(prop.number)}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
                 </TableCell>
             </TableRow>
         )
     }
 
-    var isAdmin = true;
-
+    // var user = firebase.auth().currentUser;
+    // console.log(user);
+    // var userID = user.uid;
+    var isAdmin = false;
 
     if (!eventsList) {
         return <div className='list-of-events'></div>
@@ -81,12 +85,11 @@ const EventsList = (prop) => {
         }
 
         if (shouldRedirectToProfile) {
-            return <Redirect to="/profile"/>
+            return <Redirect to={`/profile/`}/>
         }
 
         if (shouldRedirectToEvents) {
-            // var path = "/events" + 
-            return <Redirect to="/events/"/>
+            return <Redirect to={`/events/${eventPageLocation}`}/>
         }
 
         return (
@@ -99,7 +102,6 @@ const EventsList = (prop) => {
                     {isAdmin ? <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>Create New Event</Button> : null}
 
                 </div>
-
 
                 <TableContainer component={Paper}>
                     <Table border="1" id="list-of-event">
