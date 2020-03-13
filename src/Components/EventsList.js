@@ -40,15 +40,25 @@ const EventsList = (prop) => {
         setEventPageLocation(eventID);
     }
 
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [userID, setUserID] = useState("")
+
     useEffect( () => {
         //async function nested inside because useEffect must be a callback
         async function blockingCall() {
-            setEventsList(await populateEvents())
+            let response = await populateEvents()
+            console.log(response)
+            setEventsList(response.events)
+            setIsAdmin(response.userType === 'Event Organizer')
         }
         blockingCall()
+
+        auth.onAuthStateChanged(user => {
+            setUserID(user.uid);
+        })
     }, [])
 
-    
+
     // function to show events in table
     function EventInfo(prop) {
         return (
@@ -66,16 +76,12 @@ const EventsList = (prop) => {
                     {prop.endTime}
                 </TableCell>
                 <TableCell align="center">
-                    <Button className="event-pages" onClick={() => handleRedirectToEvents(prop.number)}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
+                    <Button className="event-pages" onClick={() => handleRedirectToEvents(prop.number)}>View Event</Button>
                 </TableCell>
             </TableRow>
         )
     }
 
-    auth.onAuthStateChanged(user => {
-        console.log(user.uid)
-    })
-    var isAdmin = false;
 
     if (!eventsList) {
         return <div className='list-of-events'></div>
@@ -85,7 +91,7 @@ const EventsList = (prop) => {
         }
 
         if (shouldRedirectToProfile) {
-            return <Redirect to={`/profile/`}/>
+            return <Redirect to={`/profile/${userID}`}/>
         }
 
         if (shouldRedirectToEvents) {
@@ -99,7 +105,7 @@ const EventsList = (prop) => {
                     <Button id="view-profile-button" onClick={handleRedirectToProfile}>
                         View Your Profile
                     </Button>
-                    {isAdmin ? <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>Create New Event</Button> : null}
+                    {isAdmin? <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>Create New Event</Button> : null}
 
                 </div>
 

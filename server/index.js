@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-const {firebaseConnect, age, stampBirthday, verifyLogin} = require('./utils.js')
+const {firebaseConnect, age, stampBirthday, verifyLogin, getUserType} = require('./utils.js')
 const {OAuth2Client} = require('google-auth-library');
 
 const firebaseClient = firebaseConnect()
@@ -122,6 +122,7 @@ app.get('/events', async (req, res) => {
             return data;
         });
         response.success = true;
+        response.userType = getUserType(req.body.uid, firebaseClient)
     }
     catch(err) {
         response.error = true

@@ -54,7 +54,7 @@ export const populateEvents = async () => {
                 'Content-type': 'application/json'
             }
         })
-        return (await respString.json()).events;
+        return (await respString.json()); //you were only returning events before
     }
     catch(err) {
         console.log(err)
