@@ -52,7 +52,7 @@ const RegisterComponent = (props) => {
     const forceRender = useForceRender()
     
     return (
-        <div className='login-app'>
+        <div className='register-app'>
             <h1 className='title'>Tourify</h1>
 
             <table id='registration-table'><tbody>

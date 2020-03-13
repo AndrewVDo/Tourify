@@ -6,7 +6,7 @@ body {
   background-size: cover;
 }
 
-.login-app {
+.login-app, .register-app {
   text-align: center;
 }
 
@@ -17,7 +17,7 @@ body {
   font-size: 16px;
 }
 
-.login-app {
+.login-app, .register-app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
