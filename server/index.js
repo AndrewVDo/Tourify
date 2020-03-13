@@ -5,7 +5,7 @@ const {firebaseConnect, age, stampBirthday, verifyLogin} = require('./utils.js')
 const {OAuth2Client} = require('google-auth-library');
 
 const firebaseClient = firebaseConnect()
-const authClient = new OAuth2Client(process.env.CLIENT_ID)
+const authClient = new OAuth2Client(process.env.client_id)
 const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
