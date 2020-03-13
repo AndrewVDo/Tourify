@@ -12,37 +12,26 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(pino);
 
-app.get('/api/greeting', (req, res) => {
-    const name = req.query.name || 'World';
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-});
-
 app.post('/login', async (req, res) => {
     let response = {
         success: false,
-        error: false,
         msg: ''
     }
     try {
         if(!await verifyLogin(req.body.idToken, authClient)) {
             throw new Error('login not valid')
         }
-        else {
-            response.success = true
-        }
+        response.success = true
     }
     catch(err) {
-        response.error = true
         response.msg = err.toString
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 })
 
 app.post('/register', async (req, res) => {
     let response = {
         success: false,
-        error: false,
         msg: ''
     }
     let newUserRef = firebaseClient.collection('users').doc(`user-${req.body.uid}`)
@@ -54,54 +43,51 @@ app.post('/register', async (req, res) => {
         else if((await newUserRef.get()).exists) {
             throw new Error('user already exists')
         }
-        else {
-            //might not need to send this timeStamp to client
-            let timeReceipt = await newUserRef.set({
-                alias: req.body.alias,
-                dateOfBirth: stampBirthday(req.body.dateOfBirth),
-                nationality: req.body.nationality,
-                profilePicUrl: req.body.profilePicUrl,
-                uid: req.body.uid,
-                userType: req.body.userType,
-                weight: req.body.weight
-            })
-            console.log(timeReceipt)
-            response.success = true
-        }
+        //might not need to send this timeStamp to client
+        let timeReceipt = await newUserRef.set({
+            alias: req.body.alias,
+            dateOfBirth: stampBirthday(req.body.dateOfBirth),
+            nationality: req.body.nationality,
+            profilePicUrl: req.body.profilePicUrl,
+            uid: req.body.uid,
+            userType: req.body.userType,
+            weight: req.body.weight
+        })
+        response.success = true
     }
     catch(err) {
-        response.error = true
         response.msg = err.toString()
     }
-    res.send(JSON.stringify(response))
+    res.json(response)
 })
 
-app.post('/profileInfo', async (req, res) => {
+app.post('/profile-info', async (req, res) => {
     let response = {
         success: false,
-        error: false,
         msg: ''
     }
     let usersRef = firebaseClient.collection("users").doc(req.query.uid)
 
     let documentSnapShot = await usersRef.get()
-    if(documentSnapShot.exists) {
-        try {
-            let rawDocument = documentSnapShot.data()
-            response.resDocument = {
-                alias: rawDocument.alias,
-                weight: rawDocument.weight,
-                userType: rawDocument.userType,
-                profilePicUrl: rawDocument.profilePicUrl,
-                age: age(rawDocument.dateOfirebaseClientirth),
-                nationality: rawDocument.nationality
-            }
-            response.success = true
+    if(!documentSnapShot.exists) {
+        response.success = false
+        response.msg = 'failed to load'
+        return res.json(response) 
+    }
+    try {
+        let rawDocument = documentSnapShot.data()
+        response.resDocument = {
+            alias: rawDocument.alias,
+            weight: rawDocument.weight,
+            userType: rawDocument.userType,
+            profilePicUrl: rawDocument.profilePicUrl,
+            age: age(rawDocument.dateOfBirth),
+            nationality: rawDocument.nationality
         }
-        catch(err) {
-            response.error = true
-            response.msg = err.toString()
-        }
+        response.success = true
+    }
+    catch(err) {
+        response.msg = err.toString()
     }
     res.send(JSON.stringify(response))
 });
@@ -109,7 +95,6 @@ app.post('/profileInfo', async (req, res) => {
 app.post('/events', async (req, res) => {
     let response = {
         success: false,
-        error: false,
         msg: ''
     }
     try {
@@ -126,7 +111,6 @@ app.post('/events', async (req, res) => {
     }
     catch(err) {
         response.error = true
-        response.msg = err.toString()
     }
     res.json(response)
 });
