@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-console.log('sdk: ', process.env.firebase_admin_sdk)
+console.log('typeof sdk: ', typeof process.env.firebase_admin_sdk)
 const serviceAccount = (process.env.firebase_admin_sdk)
 const {firestore} = require('firebase-admin')
 
