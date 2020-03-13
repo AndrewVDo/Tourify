@@ -26,7 +26,7 @@ const UpdateProfile = (props) => {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        fetch("/update-profile-info", {
+        fetch("https://tourify-backend.herokuapp.com/update-profile-info", {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

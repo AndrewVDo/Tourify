@@ -24,7 +24,7 @@ const Profile  = (props) => {
                //.then(resp => resp.json())
                .then(data => setProfile(data.resDocument))
            async function blockFetch(){
-               let respString = await fetch('/profile-info',{
+               let respString = await fetch('https://tourify-backend.herokuapp.com/profile-info',{
                    method: 'POST',
                    headers:{
                        'Accept': 'application/json',
@@ -44,7 +44,7 @@ const Profile  = (props) => {
     },[]);
 
         if(toUpdate) { //intial : false
-            return <Redirect to={`/profile/${props.match.params.userId}/edit`}/>
+            return <Redirect to={`https://tourify-backend.herokuapp.com/profile/${props.match.params.userId}/edit`}/>
         }
         return (<div id="profile">
                 <div id='profile-header'>

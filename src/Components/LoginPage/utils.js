@@ -1,6 +1,6 @@
 export const clickRegister = async (formData, dateOfBirth) => {  
     try {
-        let respString = await fetch(`/register`, {
+        let respString = await fetch(`https://tourify-backend.herokuapp.com/register`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -27,7 +27,7 @@ export const clickRegister = async (formData, dateOfBirth) => {
 
 export const clickLogin = async idToken => {
     try {
-        let respString = await fetch('/login', {
+        let respString = await fetch('https://tourify-backend.herokuapp.com/login', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
