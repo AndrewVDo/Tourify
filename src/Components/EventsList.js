@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
 import { populateEvents } from './LoginPage/utils'
-import * as firebase from 'firebase'
+import {auth} from './firebase.js'
 
 import '../StyleSheets/EventsList.css'
 
@@ -72,9 +72,9 @@ const EventsList = (prop) => {
         )
     }
 
-    // var user = firebase.auth().currentUser;
-    // console.log(user);
-    // var userID = user.uid;
+    auth.onAuthStateChanged(user => {
+        console.log(user.uid)
+    })
     var isAdmin = false;
 
     if (!eventsList) {

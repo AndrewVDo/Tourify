@@ -30,4 +30,8 @@ const verifyLogin = async (idToken, authClient) => {
     return payload.email_verified
 }
 
+// const getUserInfo = (uid) {
+//     return usertype
+// }
+
 module.exports = {firebaseConnect, age, stampBirthday, verifyLogin}
