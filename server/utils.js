@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 console.log('typeof sdk: ', typeof process.env.firebase_admin_sdk)
-const serviceAccount = (process.env.firebase_admin_sdk)
+const serviceAccount = JSON.parse(process.env.firebase_admin_sdk)
 const {firestore} = require('firebase-admin')
 
 const firebaseConnect = () => {
