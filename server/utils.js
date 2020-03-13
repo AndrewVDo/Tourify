@@ -1,7 +1,8 @@
-const firebaseConnect = () => {
-    const admin = require("firebase-admin");
-    const serviceAccount = require("../tourify-ddf38-firebase-adminsdk-y4uye-9666de5e0f.json")
+const admin = require("firebase-admin");
+const serviceAccount = require("../tourify-ddf38-firebase-adminsdk-y4uye-9666de5e0f.json")
+const {firestore} = require('firebase-admin')
 
+const firebaseConnect = () => {
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL: "https://tourify-ddf38.firebaseio.com"
@@ -11,7 +12,6 @@ const firebaseConnect = () => {
 }
 
 const stampBirthday = birthday => {
-    const {firestore} = require('firebase-admin')
     return firestore.Timestamp.fromDate(new Date(birthday))
 }
 

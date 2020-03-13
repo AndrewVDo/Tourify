@@ -1,36 +1,32 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import '../../StyleSheets/LoginApp.css'
 import LoginComponent from './LoginComponent.js'
 import RegisterComponent from './RegisterComponent.js'
 import {Redirect} from 'react-router-dom'
 
 const LoginPage = () => {
-    const [registerPage, setRegisterPage] = useState(false)
+    const [isRegisterPage, setIsRegisterPage] = useState(false)
     const [loginInfo, setLoginInfo] = useState({})
-    const [redirect, setRedirect] = useState(false)
+    const [shouldRedirect, setShouldRedirect] = useState(false)
 
-    if(redirect){
+    if(shouldRedirect){
         return(<Redirect to='/CreateEvent'></Redirect>)
     }
 
-    if(registerPage){
-        return(
-            <RegisterComponent 
-                setRegisterPage = {setRegisterPage}
-                loginInfo = {loginInfo}
-                setRedirect = {setRedirect}
-            />
-        )
-    } else {
-        return(
-            <LoginComponent 
-                setRegisterPage = {setRegisterPage}
-                setLoginInfo = {setLoginInfo}
-                setRedirect = {setRedirect}
-            />
-        )
-    }
-
+    return (isRegisterPage) ? 
+    (
+        <RegisterComponent 
+            setIsRegisterPage = {setIsRegisterPage}
+            loginInfo = {loginInfo}
+            setShouldRedirect = {setShouldRedirect}
+        />
+    ) : (
+        <LoginComponent 
+            setIsRegisterPage = {setIsRegisterPage}
+            setLoginInfo = {setLoginInfo}
+            setShouldRedirect = {setShouldRedirect}
+        />
+    )
 }
 
 export default LoginPage
