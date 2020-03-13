@@ -30,4 +30,15 @@ const verifyLogin = async (idToken, authClient) => {
     return payload.email_verified
 }
 
-module.exports = {firebaseConnect, age, stampBirthday, verifyLogin}
+const getUserType = async (uid, firebaseClient) => {
+    let userRef = firebaseClient.collection('users').doc(`user-${uid}`)
+    let docSnapshot = await userRef.get()
+
+    if(!docSnapshot) {
+        throw new Error('')
+    }
+
+    return docSnapshot.data().userType
+}
+
+module.exports = {firebaseConnect, age, stampBirthday, verifyLogin, getUserType}
