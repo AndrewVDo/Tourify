@@ -64,11 +64,13 @@ const EventsList = (prop) => {
                     {prop.endTime}
                 </TableCell>
                 <TableCell align="center">
-                    <Button className="event-pages" onClick={handleRedirectToEvents}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
+                    <Button className="event-pages" onclick={handleRedirectToEvents}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
                 </TableCell>
             </TableRow>
         )
     }
+
+    var isAdmin = true;
 
 
     if (!eventsList) {
@@ -84,7 +86,7 @@ const EventsList = (prop) => {
 
         if (shouldRedirectToEvents) {
             // var path = "/events" + 
-            return <Redirect to="/events/:id"/>
+            return <Redirect to="/events/"/>
         }
 
         return (
@@ -94,9 +96,8 @@ const EventsList = (prop) => {
                     <Button id="view-profile-button" onClick={handleRedirectToProfile}>
                         View Your Profile
                     </Button>
-                    <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>
-                        Create New Event
-                    </Button>
+                    {isAdmin ? <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>Create New Event</Button> : null}
+
                 </div>
 
 
