@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import "../StyleSheets/Map.css";
 import ReactMapGL, {Layer, Source} from "react-map-gl";
-import {firestore} from "./firebase";
+import {firestore} from "../firebase";
 
 const MAPBOX_TOKEN =
   "pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA";

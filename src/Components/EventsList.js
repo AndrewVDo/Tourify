@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
 import { populateEvents } from './LoginPage/utils'
-import { auth } from './firebase.js'
+import { auth } from '../firebase.js'
 
 import '../StyleSheets/EventsList.css'
 
