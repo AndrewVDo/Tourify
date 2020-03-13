@@ -66,7 +66,7 @@ app.post('/profile-info', async (req, res) => {
         success: false,
         msg: ''
     }
-    let usersRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
+    let usersRef = firebaseClient.collection("users").doc(req.query.uid)
 
     let documentSnapShot = await usersRef.get()
     if(!documentSnapShot.exists) {
