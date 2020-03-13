@@ -1,7 +1,6 @@
-import React, {useState, useEffect, Component} from "react"
+import React, {useState, useEffect} from "react"
 
 import Button from '@material-ui/core/Button'
-import { Link } from '@material-ui/core';
 import { Table } from '@material-ui/core';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,7 +11,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { Redirect } from 'react-router-dom'
 import { populateEvents } from './LoginPage/utils'
-import {auth} from './firebase.js'
+import { auth } from './firebase.js'
 
 import '../StyleSheets/EventsList.css'
 
@@ -46,16 +45,15 @@ const EventsList = (prop) => {
     useEffect( () => {
         //async function nested inside because useEffect must be a callback
         async function blockingCall() {
-            let response = await populateEvents()
-            console.log(response)
-            setEventsList(response.events)
-            setIsAdmin(response.userType === 'Event Organizer')
+            let response
+            auth.onAuthStateChanged(async user => {
+                setUserID(user.uid);
+                response = await populateEvents(user.uid)
+                setEventsList(response.events)
+                setIsAdmin(response.userType === "Event Organizer")
+            })
         }
         blockingCall()
-
-        auth.onAuthStateChanged(user => {
-            setUserID(user.uid);
-        })
     }, [])
 
 
@@ -106,7 +104,6 @@ const EventsList = (prop) => {
                         View Your Profile
                     </Button>
                     {isAdmin? <Button id="create-event-button" onClick={handleRedirectToCreateEvent}>Create New Event</Button> : null}
-
                 </div>
 
                 <TableContainer component={Paper}>
@@ -120,7 +117,7 @@ const EventsList = (prop) => {
                                 <TableCell width="" align="center">Event Name</TableCell>
                                 <TableCell width="" align="center">Event Start Time</TableCell>
                                 <TableCell width="" align="center">Event End Time</TableCell>
-                                <TableCell width=""></TableCell>    {/* for event page button */}
+                                <TableCell width="">{/* for event page button */}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

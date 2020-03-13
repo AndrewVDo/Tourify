@@ -106,7 +106,7 @@ app.post('/profileInfo', async (req, res) => {
     res.send(JSON.stringify(response))
 });
 
-app.get('/events', async (req, res) => {
+app.post('/events', async (req, res) => {
     let response = {
         success: false,
         error: false,
@@ -122,7 +122,7 @@ app.get('/events', async (req, res) => {
             return data;
         });
         response.success = true;
-        response.userType = getUserType(req.body.uid, firebaseClient)
+        response.userType = await getUserType(req.body.uid, firebaseClient)
     }
     catch(err) {
         response.error = true
