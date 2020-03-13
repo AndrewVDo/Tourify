@@ -9,7 +9,6 @@ import "../StyleSheets/Profile.css"
 //TODO: PASS UID WITH PROPS TO SPECIFY WHICH TO UPDATE
 //TODO: enable/ disable edit button based on whether you are viewing your profile or another rider's profile
 const Profile  = (props) => {
-
     const [profile, setProfile] = useState({
         alias: '',
         age: '',
@@ -19,9 +18,6 @@ const Profile  = (props) => {
         weight : ''});
     const [toUpdate, setToUpdate] = useState(false)
 
-    function handleClick(){
-        setToUpdate(true);
-    }
    useEffect(() => {
        try{
            blockFetch()
@@ -73,7 +69,7 @@ const Profile  = (props) => {
                     <p id="nationality">Nationality: {profile.nationality}</p>
                     <p>user type: {profile.userType}</p>
                 </div>
-                <Button variant="contained" onClick={handleClick}>Edit</Button>
+                <Button variant="contained" onClick={() => setToUpdate(true)}>Edit</Button>
             </div>
         )
 };
