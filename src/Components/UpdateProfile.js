@@ -14,10 +14,10 @@ const nationalityList = getNames()
 //TODO RECIEVE UID IN PROPS TO UPDATE, USE UID TO SPECIFY WHICH PROFILE TO GO TO
 
 const UpdateProfile = (props) => {
-    const [name, setName] = useState("speed racer");
-    const [weight, setWeight] = useState(0);
-    const [age, setAge] = useState(0);
-    const [nationality, setNationality] = useState("canadian");
+    const [name, setName] = useState();
+    const [weight, setWeight] = useState();
+    const [age, setAge] = useState();
+    const [nationality, setNationality] = useState();
     const [profileRedirect, setProfileRedirect] = useState(false)
     const [UId, setUId] = useState();
 
