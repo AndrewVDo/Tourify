@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const pino = require('express-pino-logger')();
 const {firebaseConnect, age, stampBirthday, verifyLogin} = require('./utils.js')
 const {OAuth2Client} = require('google-auth-library');
 
@@ -10,7 +9,6 @@ const app = express()
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(pino);
 
 app.post('/login', async (req, res) => {
     let response = {
