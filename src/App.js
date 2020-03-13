@@ -13,7 +13,7 @@ class App extends Component {
             <Route path="/" exact component={LoginPage}/>
             <Route path="/profile/:userId" exact component={ProfilePage}/>
             <Route path="/profile/:userId/edit" component = {UpdateProfile}/>
-            <Route path="/events/" exact component={CreateEvent}/>
+            <Route path="/events/create" exact component={CreateEvent}/>
             <Route path="/events/:eventId" component={Map} />
         </BrowserRouter>
     )
