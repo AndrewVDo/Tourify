@@ -92,6 +92,21 @@ app.post('/profile-info', async (req, res) => {
     res.json(response)
 });
 
+app.put('/update-profile-info', async (req, res)=>{
+    let userRef = firebaseClient.collection("users");
+    let riderInfo = userRef.doc(`user-${req.body.uid}`)
+    let updateData = {
+        alias : req.body.name,
+        weight : req.body.weight,
+        age : req.body.age,
+        nationality : req.body.nationality
+    };
+
+    await riderInfo.update(updateData);
+        //.catch(err => console.log(`ERROR OCCURED ${err}`))
+        res.send({success: true});
+});
+
 app.listen(3001, () =>
     console.log('Express server is running on localhost:3001')
 )
