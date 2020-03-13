@@ -17,32 +17,6 @@ import { getUserInfo } from './LoginPage/utils'
 import '../StyleSheets/EventsList.css'
 
 
-function foo(num) {
-    console.log(num)
-}
-
-function EventInfo(prop) {
-    return (
-        <TableRow>
-            <TableCell align="center">
-                {prop.number}
-            </TableCell>
-            <TableCell align="center">
-                {prop.name}
-            </TableCell>
-            <TableCell align="center">
-                {prop.startTime}
-            </TableCell>
-            <TableCell align="center">
-                {prop.endTime}
-            </TableCell>
-            <TableCell align="center">
-                <Button className="event-pages" onClick={foo(prop.number)}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
-            </TableCell>
-        </TableRow>
-    )
-}
-
 const EventsList = (prop) => {
     const [eventsList, setEventsList] = useState()
 
@@ -72,6 +46,30 @@ const EventsList = (prop) => {
         blockingCall()
     }, [])
 
+    
+    // function to show events in table
+    function EventInfo(prop) {
+        return (
+            <TableRow>
+                <TableCell align="center">
+                    {prop.number}
+                </TableCell>
+                <TableCell align="center">
+                    {prop.name}
+                </TableCell>
+                <TableCell align="center">
+                    {prop.startTime}
+                </TableCell>
+                <TableCell align="center">
+                    {prop.endTime}
+                </TableCell>
+                <TableCell align="center">
+                    <Button className="event-pages" onClick={handleRedirectToEvents}>View Event</Button>      {/* need to make GET request along with event # or any identifier */}
+                </TableCell>
+            </TableRow>
+        )
+    }
+
 
     if (!eventsList) {
         return <div className='list-of-events'></div>
@@ -86,7 +84,7 @@ const EventsList = (prop) => {
 
         if (shouldRedirectToEvents) {
             // var path = "/events" + 
-            return <Redirect to="/events/"/>
+            return <Redirect to="/events/:id"/>
         }
 
         return (
