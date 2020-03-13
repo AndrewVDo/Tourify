@@ -1,0 +1,45 @@
+body {
+  background: url(../Images/bwCyclists.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.login-app, .register-app {
+  text-align: center;
+}
+
+.login-form > * {
+  width: 200px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.login-app, .register-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  margin-right: 50%;
+  background-image: linear-gradient(to left, rgba(200, 200, 200, 0.5), rgba(200, 200, 200, 1.0));
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+}
+
+#registration-table > tbody > tr > td {
+  width: 10em;
+  padding: 0.25em 0em;
+}
+
+#registration-table > tbody > tr > td > div {
+  width: 100%;
+}
