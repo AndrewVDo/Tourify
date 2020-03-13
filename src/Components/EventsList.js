@@ -130,8 +130,8 @@ const EventsList = (prop) => {
                                             key = {element.event_name}
                                             number = {element.event_id}
                                             name = {element.event_name}
-                                            startTime = {new Date(element.start_time._seconds).toDateString()}
-                                            endTime = {new Date(element.end_time._seconds).toDateString()}
+                                            startTime = {new Date(element.start_time._seconds * 1000).toDateString()}
+                                            endTime = {new Date(element.end_time._seconds * 1000).toDateString()}
                                         />
                                     ))
                                 }

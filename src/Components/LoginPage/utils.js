@@ -47,7 +47,6 @@ export const clickLogin = async idToken => {
 
 export const populateEvents = async (uid) => {
     try {
-        console.log("uid: ", uid)
         let respString = await fetch('/events', {
             method: "POST",
             headers: {
