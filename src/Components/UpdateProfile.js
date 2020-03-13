@@ -44,14 +44,20 @@ const UpdateProfile = (props) => {
     }
 
 auth.onAuthStateChanged(user => {
-    if (user.uid !== props.match.params.userId) {
-        return (<Redirect to={`/profile/${user.uid}`}/>)
+    if (user.uid.localeCompare(props.match.params.userId)!=0) {
+        console.log("hello")
+        setUId(props.match.params.userId)
+        //return (<Redirect to={`/profile/${props.match.params.userId}`}/>)
+        setProfileRedirect(true);
     }
-    setUId(user.uid);
+    else{
+        setUId(user.uid)
+    }
+
 })
-if(profileRedirect){
-    return (<Redirect to={`/profile/${UId}`}/>)
-}
+    if(profileRedirect){
+        return (<Redirect to={`/profile/${UId}`}/>)
+    }
     return (
         <div id='update-profile'>
             <h1>Update Profile</h1>

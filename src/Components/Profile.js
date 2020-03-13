@@ -40,6 +40,7 @@ const Profile  = (props) => {
        catch(err) {
            console.error('err: ', err)
        }
+
     },[]);
 
         if(toUpdate) { //intial : false
