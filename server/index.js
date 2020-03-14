@@ -66,7 +66,7 @@ app.post('/profile-info', async (req, res) => {
         success: false,
         msg: ''
     }
-    let usersRef = firebaseClient.collection("users").doc(req.query.uid)
+    let usersRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
 
     let documentSnapShot = await usersRef.get()
     if(!documentSnapShot.exists) {
@@ -81,7 +81,7 @@ app.post('/profile-info', async (req, res) => {
             weight: rawDocument.weight,
             userType: rawDocument.userType,
             profilePicUrl: rawDocument.profilePicUrl,
-            age: age(rawDocument.dateOfBirth),
+            age:age(rawDocument.dateOfBirth._seconds),
             nationality: rawDocument.nationality
         }
         response.success = true
@@ -89,6 +89,7 @@ app.post('/profile-info', async (req, res) => {
     catch(err) {
         response.msg = err.toString()
     }
+    console.log(response);
     res.json(response)
 });
 
@@ -98,13 +99,14 @@ app.put('/update-profile-info', async (req, res)=>{
     let updateData = {
         alias : req.body.name,
         weight : req.body.weight,
-        age : req.body.age,
+        age :req.body.age,
         nationality : req.body.nationality
     };
 
     await riderInfo.update(updateData);
         //.catch(err => console.log(`ERROR OCCURED ${err}`))
-        res.send({success: true});
+    console.log(updateData)
+    res.send({success: true});
 });
 
 app.listen(3001, () =>

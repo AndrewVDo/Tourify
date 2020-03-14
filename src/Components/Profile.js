@@ -42,7 +42,7 @@ const Profile  = (props) => {
        }
 
     },[]);
-
+    console.log(profile);
         if(toUpdate) { //intial : false
             return <Redirect to={`/profile/${props.match.params.userId}/edit`}/>
         }
