@@ -13,7 +13,7 @@ export const clickRegister = async (formData, dateOfBirth) => {
                 nationality: formData.nationality,
                 profilePicUrl: formData.profilePicUrl,
                 uid: formData.uid,
-                userType: formData.userType,
+                userType: formData['user-type'],
                 weight: formData.weight
             })
         })
