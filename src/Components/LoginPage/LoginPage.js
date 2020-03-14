@@ -10,7 +10,7 @@ const LoginPage = () => {
     const [shouldRedirect, setShouldRedirect] = useState(false)
 
     if(shouldRedirect){
-        return(<Redirect to='/events'></Redirect>)
+        return(<Redirect to='/CreateEvent'></Redirect>)
     }
 
     return (isRegisterPage) ? 
