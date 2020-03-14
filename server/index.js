@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
-const {firebaseConnect, age, stampBirthday, verifyLogin, getUserType} = require('./utils.js')
+const {firebaseConnect, age, stampBirthday, verifyLogin} = require('./utils.js')
 const {OAuth2Client} = require('google-auth-library');
 
 const firebaseClient = firebaseConnect()
@@ -88,29 +88,6 @@ app.post('/profile-info', async (req, res) => {
     }
     catch(err) {
         response.msg = err.toString()
-    }
-    res.json(response)
-});
-
-app.post('/events', async (req, res) => {
-    let response = {
-        success: false,
-        msg: ''
-    }
-    try {
-        let eventRef = await firebaseClient.collection("events").get();
-        response.events = eventRef.docs.map(doc => {
-            let data = {
-                "event_id": doc.id,
-                ...doc.data()
-            }
-            return data;
-        });
-        response.success = true;
-        response.userType = await getUserType(req.body.uid, firebaseClient)
-    }
-    catch(err) {
-        response.error = true
     }
     res.json(response)
 });
