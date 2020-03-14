@@ -64,7 +64,7 @@ const Profile  = (props) => {
                     <hr/>
                 </div>
                 <div className='profile-body'>
-                    <p>Age: {profile.age}</p>
+                    <p>Age: {(Number(profile.age)/31536000000).toFixed(0)}</p>
                     <p>Weight: {profile.weight}</p>
                     <p id="nationality">Nationality: {profile.nationality}</p>
                     <p>user type: {profile.userType}</p>

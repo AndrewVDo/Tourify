@@ -75,13 +75,14 @@ app.post('/profile-info', async (req, res) => {
         return res.json(response) 
     }
     try {
-        let rawDocument = documentSnapShot.data()
+        let rawDocument = await documentSnapShot.data()
+        console.log(rawDocument.dateOfBirth)
         response.resDocument = {
             alias: rawDocument.alias,
             weight: rawDocument.weight,
             userType: rawDocument.userType,
             profilePicUrl: rawDocument.profilePicUrl,
-            age: age(rawDocument.dateOfBirth._seconds),
+            age: age(rawDocument.dateOfBirth),
             nationality: rawDocument.nationality
         }
         response.success = true
@@ -89,24 +90,25 @@ app.post('/profile-info', async (req, res) => {
     catch(err) {
         response.msg = err.toString()
     }
-    console.log(response);
+    console.error(response);
     res.json(response)
 });
 
 app.put('/update-profile-info', async (req, res)=>{
-    let userRef = firebaseClient.collection("users");
-    let riderInfo = userRef.doc(`user-${req.body.uid}`)
-    let updateData = {
-        alias : req.body.name,
-        weight : req.body.weight,
-        age : req.body.age,
-        nationality : req.body.nationality
-    };
-
-    await riderInfo.update(updateData);
-        //.catch(err => console.log(`ERROR OCCURED ${err}`))
-    console.log(updateData)
-    res.send({success: true});
+    try {
+        let userRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
+        let updateData = {
+            alias : req.body.name,
+            weight : req.body.weight,
+            dateOfBirth : req.body.age,
+            nationality : req.body.nationality
+        };
+        console.log(updateData)
+        await userRef.update(updateData);
+        res.send({success: true});
+    } catch(err) {
+        console.error(err)
+    }
 });
 
 app.listen(3001, () =>

@@ -17,8 +17,9 @@ const stampBirthday = birthday => {
 
 const age = birthday => {
     let bd = (new Date(birthday)).getTime() //this one returns seconds
-    let td = (new Date()).getTime()/1000 //this one returning milliseconds, wtf?
-    let x = Number((td - bd) / 31536000).toFixed(0);
+    let td = (new Date()).getTime() //this one returning milliseconds, wtf?
+    let x = Number(td - bd);
+    console.log(bd, td)
     return x
 }
 
