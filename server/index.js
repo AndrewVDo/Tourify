@@ -89,7 +89,6 @@ app.post('/profile-info', async (req, res) => {
     catch(err) {
         response.msg = err.toString()
     }
-    console.error(response);
     res.json(response)
 });
 
@@ -103,7 +102,7 @@ app.put('/update-profile-info', async (req, res)=>{
             nationality : req.body.nationality
         };
         await userRef.update(updateData);
-        res.send({success: true});
+        res.json({success: true});
     } catch(err) {
         console.error(err)
     }
