@@ -81,7 +81,7 @@ app.post('/profile-info', async (req, res) => {
             weight: rawDocument.weight,
             userType: rawDocument.userType,
             profilePicUrl: rawDocument.profilePicUrl,
-            age:age(rawDocument.dateOfBirth._seconds),
+            age: age(rawDocument.dateOfBirth._seconds),
             nationality: rawDocument.nationality
         }
         response.success = true
@@ -99,7 +99,7 @@ app.put('/update-profile-info', async (req, res)=>{
     let updateData = {
         alias : req.body.name,
         weight : req.body.weight,
-        age :req.body.age,
+        age : req.body.age,
         nationality : req.body.nationality
     };
 
