@@ -13,7 +13,7 @@ export const clickRegister = async (formData, dateOfBirth) => {
                 nationality: formData.nationality,
                 profilePicUrl: formData.profilePicUrl,
                 uid: formData.uid,
-                userType: formData.userType,
+                userType: formData['user-type'],
                 weight: formData.weight
             })
         })
@@ -38,9 +38,28 @@ export const clickLogin = async idToken => {
             })
         })
 
-        return await respString.json() 
+        return await respString.json()
     }
     catch(err) {
         console.error('err: ', err)
+    }
+}
+
+export const populateEvents = async (uid) => {
+    try {
+        let respString = await fetch('/events', {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                uid: uid
+            })
+        })
+        return (await respString.json());
+    }
+    catch(err) {
+        console.error(err)
     }
 }
