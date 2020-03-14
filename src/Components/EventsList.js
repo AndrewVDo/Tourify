@@ -18,17 +18,10 @@ import '../StyleSheets/EventsList.css'
 
 const EventsList = (prop) => {
     const [eventsList, setEventsList] = useState()
-
-    // state for redirecting to create event page
     const [shouldRedirectToCreateEvent, setRedirectToCreateEvent] = useState(false)
-
-    // state for redirecting to profile page
     const [shouldRedirectToProfile, setRedirectToProfile] = useState(false)
-
-    // state for redirecting to events page
     const [shouldRedirectToEvents, setRedirectToEvents] = useState(false)
     const [eventPageLocation, setEventPageLocation] = useState()
-    
     const [isAdmin, setIsAdmin] = useState(false)
     const [userID, setUserID] = useState("")
 
