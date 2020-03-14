@@ -45,7 +45,7 @@ class CreateEvent extends Component {
 
   render() {
     if (this.state.redirect) {
-      return <Redirect to="/"/>;
+      return <Redirect to="/events"/>;
     }
 
     const spacing = {
