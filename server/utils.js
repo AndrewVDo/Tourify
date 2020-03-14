@@ -16,11 +16,9 @@ const stampBirthday = birthday => {
 }
 
 const age = birthday => {
-    let bd = (new Date(birthday)).getTime() //this one returns seconds
-    let td = (new Date()).getTime() //this one returning milliseconds, wtf?
-    let x = Number(td - bd);
-    console.log(bd, td)
-    return x
+    let bd = (new Date(birthday)).getTime()
+    let td = (new Date()).getTime()
+    return Number(td - bd);
 }
 
 const verifyLogin = async (idToken, authClient) => {

@@ -76,7 +76,6 @@ app.post('/profile-info', async (req, res) => {
     }
     try {
         let rawDocument = await documentSnapShot.data()
-        console.log(rawDocument.dateOfBirth)
         response.resDocument = {
             alias: rawDocument.alias,
             weight: rawDocument.weight,
@@ -103,7 +102,6 @@ app.put('/update-profile-info', async (req, res)=>{
             dateOfBirth : req.body.age,
             nationality : req.body.nationality
         };
-        console.log(updateData)
         await userRef.update(updateData);
         res.send({success: true});
     } catch(err) {
