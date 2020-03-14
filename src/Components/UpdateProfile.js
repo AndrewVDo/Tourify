@@ -17,7 +17,7 @@ const UpdateProfile = (props) => {
     const [name, setName] = useState();
     const [weight, setWeight] = useState();
     const [age, setAge] = useState();
-    const [nationality, setNationality] = useState();
+    const [nationality, setNationality] = useState(nationalityList[0]);
     const [profileRedirect, setProfileRedirect] = useState(false)
     const [UId, setUId] = useState();
 

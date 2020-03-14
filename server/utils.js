@@ -16,8 +16,9 @@ const stampBirthday = birthday => {
 }
 
 const age = birthday => {
-    birthday = new Date(birthday);
-    return Number((new Date().getTime() - birthday.getTime()) / 31536000000).toFixed(0);
+    let bd = (new Date(birthday)).getTime()
+    let td = (new Date()).getTime()
+    return Number(td - bd);
 }
 
 const verifyLogin = async (idToken, authClient) => {

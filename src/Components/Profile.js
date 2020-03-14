@@ -9,20 +9,18 @@ import "../StyleSheets/Profile.css"
 //TODO: PASS UID WITH PROPS TO SPECIFY WHICH TO UPDATE
 //TODO: enable/ disable edit button based on whether you are viewing your profile or another rider's profile
 const Profile  = (props) => {
-    const [profile, setProfile] = useState({
-        alias: '',
-        age: '',
-        nationality: '',
-        profilePicUrl: "",
-        userType: '',
-        weight : ''});
+    const [profile, setProfile] = useState({});
     const [toUpdate, setToUpdate] = useState(false)
+    const [isAfterFetch, setIsAfterFetch] = useState(false)
+    const [toEvents, setToEvents] = useState(false)
 
    useEffect(() => {
        try{
            blockFetch()
-               //.then(resp => resp.json())
-               .then(data => setProfile(data.resDocument))
+               .then(data => {
+                   setProfile(data.resDocument)
+                   setIsAfterFetch(true)
+                })
            async function blockFetch(){
                let respString = await fetch('/profile-info',{
                    method: 'POST',
@@ -42,34 +40,41 @@ const Profile  = (props) => {
        }
 
     },[]);
-
         if(toUpdate) { //intial : false
             return <Redirect to={`/profile/${props.match.params.userId}/edit`}/>
         }
+        if(toEvents) {
+            return <Redirect to={`/events`}/>
+        }
+        if(!isAfterFetch) {
+            return (<div id="profile"></div>)
+        }
         return (<div id="profile">
-                <div id='profile-header'>
-                    <td className="profile-image"><Avatar id="avatar" src={profile.profilePicUrl}/></td>
-                    <td className="profile-image">
-                        <ReactCountryFlag
-                        id='country-image'
-                        countryCode={getCode(profile.nationality)}
-                        svg
-                        cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
-                        cdnSuffix="svg"
-                        />
-                    </td>
-                </div>
+                    <div id='profile-header'>
+                        <table><tbody><tr>
+                            <td className="profile-image"><Avatar id="avatar" src={profile.profilePicUrl}/></td>
+                            <td className="profile-image">
+                                <ReactCountryFlag
+                                id='country-image'
+                                countryCode={getCode(profile.nationality)}
+                                svg
+                                cdnUrl="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.4.3/flags/1x1/"
+                                cdnSuffix="svg"
+                                />
+                            </td>
+                        </tr></tbody></table>
+                    </div>
                     <h1 id="name">{profile.alias}</h1>
                 <div>
-                    <hr/>
                 </div>
                 <div className='profile-body'>
-                    <p>Age: {profile.age}</p>
+                    <p>Age: {(Number(profile.age)/31536000000).toFixed(0)}</p>
                     <p>Weight: {profile.weight}</p>
                     <p id="nationality">Nationality: {profile.nationality}</p>
                     <p>user type: {profile.userType}</p>
                 </div>
                 <Button variant="contained" onClick={() => setToUpdate(true)}>Edit</Button>
+                <Button variant="contained" onClick={() => setToEvents(true)}>Back</Button>
             </div>
         )
 };

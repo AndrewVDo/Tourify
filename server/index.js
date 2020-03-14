@@ -66,7 +66,7 @@ app.post('/profile-info', async (req, res) => {
         success: false,
         msg: ''
     }
-    let usersRef = firebaseClient.collection("users").doc(req.query.uid)
+    let usersRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
 
     let documentSnapShot = await usersRef.get()
     if(!documentSnapShot.exists) {
@@ -75,7 +75,7 @@ app.post('/profile-info', async (req, res) => {
         return res.json(response) 
     }
     try {
-        let rawDocument = documentSnapShot.data()
+        let rawDocument = await documentSnapShot.data()
         response.resDocument = {
             alias: rawDocument.alias,
             weight: rawDocument.weight,
@@ -116,18 +116,19 @@ app.post('/events', async (req, res) => {
 });
 
 app.put('/update-profile-info', async (req, res)=>{
-    let userRef = firebaseClient.collection("users");
-    let riderInfo = userRef.doc(`user-${req.body.uid}`)
-    let updateData = {
-        alias : req.body.name,
-        weight : req.body.weight,
-        age : req.body.age,
-        nationality : req.body.nationality
-    };
-
-    await riderInfo.update(updateData);
-        //.catch(err => console.log(`ERROR OCCURED ${err}`))
-        res.send({success: true});
+    try {
+        let userRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
+        let updateData = {
+            alias : req.body.name,
+            weight : req.body.weight,
+            dateOfBirth : req.body.age,
+            nationality : req.body.nationality
+        };
+        await userRef.update(updateData);
+        res.json({success: true});
+    } catch(err) {
+        console.error(err)
+    }
 });
 
 app.listen(3001, () =>
