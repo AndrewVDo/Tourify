@@ -23,7 +23,7 @@ const Profile  = (props) => {
                    setIsAfterFetch(true)
                 })
            async function blockFetch(){
-               let profileInfo = await getProfileInfo()
+               let profileInfo = await getProfileInfo(props.match.params.userId)
                return profileInfo;
            }
        }

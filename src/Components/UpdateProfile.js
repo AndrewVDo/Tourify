@@ -1,7 +1,8 @@
-import React,{useState, useEffect} from "react";
-import {Button, TextField, Select, MenuItem} from "@material-ui/core";
-import {getNames, getCode} from 'country-list'
+import React, {useState} from "react";
+import {Button, MenuItem, Select, TextField} from "@material-ui/core";
+import {getNames} from 'country-list'
 import {auth} from '../firebase.js'
+import {updateProfile} from '../api';
 
 import "../StyleSheets/UpdateProfile.css"
 import DateFnsUtils from "@date-io/date-fns";
@@ -24,22 +25,9 @@ const UpdateProfile = (props) => {
     function handleOnSubmitEvent() {
         setProfileRedirect(true);
     }
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        fetch("/update-profile-info", {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                uid: UId,
-                name: name,
-                weight: weight,
-                age: age,
-                nationality: nationality
-            })
-        });
+        await updateProfile(UId, name, weight, age, nationality);
         handleOnSubmitEvent();
     }
 

@@ -1,6 +1,8 @@
+const BASE_URL = ``
+
 export const register = async (formData, dateOfBirth) => {
     try {
-        let respString = await fetch(`/register`, {
+        let respString = await fetch(`${BASE_URL}/register`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -27,7 +29,7 @@ export const register = async (formData, dateOfBirth) => {
 
 export const login = async idToken => {
     try {
-        let respString = await fetch('/login', {
+        let respString = await fetch(``${BASE_URL}/login``, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -47,7 +49,7 @@ export const login = async idToken => {
 
 export const getAllEvents = async (uid) => {
     try {
-        let respString = await fetch('/events', {
+        let respString = await fetch(`${BASE_URL}/events`, {
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -64,16 +66,16 @@ export const getAllEvents = async (uid) => {
     }
 }
 
-export async function getProfileInfo() {
+export async function getProfileInfo(userId) {
     try {
-        let response = await fetch('/profile-info', {
+        let response = await fetch(`${BASE_URL}/profile-info`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-type': 'application/json'
             },
             body: JSON.stringify({
-                uid: props.match.params.userId
+                uid: userId
             })
         });
 
@@ -85,5 +87,31 @@ export async function getProfileInfo() {
             error: error
         }
     }
+}
 
+export async function updateProfile(uid, name, weight, age, nationality) {
+    try {
+        let response = fetch(`${BASE_URL}/update-profile-info`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                uid: UId,
+                name: name,
+                weight: weight,
+                age: age,
+                nationality: nationality
+            })
+        });
+
+        return await response.json();
+    }catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            error: error
+        }
+    }
 }
