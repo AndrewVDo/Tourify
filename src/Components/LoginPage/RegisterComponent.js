@@ -1,20 +1,11 @@
 import React, {useState} from 'react'
 import ReactCountryFlag from 'react-country-flag'
-import {getNames, getCode} from 'country-list'
-import {
-    InputLabel, 
-    Button,
-    Select, 
-    MenuItem, 
-    TextField
-} from '@material-ui/core'
+import {getCode, getNames} from 'country-list'
+import {Button, InputLabel, MenuItem, Select, TextField} from '@material-ui/core'
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker
-} from '@material-ui/pickers'
-import {clickRegister} from './utils.js'
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers'
+import {register} from '../../api.js'
 
 const nationalityList = getNames()
 const userTypeList = ['Racer', 'Event Organizer']
@@ -157,7 +148,7 @@ const RegisterComponent = (props) => {
                             onClick={async event => {
                                 try {
                                     event.preventDefault()
-                                    let response = await clickRegister(formData, dateOfBirth)
+                                    let response = await register(formData, dateOfBirth)
                                     if(!response.success) {
                                         alert(response.msg)
                                         return

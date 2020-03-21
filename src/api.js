@@ -1,4 +1,4 @@
-export const clickRegister = async (formData, dateOfBirth) => {  
+export const register = async (formData, dateOfBirth) => {
     try {
         let respString = await fetch(`/register`, {
             method: 'POST',
@@ -25,7 +25,7 @@ export const clickRegister = async (formData, dateOfBirth) => {
     }
 }
 
-export const clickLogin = async idToken => {
+export const login = async idToken => {
     try {
         let respString = await fetch('/login', {
             method: 'POST',
@@ -45,7 +45,7 @@ export const clickLogin = async idToken => {
     }
 }
 
-export const populateEvents = async (uid) => {
+export const getAllEvents = async (uid) => {
     try {
         let respString = await fetch('/events', {
             method: "POST",
