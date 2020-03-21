@@ -1,8 +1,9 @@
-import React,{useState, useEffect} from "react";
-import {Button, Avatar, Container} from "@material-ui/core";
+import React, {useEffect, useState} from "react";
+import {Avatar, Button} from "@material-ui/core";
 import ReactCountryFlag from 'react-country-flag'
 import {getCode} from 'country-list'
 import {Redirect} from 'react-router-dom'
+import {getProfileInfo} from '../api'
 
 import "../StyleSheets/Profile.css"
 
@@ -14,7 +15,7 @@ const Profile  = (props) => {
     const [isAfterFetch, setIsAfterFetch] = useState(false)
     const [toEvents, setToEvents] = useState(false)
 
-   useEffect(() => {
+    useEffect(() => {
        try{
            blockFetch()
                .then(data => {
@@ -22,17 +23,8 @@ const Profile  = (props) => {
                    setIsAfterFetch(true)
                 })
            async function blockFetch(){
-               let respString = await fetch('/profile-info',{
-                   method: 'POST',
-                   headers:{
-                       'Accept': 'application/json',
-                       'Content-type' : 'application/json'
-                   },
-                   body: JSON.stringify({
-                       uid: props.match.params.userId
-                   })
-               })
-               return await respString.json()
+               let profileInfo = await getProfileInfo()
+               return profileInfo;
            }
        }
        catch(err) {

@@ -63,3 +63,27 @@ export const getAllEvents = async (uid) => {
         console.error(err)
     }
 }
+
+export async function getProfileInfo() {
+    try {
+        let response = await fetch('/profile-info', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                uid: props.match.params.userId
+            })
+        });
+
+        return await response.json();
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            error: error
+        }
+    }
+
+}
