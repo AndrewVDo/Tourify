@@ -1,7 +1,7 @@
 import React from 'react'
 import GoogleButton from "react-google-button";
-import { signInWithGoogle } from "../../firebase.js";
-import {clickLogin} from './utils.js'
+import {signInWithGoogle} from "../../firebase.js";
+import {login} from '../../api.js'
 
 const LoginComponent = (props) => {
     return (
@@ -13,7 +13,7 @@ const LoginComponent = (props) => {
                         try {
                             let loginInfo = await signInWithGoogle()
                             props.setLoginInfo(loginInfo)
-                            let response = await clickLogin(loginInfo.credential.idToken)
+                            let response = await login(loginInfo.credential.idToken)
                             if(!response.success) {
                                 alert(response.msg)
                                 return

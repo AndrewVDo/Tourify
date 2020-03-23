@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react"
+import React, {useEffect, useState} from "react"
 
 import Button from '@material-ui/core/Button'
-import { Table } from '@material-ui/core';
+import {Table} from '@material-ui/core';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -9,9 +9,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import { Redirect } from 'react-router-dom'
-import { populateEvents } from './LoginPage/utils'
-import { auth } from '../firebase.js'
+import {Redirect} from 'react-router-dom'
+import {getAllEvents} from '../api'
+import {auth} from '../firebase.js'
 
 import '../StyleSheets/EventsList.css'
 
@@ -44,7 +44,7 @@ const EventsList = (prop) => {
             let response
             auth.onAuthStateChanged(async user => {
                 setUserID(user.uid);
-                response = await populateEvents(user.uid)
+                response = await getAllEvents(user.uid)
                 setEventsList(response.events)
                 setIsAdmin(response.userType === "Event Organizer")
             })
