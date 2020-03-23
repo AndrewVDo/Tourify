@@ -95,7 +95,7 @@ export async function updateProfile(uid, name, weight, age, nationality) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                uid: UId,
+                uid: uid,
                 name: name,
                 weight: weight,
                 age: age,
