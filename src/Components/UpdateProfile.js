@@ -20,29 +20,29 @@ const UpdateProfile = props => {
     const [age, setAge] = useState();
     const [nationality, setNationality] = useState(nationalityList[0]);
     const [profileRedirect, setProfileRedirect] = useState(false);
-    const [UId, setUId] = useState();
+    const [uid, setUid] = useState();
 
     function handleOnSubmitEvent() {
         setProfileRedirect(true);
     }
     const handleSubmit = async event => {
         event.preventDefault();
-        await updateProfile(UId, name, weight, age, nationality);
+        await updateProfile(uid, name, weight, age, nationality);
         handleOnSubmitEvent();
     };
 
     auth.onAuthStateChanged(user => {
         if (user.uid.localeCompare(props.match.params.userId) != 0) {
             console.log('hello');
-            setUId(props.match.params.userId);
+            setUid(props.match.params.userId);
             //return (<Redirect to={`/profile/${props.match.params.userId}`}/>)
             setProfileRedirect(true);
         } else {
-            setUId(user.uid);
+            setUid(user.uid);
         }
     });
     if (profileRedirect) {
-        return <Redirect to={`/profile/${UId}`} />;
+        return <Redirect to={`/profile/${uid}`} />;
     }
     return (
         <div id="update-profile">
