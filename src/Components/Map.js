@@ -1,109 +1,122 @@
-import React, {Component} from "react";
-import "../StyleSheets/Map.css";
-import ReactMapGL, {Layer, Source} from "react-map-gl";
-import {firestore} from "../firebase";
+import React, {Component} from 'react';
+import '../StyleSheets/Map.css';
+import ReactMapGL, {Marker} from 'react-map-gl';
+import {firestore} from '../firebase';
+import {getProfileInfo} from '../api';
+import defaultProfilePicture from '../Images/cat.jpg';
 
 const MAPBOX_TOKEN =
-  "pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA";
-
-const pointLayer = {
-  type: "circle",
-  paint: {
-    "circle-radius": 5,
-    "circle-color": "#007cbf"
-  }
-};
-
-function point({ lat, long }) {
-  return {
-    type: "Point",
-    coordinates: [long, lat]
-  };
-}
+    'pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA';
 
 class Map extends Component {
-  animation = null;
+    animation = null;
 
-  state = {
-    pointsData: {},
-    viewport: {
-      latitude: 49.155502,
-      longitude: -123.000105,
-      zoom: 5
+    state = {
+        pointsData: {},
+        viewport: {
+            latitude: 47.605239,
+            longitude: -122.201317,
+            zoom: 9,
+        },
+        uids: new Set(),
+        users: {},
+    };
+
+    constructor(props) {
+        super(props);
     }
-  };
 
-  constructor(props) {
-    super(props);
-  }
+    async componentDidMount() {
+        this._animatePoint();
+        this.coordinatesRef = firestore.collection(
+            `events/${this.props.match.params.eventId}/coordinates`
+        );
 
-  componentDidMount() {
-    this._animatePoint();
-    this.coordinatesRef = firestore.collection(
-      `events/${this.props.match.params.eventId}/coordinates`
-    );
+        this.coordinatesRef
+            .orderBy('timestamp', 'desc')
+            .limit(5)
+            .onSnapshot(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    this.setState(prevState => {
+                        let { pointsData, uids } = prevState;
 
-    this.coordinatesRef
-      .orderBy("timestamp", "desc")
-      .limit(1)
-      .onSnapshot(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          this.setState(prev => {
-            let pointsData = prev.pointsData;
+                        pointsData[data.user_uuid] = {
+                            lat: data.latlng.latitude,
+                            long: data.latlng.longitude,
+                        };
 
-            pointsData[data.user_uuid] = {
-              lat: data.latlng.latitude,
-              long: data.latlng.longitude
-            };
+                        uids.add(data.user_uuid);
 
-            return { pointsData };
-          });
+                        return { pointsData, uids };
+                    });
 
-          this._animatePoint();
+                    this._animatePoint();
+                });
+            });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        prevState.uids.forEach(async uid => {
+            if (prevState.users[uid] !== undefined) {
+                return;
+            }
+
+            let profile = await getProfileInfo(uid);
+            prevState.users[uid] = profile;
+            this.setState({
+                users: prevState.users,
+            });
         });
-      });
-  }
+    }
 
-  componentWillUnmount() {
-    window.cancelAnimationFrame(this.animation);
-  }
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.animation);
+    }
 
-  _animatePoint = () => {
-    this.animation = window.requestAnimationFrame(this._animatePoint);
-  };
+    _animatePoint = () => {
+        this.animation = window.requestAnimationFrame(this._animatePoint);
+    };
 
-  _onViewportChange = viewport => this.setState({ viewport });
+    _onViewportChange = viewport => this.setState({ viewport });
 
-  render() {
-    const { viewport, pointsData } = this.state;
-    const entries = Object.entries(pointsData);
+    render() {
+        const { viewport, pointsData } = this.state;
+        const entries = Object.entries(pointsData);
 
-    return (
-      <ReactMapGL
-        {...viewport}
-        width="100vw"
-        height="100vh"
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-      >
-        {entries.map(entry => {
-          const [key, val] = entry;
-          const { lat, long } = val;
-          const pointData = point({ lat: lat, long: long });
+        return (
+            <ReactMapGL
+                {...viewport}
+                width="100vw"
+                height="100vh"
+                mapStyle="mapbox://styles/mapbox/dark-v9"
+                onViewportChange={this._onViewportChange}
+                mapboxApiAccessToken={MAPBOX_TOKEN}
+            >
+                {entries.map(entry => {
+                    const [key, val] = entry;
+                    const { lat, long } = val;
 
-          return (
-            pointData && (
-              <Source key={key} type="geojson" data={pointData}>
-                <Layer {...pointLayer} />
-              </Source>
-            )
-          );
-        })}
-      </ReactMapGL>
-    );
-  }
+                    let imgUrl =
+                        this.state.users[key] === undefined
+                            ? defaultProfilePicture
+                            : this.state.users[key].profilePicUrl;
+
+                    return (
+                        <Marker
+                            key={key}
+                            latitude={lat}
+                            longitude={long}
+                            offsetLeft={-20}
+                            offsetTop={-10}
+                        >
+                            <img src={imgUrl} className={'marker'} />
+                        </Marker>
+                    );
+                })}
+            </ReactMapGL>
+        );
+    }
 }
 
 export default Map;
