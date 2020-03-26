@@ -61,12 +61,12 @@ app.post('/register', async (req, res) => {
     res.json(response)
 })
 
-app.post('/profile-info', async (req, res) => {
+app.get('/profile-info/:uid', async (req, res) => {
     let response = {
         success: false,
         msg: ''
     }
-    let usersRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
+    let usersRef = firebaseClient.collection("users").doc(`user-${req.params.uid}`)
 
     let documentSnapShot = await usersRef.get()
     if(!documentSnapShot.exists) {
@@ -76,7 +76,7 @@ app.post('/profile-info', async (req, res) => {
     }
     try {
         let rawDocument = await documentSnapShot.data()
-        response.resDocument = {
+        response.data = {
             alias: rawDocument.alias,
             weight: rawDocument.weight,
             userType: rawDocument.userType,

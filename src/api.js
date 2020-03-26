@@ -65,18 +65,15 @@ export const getAllEvents = async uid => {
 
 export async function getProfileInfo(userId) {
     try {
-        let response = await fetch(`${BASE_URL}/profile-info`, {
-            method: 'POST',
+        let response = await fetch(`${BASE_URL}/profile-info/${userId}`, {
+            method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                uid: userId,
-            }),
+            }
         });
 
-        return await response.json();
+        return (await response.json()).data;
     } catch (error) {
         console.log(error);
         return {

@@ -18,7 +18,7 @@ const Profile = props => {
     useEffect(() => {
         try {
             blockFetch().then(data => {
-                setProfile(data.resDocument);
+                setProfile(data);
                 setIsAfterFetch(true);
             });
             async function blockFetch() {
