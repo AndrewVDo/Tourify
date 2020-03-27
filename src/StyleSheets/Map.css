@@ -1,3 +1,12 @@
 .map {
     min-height: 100vh;
 }
+
+.marker {
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #007cbf;
+}
