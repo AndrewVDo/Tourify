@@ -19,8 +19,8 @@ class Map extends Component {
             longitude: -122.201317,
             zoom: 9,
         },
-        uids: new Set(),
-        users: {},
+        uids: new Set(), //set of uuids of users
+        users: {}, //map of profiles
     };
 
     constructor(props) {
@@ -45,11 +45,13 @@ class Map extends Component {
                     this.setState(prevState => {
                         let { pointsData, uids } = prevState;
 
+                        //add or update mapping of uuid => { lat, long } to state
                         pointsData[data.user_uuid] = {
                             lat: data.latlng.latitude,
                             long: data.latlng.longitude,
                         };
 
+                        //add to the set of uuids for fetching user profile later
                         uids.add(data.user_uuid);
 
                         return { pointsData, uids };
@@ -60,12 +62,15 @@ class Map extends Component {
             });
     }
 
+    //called whenever state is updated
     componentDidUpdate(prevProps, prevState) {
         prevState.uids.forEach(async uid => {
             if (prevState.users[uid] !== undefined) {
+                //user profile already exists
                 return;
             }
 
+            //fetch user profile and add it to state
             let profile = await getProfileInfo(uid);
             prevState.users[uid] = profile;
             this.setState({
@@ -104,6 +109,7 @@ class Map extends Component {
                 onViewportChange={this._onViewportChange}
                 mapboxApiAccessToken={MAPBOX_TOKEN}
             >
+                //add markers on map with profile pictures
                 {entries.map(entry => {
                     const [key, val] = entry;
                     const { lat, long } = val;
