@@ -19,6 +19,12 @@ class Map extends Component {
             longitude: -122.201317,
             zoom: 9,
         },
+        mapSettings: {
+            width: '100vw',
+            height: '100vh',
+            mapStyle: 'mapbox://styles/mapbox/dark-v9',
+            mapboxApiAccessToken: MAPBOX_TOKEN,
+        },
         uids: new Set(), //set of uuids of users
         users: {}, //map of profiles
     };
@@ -97,15 +103,13 @@ class Map extends Component {
     _onViewportChange = viewport => this.setState({ viewport });
 
     render() {
-        const { viewport, pointsData } = this.state;
+        const { viewport, pointsData, mapSettings } = this.state;
         const entries = Object.entries(pointsData);
 
         return (
             <ReactMapGL
                 {...viewport}
-                width="100vw"
-                height="100vh"
-                mapStyle="mapbox://styles/mapbox/dark-v9"
+                {...mapSettings}
                 onViewportChange={this._onViewportChange}
                 mapboxApiAccessToken={MAPBOX_TOKEN}
             >
