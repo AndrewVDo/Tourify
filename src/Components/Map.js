@@ -29,10 +29,6 @@ class Map extends Component {
         users: {}, //map of profiles
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     async componentDidMount() {
         this._animatePoint();
         this.coordinatesRef = firestore.collection(
