@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, {Marker} from 'react-map-gl';
-import {firestore} from '../firebase';
-import {getProfileInfo} from '../api';
+import ReactMapGL, { Marker } from 'react-map-gl';
+import { firestore } from '../firebase';
+import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
 import firebase from 'firebase';
 
@@ -130,7 +130,11 @@ class Map extends Component {
                             offsetLeft={-20}
                             offsetTop={-10}
                         >
-                            <img src={imgUrl} className={'marker'} />
+                            <img
+                                src={imgUrl}
+                                alt="profile icon"
+                                className={'marker'}
+                            />
                         </Marker>
                     );
                 })}
