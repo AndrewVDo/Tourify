@@ -111,10 +111,9 @@ class Map extends Component {
                 {...viewport}
                 {...mapSettings}
                 onViewportChange={this._onViewportChange}
-                mapboxApiAccessToken={MAPBOX_TOKEN}
             >
-                //add markers on map with profile pictures
                 {entries.map(entry => {
+                    // add markers on map with profile pictures
                     const [key, val] = entry;
                     const { lat, long } = val;
 
