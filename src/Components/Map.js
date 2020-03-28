@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, {Marker} from 'react-map-gl';
+import ReactMapGL, {Marker, LinearInterpolator, FlyToInterpolator} from 'react-map-gl';
 import {firestore} from '../firebase';
 import {getProfileInfo} from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -16,7 +16,7 @@ class Map extends Component {
         viewport: {
             latitude: 47.605239,
             longitude: -122.201317,
-            zoom: 9,
+            zoom: 9
         },
         uids: new Set(),
         users: {},
@@ -80,6 +80,32 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
+    _onClick = event => {
+        // Sam pass in user id from the list of people
+        // grab points data with user id that is passed in
+        // set viewport to the lat and long of that person
+        // test uid: aQIAX70LSDaYw5Tbnd6PjDEHjNH3
+        // event: andrews event
+        const test = "aQIAX70LSDaYw5Tbnd6PjDEHjNH3";
+        const data = this.state.pointsData[test];
+        const longitude = data.long;
+        const latitude = data.lat;
+        const zoom = 15;
+
+        this.setState({
+            viewport: {
+                ...this.state.viewport,
+                longitude,
+                latitude,
+                zoom,
+                transitionDuration: 1000,
+                transitionInterpolator: new FlyToInterpolator()
+            }
+        });
+
+        console.log(data);
+    }
+
     render() {
         const { viewport, pointsData } = this.state;
         const entries = Object.entries(pointsData);
@@ -92,6 +118,7 @@ class Map extends Component {
                 mapStyle="mapbox://styles/mapbox/dark-v9"
                 onViewportChange={this._onViewportChange}
                 mapboxApiAccessToken={MAPBOX_TOKEN}
+                onClick = {this._onClick}
             >
                 {entries.map(entry => {
                     const [key, val] = entry;
