@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL, { Marker, LinearInterpolator, FlyToInterpolator } from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -27,6 +27,8 @@ class Map extends Component {
         },
         uids: new Set(), //set of uuids of users
         users: {}, //map of profiles
+        focusID: "aQIAX70LSDaYw5Tbnd6PjDEHjNH3",
+        interval: "",
     };
 
     async componentDidMount() {
@@ -98,6 +100,35 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
+    _focus = id => {
+        // Sam pass in user id from the list of people
+        // grab points data with user id that is passed in
+        // set viewport to the lat and long of that person
+        // test uid: aQIAX70LSDaYw5Tbnd6PjDEHjNH3
+        // event: andrews event
+        const data = this.state.pointsData[this.state.focusID];
+        const longitude = data.long;
+        const latitude = data.lat;
+        const zoom = 15;
+
+        this.setState({
+            viewport: {
+                ...this.state.viewport,
+                longitude,
+                latitude,
+                zoom,
+                transitionDuration: 1000,
+                transitionInterpolator: new FlyToInterpolator()
+            }
+        });
+    }
+
+    _onClick = event => {
+        // var id = setInterval(mySynFunc, 3000, 'my-url');
+        this.state.interval = setInterval(this._focus, 1000);
+        // clearInterval(this.state.interval) to stop calling in background
+    }
+
     render() {
         const { viewport, pointsData, mapSettings } = this.state;
         const entries = Object.entries(pointsData);
@@ -107,6 +138,7 @@ class Map extends Component {
                 {...viewport}
                 {...mapSettings}
                 onViewportChange={this._onViewportChange}
+                onClick = {this._onClick}
             >
                 {entries.map(entry => {
                     // add markers on map with profile pictures
