@@ -1,0 +1,16 @@
+#accoladeTable{
+    padding:10px !important;
+}
+
+.accolade-row{
+    color: red;
+}
+#spinner{
+    align-content: center;
+}
+
+#accolade{
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px
+}
