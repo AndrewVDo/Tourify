@@ -4,6 +4,7 @@ import ReactMapGL, {Marker} from 'react-map-gl';
 import {firestore} from '../firebase';
 import {getProfileInfo} from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
+import firebase from 'firebase';
 
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA';
@@ -30,6 +31,9 @@ class Map extends Component {
         this._animatePoint();
         this.coordinatesRef = firestore.collection(
             `events/${this.props.match.params.eventId}/coordinates`
+        );
+        this.eventDoc = firestore.doc(
+            `events/${this.props.match.params.eventId}`
         );
 
         this.coordinatesRef
@@ -66,6 +70,13 @@ class Map extends Component {
             prevState.users[uid] = profile;
             this.setState({
                 users: prevState.users,
+            });
+
+            //add user profile reference in on firestore
+            this.eventDoc.update({
+                participants: firebase.firestore.FieldValue.arrayUnion(
+                    firestore.doc(`/users/user-${uid}`)
+                ),
             });
         });
     }
