@@ -20,6 +20,8 @@ class Map extends Component {
         },
         uids: new Set(),
         users: {},
+        focusID: "aQIAX70LSDaYw5Tbnd6PjDEHjNH3",
+        interval: "",
     };
 
     constructor(props) {
@@ -80,14 +82,13 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
-    _onClick = event => {
+    _focus = id => {
         // Sam pass in user id from the list of people
         // grab points data with user id that is passed in
         // set viewport to the lat and long of that person
         // test uid: aQIAX70LSDaYw5Tbnd6PjDEHjNH3
         // event: andrews event
-        const test = "aQIAX70LSDaYw5Tbnd6PjDEHjNH3";
-        const data = this.state.pointsData[test];
+        const data = this.state.pointsData[this.state.focusID];
         const longitude = data.long;
         const latitude = data.lat;
         const zoom = 15;
@@ -102,8 +103,12 @@ class Map extends Component {
                 transitionInterpolator: new FlyToInterpolator()
             }
         });
+        // var id = setInterval(mySynFunc, 3000, 'my-url');
+    }
 
-        console.log(data);
+    _onClick = event => {
+        this.state.interval = setInterval(this._focus, 1000);
+        // clearInterval(this.state.interval) to stop calling in background
     }
 
     render() {
