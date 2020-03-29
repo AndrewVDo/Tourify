@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../../StyleSheets/LoginApp.css';
 import LoginComponent from './LoginComponent.js';
 import RegisterComponent from './RegisterComponent.js';
-import { Redirect } from 'react-router-dom';
 
 const LoginPage = props => {
     const [isRegisterPage, setIsRegisterPage] = useState(false);
@@ -15,7 +14,6 @@ const LoginPage = props => {
                 throw new Error('Error setting cookie');
             }
             props.setCookie('profile', loginInfo.additionalUserInfo.profile);
-            //return(<Redirect to='/events'></Redirect>)
         } catch (e) {
             console.error(e);
         }
