@@ -26,7 +26,7 @@ export const register = async (formData, dateOfBirth) => {
     }
 };
 
-export const login = async idToken => {
+export const login = async (idToken, uid) => {
     try {
         let respString = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
@@ -36,6 +36,7 @@ export const login = async idToken => {
             },
             body: JSON.stringify({
                 idToken: idToken,
+                uid: uid
             }),
         });
 
