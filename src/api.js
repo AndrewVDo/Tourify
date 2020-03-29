@@ -1,3 +1,5 @@
+import { signOut } from './firebase'
+
 const BASE_URL = ``;
 
 export const register = async (formData, dateOfBirth) => {
@@ -108,5 +110,14 @@ export async function updateProfile(uid, name, weight, age, nationality) {
             success: false,
             error: error,
         };
+    }
+}
+
+export async function handleSignOut(delCookie) {
+    try{
+        await signOut()
+        delCookie('profile')
+    } catch(e) {
+        console.error(e)
     }
 }
