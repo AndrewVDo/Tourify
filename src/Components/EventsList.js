@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import {Redirect} from 'react-router-dom'
-import {getAllEvents} from '../api'
+import {getAllEvents, handleSignOut} from '../api'
 import {auth} from '../firebase.js'
 
 import '../StyleSheets/EventsList.css'
@@ -43,6 +43,10 @@ const EventsList = (prop) => {
         async function blockingCall() {
             let response
             auth.onAuthStateChanged(async user => {
+                if(!user){
+                    prop.delCookie('profile')
+                    return <Redirect to="/"/>
+                }
                 setUserID(user.uid);
                 response = await getAllEvents(user.uid)
                 setEventsList(response.events)
@@ -96,6 +100,9 @@ const EventsList = (prop) => {
             <div className="list-of-events">
 
                 <div className="btn-group">
+                    <Button id="sign-out" onClick={() => handleSignOut(prop.delCookie)}>
+                        Sign Out
+                    </Button>
                     <Button id="view-profile-button" onClick={handleRedirectToProfile}>
                         View Your Profile
                     </Button>
