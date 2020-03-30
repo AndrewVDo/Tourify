@@ -27,7 +27,7 @@ class Map extends Component {
         },
         uids: new Set(), //set of uuids of users
         users: {}, //map of profiles
-        focusID: "aQIAX70LSDaYw5Tbnd6PjDEHjNH3",
+        focusID: "DQuDx4HCWvVTRQF6TZNMCCIT7pX2",
         interval: "",
     };
 
@@ -100,16 +100,15 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
-    _focus = id => {
-        // Sam pass in user id from the list of people
-        // grab points data with user id that is passed in
-        // set viewport to the lat and long of that person
+    _focus = () => {
+        // Sam list will change this.state.focusID 
+        // to focus on specific racer
         // test uid: aQIAX70LSDaYw5Tbnd6PjDEHjNH3
         // event: andrews event
         const data = this.state.pointsData[this.state.focusID];
         const longitude = data.long;
         const latitude = data.lat;
-        const zoom = 15;
+        const zoom = 18;
 
         this.setState({
             viewport: {
@@ -123,10 +122,16 @@ class Map extends Component {
         });
     }
 
+    // called on Click to track racer
     _onClick = event => {
         // var id = setInterval(mySynFunc, 3000, 'my-url');
         this.state.interval = setInterval(this._focus, 1000);
         // clearInterval(this.state.interval) to stop calling in background
+    }
+
+    // this can be called with a button etc to stop tracking
+    _clearInterval = event => {
+        clearInterval(this.state.interval);
     }
 
     render() {
