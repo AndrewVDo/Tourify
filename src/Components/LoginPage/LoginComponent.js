@@ -14,7 +14,8 @@ const LoginComponent = props => {
                             let loginInfo = await signInWithGoogle();
                             props.setLoginInfo(loginInfo);
                             let response = await login(
-                                loginInfo.credential.idToken
+                                loginInfo.credential.idToken,
+                                loginInfo.user.uid
                             );
                             if (!response.success) {
                                 alert(response.msg);

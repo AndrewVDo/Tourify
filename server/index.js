@@ -17,9 +17,14 @@ app.post('/login', async (req, res) => {
         success: false,
         msg: ''
     }
+    let registeredCheckRef = firebaseClient.collection('users').doc(`user-${req.body.uid}`)
+
     try {
         if(!await verifyLogin(req.body.idToken, authClient)) {
             throw new Error('login not valid')
+        }
+        else if( !(await registeredCheckRef.get()).exists) {
+            throw new Error('not registered yet')
         }
         response.success = true
     }
