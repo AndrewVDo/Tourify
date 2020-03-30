@@ -25,3 +25,5 @@ yarn-error.log*
 
 *firebase-adminsdk*
 package-lock.json
+
+.idea

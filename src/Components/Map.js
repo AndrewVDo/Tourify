@@ -1,124 +1,156 @@
-import React, {Component} from "react";
-import "../StyleSheets/Map.css";
-import ReactMapGL, {Layer, Source} from "react-map-gl";
-import {firestore} from "../firebase";
+import React, { Component } from 'react';
+import '../StyleSheets/Map.css';
+import ReactMapGL, { Marker } from 'react-map-gl';
+import { firestore } from '../firebase';
+import { getProfileInfo } from '../api';
+import defaultProfilePicture from '../Images/cat.jpg';
+import firebase from 'firebase';
 
 const MAPBOX_TOKEN =
-  "pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA";
-
-const pointLayer = {
-  type: "circle",
-  paint: {
-    "circle-radius": 5,
-    "circle-color": "#007cbf"
-  }
-};
-
-function point({ lat, long }) {
-  return {
-    type: "Point",
-    coordinates: [long, lat]
-  };
-}
+    'pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA';
 
 class Map extends Component {
-  animation = null;
+    animation = null;
 
-  state = {
-    pointsData: {},
-    viewport: {
-      latitude: 49.155502,
-      longitude: -123.000105,
-      zoom: 5
+    state = {
+        pointsData: {},
+        viewport: {
+            latitude: 47.605239,
+            longitude: -122.201317,
+            zoom: 9,
+        },
+        mapSettings: {
+            width: '100vw',
+            height: '100vh',
+            mapStyle: 'mapbox://styles/mapbox/dark-v9',
+            mapboxApiAccessToken: MAPBOX_TOKEN,
+        },
+        uids: new Set(), //set of uuids of users
+        users: {}, //map of profiles
+    };
+
+    async componentDidMount() {
+        this._animatePoint();
+        this.coordinatesRef = firestore.collection(
+            `events/${this.props.match.params.eventId}/coordinates`
+        );
+        this.eventDoc = firestore.doc(
+            `events/${this.props.match.params.eventId}`
+        );
+
+        this.coordinatesRef
+            .orderBy('timestamp', 'desc')
+            .limit(5)
+            .onSnapshot(querySnapshot => {
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    this.setState(prevState => {
+                        let { pointsData, uids } = prevState;
+
+                        //add or update mapping of uuid => { lat, long } to state
+                        pointsData[data.user_uuid] = {
+                            lat: data.latlng.latitude,
+                            long: data.latlng.longitude,
+                        };
+
+                        //add to the set of uuids for fetching user profile later
+                        uids.add(data.user_uuid);
+
+                        return { pointsData, uids };
+                    });
+
+                    this._animatePoint();
+                });
+            });
     }
-  };
 
-  constructor(props) {
-    super(props);
-  }
+    //called whenever state is updated
+    componentDidUpdate(prevProps, prevState) {
+        prevState.uids.forEach(async uid => {
+            if (prevState.users[uid] !== undefined) {
+                //user profile already exists
+                return;
+            }
 
-  componentDidMount() {
-    this._animatePoint();
-    this.coordinatesRef = firestore.collection(
-      `events/${this.props.match.params.eventId}/coordinates`
-    );
+            //fetch user profile and add it to state
+            let profile = await getProfileInfo(uid);
+            prevState.users[uid] = profile;
+            this.setState({
+                users: prevState.users,
+            });
 
-    this.coordinatesRef
-      .orderBy("timestamp", "desc")
-      .limit(1)
-      .onSnapshot(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          this.setState(prev => {
-            let pointsData = prev.pointsData;
-
-            pointsData[data.user_uuid] = {
-              lat: data.latlng.latitude,
-              long: data.latlng.longitude
-            };
-
-            return { pointsData };
-          });
-
-          this._animatePoint();
+            //add user profile reference in on firestore
+            this.eventDoc.update({
+                participants: firebase.firestore.FieldValue.arrayUnion(
+                    firestore.doc(`/users/user-${uid}`)
+                ),
+            });
         });
-      });
-  }
+    }
 
-  componentWillUnmount() {
-    window.cancelAnimationFrame(this.animation);
-  }
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.animation);
+    }
 
-  _animatePoint = () => {
-    this.animation = window.requestAnimationFrame(this._animatePoint);
-  };
+    _animatePoint = () => {
+        this.animation = window.requestAnimationFrame(this._animatePoint);
+    };
 
-  _onViewportChange = viewport => this.setState({ viewport });
+    _onViewportChange = viewport => this.setState({ viewport });
 
-  render() {
-    const { viewport, pointsData } = this.state;
-    const entries = Object.entries(pointsData);
+    render() {
+        const { viewport, pointsData, mapSettings } = this.state;
+        const entries = Object.entries(pointsData);
 
-    return (
-      <div className="map">
-        <ReactMapGL
-          {...viewport}
-          width="100vw"
-          height="100vh"
-          mapStyle="mapbox://styles/mapbox/dark-v9"
-          onViewportChange={this._onViewportChange}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-        >
-          <div className="list-of-racers">
-            <table>
-              <thead>
-                <tr>
-                  <th colSpan="2">Active Racers</th>
-                </tr>
-              </thead>
-              <tbody>
+        return (
+            <ReactMapGL
+                {...viewport}
+                {...mapSettings}
+                onViewportChange={this._onViewportChange}
+            >
 
-              </tbody>
-            </table>
-          </div>
+              <div className="list-of-racers">
+                <table>
+                  <thead>
+                    <tr>
+                      <th colSpan="2">Active Racers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-          {entries.map(entry => {
-            const [key, val] = entry;
-            const { lat, long } = val;
-            const pointData = point({ lat: lat, long: long });
+                  </tbody>
+                </table>
+              </div>
 
-            return (
-              pointData && (
-                <Source key={key} type="geojson" data={pointData}>
-                  <Layer {...pointLayer} />
-                </Source>
-              )
-            );
-          })}
-        </ReactMapGL>
-      </div>
-    );
-  }
+                {entries.map(entry => {
+                    // add markers on map with profile pictures
+                    const [key, val] = entry;
+                    const { lat, long } = val;
+
+                    let imgUrl =
+                        this.state.users[key] === undefined
+                            ? defaultProfilePicture
+                            : this.state.users[key].profilePicUrl;
+
+                    return (
+                        <Marker
+                            key={key}
+                            latitude={lat}
+                            longitude={long}
+                            offsetLeft={-20}
+                            offsetTop={-10}
+                        >
+                            <img
+                                src={imgUrl}
+                                alt="profile icon"
+                                className={'marker'}
+                            />
+                        </Marker>
+                    );
+                })}
+            </ReactMapGL>
+        );
+    }
 }
 
 export default Map;
