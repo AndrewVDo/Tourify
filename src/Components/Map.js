@@ -98,9 +98,20 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
+    listRacers(prop) {
+      return (
+          <tr>
+              <td>
+                  {prop.name}
+              </td>
+          </tr>
+      )
+  }
+
     render() {
-        const { viewport, pointsData, mapSettings } = this.state;
+        const { viewport, pointsData, mapSettings, users, uids } = this.state;
         const entries = Object.entries(pointsData);
+        const usersEntries = Object.entries(users);
 
         return (
             <ReactMapGL
@@ -110,16 +121,32 @@ class Map extends Component {
             >
 
               <div className="list-of-racers">
-                <table>
-                  <thead>
-                    <tr>
-                      <th colSpan="2">Active Racers</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                  </tbody>
-                </table>
+                  <table>
+                      <thead>
+                          <tr>
+                              <th colSpan="2">Active Racers</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {
+                              usersEntries.map(usersEntry => {
+                                  // console.log(usersEntry);
+                                  const [userRef, userDetails] = usersEntry;
+                                  
+                                  return (
+                                      <tr>
+                                          <td>
+                                              {userDetails.alias}
+                                          </td>
+                                          <td>
+                                              <button>Follow</button>
+                                          </td>
+                                      </tr>
+                                  );
+                              })
+                          }
+                      </tbody>
+                  </table>
               </div>
 
                 {entries.map(entry => {
