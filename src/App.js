@@ -9,8 +9,7 @@ import UpdateProfile from './Components/UpdateProfile';
 import { CookiesProvider, useCookies } from 'react-cookie';
 
 const App = () => {
-    const [cookie, setCookie] = useCookies(['profile']);
-    console.log(cookie);
+    const [cookie, setCookie, delCookie] = useCookies(['profile']);
 
     if (!cookie.profile || cookie.profile === 'undefined') {
         return (
@@ -31,11 +30,11 @@ const App = () => {
         <CookiesProvider>
             <BrowserRouter>
                 <Route exact path="/create-event" component={CreateEvent} />
-                <Route exact path="/events" component={EventsList} />
+                <Route exact path="/events" render={props => (<EventsList {...props} delCookie={delCookie}/>)} />
                 <Route exact path={'/events/:eventId'} component={Map} />
                 <Route path="/profile/:userId" exact component={ProfilePage} />
                 <Route path="/profile/:userId/edit" component={UpdateProfile} />
-                <Route path="/" exact component={EventsList} />
+                <Route exact path="/" render={props => (<EventsList {...props} delCookie={delCookie}/>)} />
             </BrowserRouter>
         </CookiesProvider>
     );
