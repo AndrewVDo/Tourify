@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import '../StyleSheets/Map.css';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import { firestore } from '../firebase';
@@ -27,6 +27,8 @@ class Map extends Component {
         },
         uids: new Set(), //set of uuids of users
         users: {}, //map of profiles
+        focusID: "",
+        interval: ""
     };
 
     async componentDidMount() {
@@ -98,18 +100,16 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
-    listRacers(prop) {
-      return (
-          <tr>
-              <td>
-                  {prop.name}
-              </td>
-          </tr>
-      )
-  }
+    changeFocus(id) {
+        this.setState({
+            focusID: id
+        });
+
+        this._onClick
+    }
 
     render() {
-        const { viewport, pointsData, mapSettings, users, uids } = this.state;
+        const { viewport, pointsData, mapSettings, users, focusID } = this.state;
         const entries = Object.entries(pointsData);
         const usersEntries = Object.entries(users);
 
@@ -130,7 +130,6 @@ class Map extends Component {
                       <tbody>
                           {
                               usersEntries.map(usersEntry => {
-                                  // console.log(usersEntry);
                                   const [userRef, userDetails] = usersEntry;
                                   
                                   return (
@@ -139,7 +138,7 @@ class Map extends Component {
                                               {userDetails.alias}
                                           </td>
                                           <td>
-                                              <button>Follow</button>
+                                              <button className="follow-button" onClick={this.changeFocus(userRef)}>Follow</button>
                                           </td>
                                       </tr>
                                   );
