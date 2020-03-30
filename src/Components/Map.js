@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL, { Marker, LinearInterpolator, FlyToInterpolator } from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -100,12 +100,47 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
-    changeFocus(id) {
-        this.setState({
-            focusID: id
-        });
+    _focus = () => {
+        // Sam list will change this.state.focusID 
+        // to focus on specific racer
+        // test uid: aQIAX70LSDaYw5Tbnd6PjDEHjNH3
+        // event: andrews event
+        const data = this.state.pointsData[this.state.focusID];
+        const longitude = data.long;
+        const latitude = data.lat;
+        const zoom = 18;
 
-        this._onClick
+        this.setState({
+            viewport: {
+                ...this.state.viewport,
+                longitude,
+                latitude,
+                zoom,
+                transitionDuration: 1000,
+                transitionInterpolator: new FlyToInterpolator()
+            }
+        });
+    }
+
+    // called on Click to track racer
+    _onClick = () => {
+        // var id = setInterval(mySynFunc, 3000, 'my-url');
+        this.state.interval = setInterval(this._focus, 1000);
+        // clearInterval(this.state.interval) to stop calling in background
+    }
+
+    // this can be called with a button etc to stop tracking
+    _clearInterval = event => {
+        clearInterval(this.state.interval);
+    }
+
+    changeFocus(id) {
+        //this.setState({
+            //focusID: id
+        //});
+        this.state.focusID = id;
+
+        this._onClick();
     }
 
     render() {
