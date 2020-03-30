@@ -80,28 +80,43 @@ class Map extends Component {
     const entries = Object.entries(pointsData);
 
     return (
-      <ReactMapGL
-        {...viewport}
-        width="100vw"
-        height="100vh"
-        mapStyle="mapbox://styles/mapbox/dark-v9"
-        onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-      >
-        {entries.map(entry => {
-          const [key, val] = entry;
-          const { lat, long } = val;
-          const pointData = point({ lat: lat, long: long });
+      <div className="map">
+        <ReactMapGL
+          {...viewport}
+          width="100vw"
+          height="100vh"
+          mapStyle="mapbox://styles/mapbox/dark-v9"
+          onViewportChange={this._onViewportChange}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+        >
+          <div className="list-of-racers">
+            <table>
+              <thead>
+                <tr>
+                  <th colSpan="2">Active Racers</th>
+                </tr>
+              </thead>
+              <tbody>
 
-          return (
-            pointData && (
-              <Source key={key} type="geojson" data={pointData}>
-                <Layer {...pointLayer} />
-              </Source>
-            )
-          );
-        })}
-      </ReactMapGL>
+              </tbody>
+            </table>
+          </div>
+
+          {entries.map(entry => {
+            const [key, val] = entry;
+            const { lat, long } = val;
+            const pointData = point({ lat: lat, long: long });
+
+            return (
+              pointData && (
+                <Source key={key} type="geojson" data={pointData}>
+                  <Layer {...pointLayer} />
+                </Source>
+              )
+            );
+          })}
+        </ReactMapGL>
+      </div>
     );
   }
 }
