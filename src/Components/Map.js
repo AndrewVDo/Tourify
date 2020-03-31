@@ -101,14 +101,10 @@ class Map extends Component {
     _onViewportChange = viewport => this.setState({ viewport });
 
     _focus = () => {
-        // Sam list will change this.state.focusID 
-        // to focus on specific racer
-        // test uid: aQIAX70LSDaYw5Tbnd6PjDEHjNH3
-        // event: andrews event
         const data = this.state.pointsData[this.state.focusID];
         const longitude = data.long;
         const latitude = data.lat;
-        const zoom = 18;
+        const zoom = 17;
 
         this.setState({
             viewport: {
@@ -122,25 +118,10 @@ class Map extends Component {
         });
     }
 
-    // called on Click to track racer
-    _onClick = () => {
-        // var id = setInterval(mySynFunc, 3000, 'my-url');
-        this.state.interval = setInterval(this._focus, 1000);
-        // clearInterval(this.state.interval) to stop calling in background
-    }
-
-    // this can be called with a button etc to stop tracking
-    _clearInterval = event => {
-        clearInterval(this.state.interval);
-    }
-
-    changeFocus(id) {
-        //this.setState({
-            //focusID: id
-        //});
+    _onClick(id) {
         this.state.focusID = id;
 
-        this._onClick();
+        this.state.interval = setInterval(this._focus, 1000);
     }
 
     render() {
@@ -155,33 +136,33 @@ class Map extends Component {
                 onViewportChange={this._onViewportChange}
             >
 
-              <div className="list-of-racers">
-                  <table>
-                      <thead>
-                          <tr>
-                              <th colSpan="2">Active Racers</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {
-                              usersEntries.map(usersEntry => {
-                                  const [userRef, userDetails] = usersEntry;
-                                  
-                                  return (
-                                      <tr>
-                                          <td>
-                                              {userDetails.alias}
-                                          </td>
-                                          <td>
-                                              <button className="follow-button" onClick={this.changeFocus(userRef)}>Follow</button>
-                                          </td>
-                                      </tr>
-                                  );
-                              })
-                          }
-                      </tbody>
-                  </table>
-              </div>
+                <div className="list-of-racers">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colSpan="2">Active Racers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                usersEntries.map(usersEntry => {
+                                    const [userRef, userDetails] = usersEntry;
+                                    
+                                    return (
+                                        <tr>
+                                            <td>
+                                                {userDetails.alias}
+                                            </td>
+                                            <td>
+                                                <button className="follow-button" onClick={() => this._onClick(userRef)}>Follow</button>
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
                 {entries.map(entry => {
                     // add markers on map with profile pictures
