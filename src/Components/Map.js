@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, {
-    Marker,
-    LinearInterpolator,
-    FlyToInterpolator,
-} from 'react-map-gl';
+import ReactMapGL, { Marker, FlyToInterpolator } from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -129,13 +125,7 @@ class Map extends Component {
     }
 
     render() {
-        const {
-            viewport,
-            pointsData,
-            mapSettings,
-            users,
-            focusID,
-        } = this.state;
+        const { viewport, pointsData, mapSettings, users } = this.state;
         const entries = Object.entries(pointsData);
         const usersEntries = Object.entries(users);
 
