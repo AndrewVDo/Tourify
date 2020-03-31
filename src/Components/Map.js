@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL, { Marker, LinearInterpolator, FlyToInterpolator } from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -100,6 +100,30 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
+    _focus = () => {
+        const data = this.state.pointsData[this.state.focusID];
+        const longitude = data.long;
+        const latitude = data.lat;
+        const zoom = 18;
+
+        this.setState({
+            viewport: {
+                ...this.state.viewport,
+                longitude,
+                latitude,
+                zoom,
+                transitionDuration: 1000,
+                transitionInterpolator: new FlyToInterpolator()
+            }
+        });
+    }
+
+    _onClick(id) {
+        this.state.focusID = id;
+
+        this.state.interval = setInterval(this._focus, 1000);
+    }
+
     render() {
         const { viewport, pointsData, mapSettings, users, focusID } = this.state;
         const entries = Object.entries(pointsData);
@@ -130,8 +154,7 @@ class Map extends Component {
                                                 {userDetails.alias}
                                             </td>
                                             <td>
-                                                <button className="follow-button">Follow</button>
-                                                {console.log(userRef)}
+                                                <button className="follow-button" onClick={() => this._onClick(userRef)}>Follow</button>
                                             </td>
                                         </tr>
                                     );
