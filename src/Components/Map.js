@@ -1,6 +1,10 @@
 import React, { Component, useState } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, { Marker, LinearInterpolator, FlyToInterpolator } from 'react-map-gl';
+import ReactMapGL, {
+    Marker,
+    LinearInterpolator,
+    FlyToInterpolator,
+} from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -27,8 +31,8 @@ class Map extends Component {
         },
         uids: new Set(), //set of uuids of users
         users: {}, //map of profiles
-        focusID: "",
-        interval: ""
+        focusID: '',
+        interval: '',
     };
 
     async componentDidMount() {
@@ -113,10 +117,10 @@ class Map extends Component {
                 latitude,
                 zoom,
                 transitionDuration: 1000,
-                transitionInterpolator: new FlyToInterpolator()
-            }
+                transitionInterpolator: new FlyToInterpolator(),
+            },
         });
-    }
+    };
 
     _onClick(id) {
         this.state.focusID = id;
@@ -125,7 +129,13 @@ class Map extends Component {
     }
 
     render() {
-        const { viewport, pointsData, mapSettings, users, focusID } = this.state;
+        const {
+            viewport,
+            pointsData,
+            mapSettings,
+            users,
+            focusID,
+        } = this.state;
         const entries = Object.entries(pointsData);
         const usersEntries = Object.entries(users);
 
@@ -135,7 +145,6 @@ class Map extends Component {
                 {...mapSettings}
                 onViewportChange={this._onViewportChange}
             >
-
                 <div className="list-of-racers">
                     <table>
                         <thead>
@@ -144,22 +153,25 @@ class Map extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                usersEntries.map(usersEntry => {
-                                    const [userRef, userDetails] = usersEntry;
-                                    
-                                    return (
-                                        <tr>
-                                            <td>
-                                                {userDetails.alias}
-                                            </td>
-                                            <td>
-                                                <button className="follow-button" onClick={() => this._onClick(userRef)}>Follow</button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })
-                            }
+                            {usersEntries.map(usersEntry => {
+                                const [userRef, userDetails] = usersEntry;
+
+                                return (
+                                    <tr>
+                                        <td>{userDetails.alias}</td>
+                                        <td>
+                                            <button
+                                                className="follow-button"
+                                                onClick={() =>
+                                                    this._onClick(userRef)
+                                                }
+                                            >
+                                                Follow
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
