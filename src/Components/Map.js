@@ -100,14 +100,6 @@ class Map extends Component {
 
     _onViewportChange = viewport => this.setState({ viewport });
 
-    changeFocus(id) {
-        this.setState({
-            focusID: id
-        });
-
-        this._onClick
-    }
-
     render() {
         const { viewport, pointsData, mapSettings, users, focusID } = this.state;
         const entries = Object.entries(pointsData);
@@ -120,33 +112,34 @@ class Map extends Component {
                 onViewportChange={this._onViewportChange}
             >
 
-              <div className="list-of-racers">
-                  <table>
-                      <thead>
-                          <tr>
-                              <th colSpan="2">Active Racers</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {
-                              usersEntries.map(usersEntry => {
-                                  const [userRef, userDetails] = usersEntry;
-                                  
-                                  return (
-                                      <tr>
-                                          <td>
-                                              {userDetails.alias}
-                                          </td>
-                                          <td>
-                                              <button className="follow-button" onClick={this.changeFocus(userRef)}>Follow</button>
-                                          </td>
-                                      </tr>
-                                  );
-                              })
-                          }
-                      </tbody>
-                  </table>
-              </div>
+                <div className="list-of-racers">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colSpan="2">Active Racers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                usersEntries.map(usersEntry => {
+                                    const [userRef, userDetails] = usersEntry;
+                                    
+                                    return (
+                                        <tr>
+                                            <td>
+                                                {userDetails.alias}
+                                            </td>
+                                            <td>
+                                                <button className="follow-button">Follow</button>
+                                                {console.log(userRef)}
+                                            </td>
+                                        </tr>
+                                    );
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
                 {entries.map(entry => {
                     // add markers on map with profile pictures
