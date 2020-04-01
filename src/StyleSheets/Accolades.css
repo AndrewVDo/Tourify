@@ -1,16 +1,13 @@
-#accoladeTable{
-    padding:10px !important;
+#accoladeTable {
+    padding: 10px !important;
 }
 
-.accolade-row{
-    color: red;
-}
-#spinner{
+#spinner {
     align-content: center;
 }
 
-#accolade{
+#accolade {
     background-color: white;
     border-radius: 10px;
-    margin: 10px
+    margin: 10px;
 }
