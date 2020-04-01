@@ -5,9 +5,10 @@ import {getCode} from 'country-list';
 import {Redirect} from 'react-router-dom';
 import {getProfileInfo} from '../api';
 
+import Accolades from "./Accolades";
+
 import '../StyleSheets/Profile.css';
 
-//TODO: PASS UID WITH PROPS TO SPECIFY WHICH TO UPDATE
 //TODO: enable/ disable edit button based on whether you are viewing your profile or another rider's profile
 const Profile = props => {
     const [profile, setProfile] = useState({});
@@ -42,10 +43,11 @@ const Profile = props => {
         return <div id="profile"></div>;
     }
     return (
-        <div id="profile">
-            <div id="profile-header">
-                <table>
-                    <tbody>
+        <div id="profile-page">
+            <div id ="profile">
+                <div id="profile-header">
+                    <table>
+                        <tbody>
                         <tr>
                             <td className="profile-image">
                                 <Avatar
@@ -63,23 +65,26 @@ const Profile = props => {
                                 />
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
+                <h1 id="name">{profile.alias}</h1>
+                <div className="profile-body">
+                    <p>Age: {(Number(profile.age) / 31536000000).toFixed(0)}</p>
+                    <p>Weight: {profile.weight}</p>
+                    <p id="nationality">Nationality: {profile.nationality}</p>
+                    <p>user type: {profile.userType}</p>
+                </div>
+                <Button variant="contained" onClick={() => setToUpdate(true)}>
+                    Edit
+                </Button>
+                <Button variant="contained" onClick={() => setToEvents(true)}>
+                    Back
+                </Button>
             </div>
-            <h1 id="name">{profile.alias}</h1>
-            <div></div>
-            <div className="profile-body">
-                <p>Age: {(Number(profile.age) / 31536000000).toFixed(0)}</p>
-                <p>Weight: {profile.weight}</p>
-                <p id="nationality">Nationality: {profile.nationality}</p>
-                <p>user type: {profile.userType}</p>
+            <div id ="accolades">
+                <Accolades id="profile-awards"/>
             </div>
-            <Button variant="contained" onClick={() => setToUpdate(true)}>
-                Edit
-            </Button>
-            <Button variant="contained" onClick={() => setToEvents(true)}>
-                Back
-            </Button>
         </div>
     );
 };
