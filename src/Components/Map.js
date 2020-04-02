@@ -14,6 +14,77 @@ import firebase from 'firebase';
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA';
 
+function Polylines(props) {
+    let { entries } = props;
+
+    let formattedFeatures = entries.map(entry => {
+        let [uuid, coordinatePairs] = entry;
+
+        let formattedCoordinates = coordinatePairs.map(coordinatePair => {
+            return [coordinatePair.long, coordinatePair.lat];
+        });
+
+        return {
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: formattedCoordinates,
+            },
+        };
+    });
+
+    let polylineData = {
+        type: 'FeatureCollection',
+        properties: {},
+        features: formattedFeatures,
+    };
+
+    return (
+        <Source id="route" type="geojson" data={polylineData}>
+            <Layer
+                type="line"
+                layout={{
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                }}
+                paint={{
+                    'line-color': 'rgba(3, 170, 238, 0.5)',
+                    'line-width': 5,
+                }}
+            />
+        </Source>
+    );
+}
+
+function Markers(props) {
+    let { entries, users } = props;
+
+    let markers = entries.map(entry => {
+        // add markers on map with profile pictures
+        const [uuid, coordinatePairs] = entry;
+        const { lat, long } = coordinatePairs[coordinatePairs.length - 1]; //get the last (latest) entry of coordinate pairs
+
+        let imgUrl =
+            users[uuid] === undefined
+                ? defaultProfilePicture
+                : users[uuid].profilePicUrl;
+
+        return (
+            <Marker
+                key={`marker-${uuid}`}
+                latitude={lat}
+                longitude={long}
+                offsetLeft={-20}
+                offsetTop={-10}
+            >
+                <img src={imgUrl} alt="profile icon" className={'marker'} />
+            </Marker>
+        );
+    });
+
+    return markers;
+}
+
 class Map extends Component {
     animation = null;
 
@@ -203,52 +274,8 @@ class Map extends Component {
                     </table>
                 </div>
 
-                <Source
-                    id="route"
-                    type="geojson"
-                    data={this._formatGeoJson(entries)}
-                >
-                    <Layer
-                        type="line"
-                        layout={{
-                            'line-join': 'round',
-                            'line-cap': 'round',
-                        }}
-                        paint={{
-                            'line-color': 'rgba(3, 170, 238, 0.5)',
-                            'line-width': 5,
-                        }}
-                    />
-                </Source>
-
-                {entries.map(entry => {
-                    // add markers on map with profile pictures
-                    const [uuid, coordinatePairs] = entry;
-                    const { lat, long } = coordinatePairs[
-                        coordinatePairs.length - 1
-                    ]; //get the last (latest) entry of coordinate pairs
-
-                    let imgUrl =
-                        this.state.users[uuid] === undefined
-                            ? defaultProfilePicture
-                            : this.state.users[uuid].profilePicUrl;
-
-                    return (
-                        <Marker
-                            key={uuid}
-                            latitude={lat}
-                            longitude={long}
-                            offsetLeft={-20}
-                            offsetTop={-10}
-                        >
-                            <img
-                                src={imgUrl}
-                                alt="profile icon"
-                                className={'marker'}
-                            />
-                        </Marker>
-                    );
-                })}
+                <Polylines entries={entries} />
+                <Markers entries={entries} users={this.state.users} />
             </ReactMapGL>
         );
     }
