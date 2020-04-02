@@ -39,10 +39,9 @@ class Map extends Component {
         this.eventDoc = firestore.doc(
             `events/${this.props.match.params.eventId}`
         );
-
         this.coordinatesRef
+            .where('timestamp', '>', new Date(Date.now()))
             .orderBy('timestamp', 'desc')
-            .limit(5)
             .onSnapshot(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
