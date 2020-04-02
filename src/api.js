@@ -73,7 +73,7 @@ export async function getProfileInfo(userId) {
             headers: {
                 Accept: 'application/json',
                 'Content-type': 'application/json',
-            }
+            },
         });
 
         return (await response.json()).data;
@@ -113,6 +113,25 @@ export async function updateProfile(uid, name, weight, age, nationality) {
     }
 }
 
+
+export const getUserEventParticipation = async uid => {
+    let events = await getAllEvents();
+    let eventList = events.events;
+    let userParticipation = [];
+    await eventList.forEach(event => {
+        let eventName = event.event_name;
+        let eventParticipants = event.participants;
+        eventParticipants.forEach(participant => {
+            let participantID = participant._path.segments[1];
+            participantID = participantID.replace('user-', '');
+            if (participantID === uid) {
+                userParticipation.push({ event_name: eventName });
+            }
+        });
+    });
+    return userParticipation;
+};
+
 export async function handleSignOut(delCookie) {
     try{
         await signOut()
@@ -121,3 +140,4 @@ export async function handleSignOut(delCookie) {
         console.error(e)
     }
 }
+
