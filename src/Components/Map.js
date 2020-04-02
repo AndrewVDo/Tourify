@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, { Marker, FlyToInterpolator } from 'react-map-gl';
+import ReactMapGL, {
+    Marker,
+    FlyToInterpolator,
+    Source,
+    Layer,
+} from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -42,17 +47,22 @@ class Map extends Component {
         this.coordinatesRef
             .where('timestamp', '>', new Date(Date.now()))
             .orderBy('timestamp', 'desc')
+            .limit(1)
             .onSnapshot(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
                     this.setState(prevState => {
                         let { pointsData, uids } = prevState;
 
-                        //add or update mapping of uuid => { lat, long } to state
-                        pointsData[data.user_uuid] = {
+                        if (!pointsData[data.user_uuid]) {
+                            pointsData[data.user_uuid] = [];
+                        }
+
+                        //add or update mapping of uuid => [ [lat, long], [lat, long], ... ] to state
+                        pointsData[data.user_uuid].push({
                             lat: data.latlng.latitude,
                             long: data.latlng.longitude,
-                        };
+                        });
 
                         //add to the set of uuids for fetching user profile later
                         uids.add(data.user_uuid);
@@ -101,8 +111,8 @@ class Map extends Component {
 
     _focus = () => {
         const data = this.state.pointsData[this.state.focusID];
-        const longitude = data.long;
-        const latitude = data.lat;
+        const longitude = data[data.length - 1].long;
+        const latitude = data[data.length - 1].lat;
         const zoom = 17;
 
         this.setState({
@@ -123,8 +133,36 @@ class Map extends Component {
         this.state.interval = setInterval(this._focus, 1000);
     }
 
+    _formatGeoJson(entries) {
+        let formattedFeatures = entries.map(entry => {
+            let [uuid, coordinatePairs] = entry;
+
+            let formattedCoordinates = coordinatePairs.map(coordinatePair => {
+                return [coordinatePair.long, coordinatePair.lat];
+            });
+
+            return {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: formattedCoordinates,
+                },
+            };
+        });
+
+        let polylineGeoJSON = {
+            type: 'FeatureCollection',
+            properties: {},
+            features: formattedFeatures,
+        };
+
+        return polylineGeoJSON;
+    }
+
     render() {
         const { viewport, pointsData, mapSettings, users } = this.state;
+
+        //convert JS object to array
         const entries = Object.entries(pointsData);
         const usersEntries = Object.entries(users);
 
@@ -165,19 +203,39 @@ class Map extends Component {
                     </table>
                 </div>
 
+                <Source
+                    id="route"
+                    type="geojson"
+                    data={this._formatGeoJson(entries)}
+                >
+                    <Layer
+                        type="line"
+                        layout={{
+                            'line-join': 'round',
+                            'line-cap': 'round',
+                        }}
+                        paint={{
+                            'line-color': 'rgba(3, 170, 238, 0.5)',
+                            'line-width': 5,
+                        }}
+                    />
+                </Source>
+
                 {entries.map(entry => {
                     // add markers on map with profile pictures
-                    const [key, val] = entry;
-                    const { lat, long } = val;
+                    const [uuid, coordinatePairs] = entry;
+                    const { lat, long } = coordinatePairs[
+                        coordinatePairs.length - 1
+                    ]; //get the last (latest) entry of coordinate pairs
 
                     let imgUrl =
-                        this.state.users[key] === undefined
+                        this.state.users[uuid] === undefined
                             ? defaultProfilePicture
-                            : this.state.users[key].profilePicUrl;
+                            : this.state.users[uuid].profilePicUrl;
 
                     return (
                         <Marker
-                            key={key}
+                            key={uuid}
                             latitude={lat}
                             longitude={long}
                             offsetLeft={-20}
