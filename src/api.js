@@ -1,3 +1,5 @@
+import { signOut } from './firebase'
+
 const BASE_URL = ``;
 
 export const register = async (formData, dateOfBirth) => {
@@ -26,7 +28,7 @@ export const register = async (formData, dateOfBirth) => {
     }
 };
 
-export const login = async idToken => {
+export const login = async (idToken, uid) => {
     try {
         let respString = await fetch(`${BASE_URL}/login`, {
             method: 'POST',
@@ -36,6 +38,7 @@ export const login = async idToken => {
             },
             body: JSON.stringify({
                 idToken: idToken,
+                uid: uid
             }),
         });
 
@@ -110,6 +113,7 @@ export async function updateProfile(uid, name, weight, age, nationality) {
     }
 }
 
+
 export const getUserEventParticipation = async uid => {
     let events = await getAllEvents();
     let eventList = events.events;
@@ -127,3 +131,13 @@ export const getUserEventParticipation = async uid => {
     });
     return userParticipation;
 };
+
+export async function handleSignOut(delCookie) {
+    try{
+        await signOut()
+        delCookie('profile')
+    } catch(e) {
+        console.error(e)
+    }
+}
+
