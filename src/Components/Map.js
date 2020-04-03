@@ -199,9 +199,13 @@ class Map extends Component {
     };
 
     _onClick(id) {
-        this.state.focusID = id;
+        this.setState({
+            focusID: id,
+        });
 
-        this.state.interval = setInterval(this._focus, 1000);
+        this.setState({
+            interval: setInterval(this._focus, 1000),
+        });
     }
 
     render() {
