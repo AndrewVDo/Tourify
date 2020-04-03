@@ -201,9 +201,6 @@ class Map extends Component {
     _onClick(id) {
         this.setState({
             focusID: id,
-        });
-
-        this.setState({
             interval: setInterval(this._focus, 1000),
         });
     }
