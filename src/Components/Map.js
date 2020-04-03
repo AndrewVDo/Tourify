@@ -230,16 +230,16 @@ class Map extends Component {
                         </thead>
                         <tbody>
                             {usersEntries.map(usersEntry => {
-                                const [userRef, userDetails] = usersEntry;
+                                const [uuid, userDetails] = usersEntry;
 
                                 return (
-                                    <tr>
+                                    <tr key={`tr-${uuid}`}>
                                         <td>{userDetails.alias}</td>
                                         <td>
                                             <button
                                                 className="follow-button"
                                                 onClick={() =>
-                                                    this._onClick(userRef)
+                                                    this._onClick(uuid)
                                                 }
                                             >
                                                 Follow
