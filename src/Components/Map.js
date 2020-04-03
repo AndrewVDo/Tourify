@@ -204,32 +204,6 @@ class Map extends Component {
         this.state.interval = setInterval(this._focus, 1000);
     }
 
-    _formatGeoJson(entries) {
-        let formattedFeatures = entries.map(entry => {
-            let [uuid, coordinatePairs] = entry;
-
-            let formattedCoordinates = coordinatePairs.map(coordinatePair => {
-                return [coordinatePair.long, coordinatePair.lat];
-            });
-
-            return {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates: formattedCoordinates,
-                },
-            };
-        });
-
-        let polylineGeoJSON = {
-            type: 'FeatureCollection',
-            properties: {},
-            features: formattedFeatures,
-        };
-
-        return polylineGeoJSON;
-    }
-
     render() {
         const { viewport, pointsData, mapSettings, users } = this.state;
 
