@@ -18,7 +18,7 @@ function Polylines(props) {
     let { entries } = props;
 
     let formattedFeatures = entries.map(entry => {
-        let [uuid, coordinatePairs] = entry;
+        let [, coordinatePairs] = entry;
 
         let formattedCoordinates = coordinatePairs.map(coordinatePair => {
             return [coordinatePair.long, coordinatePair.lat];
@@ -199,35 +199,10 @@ class Map extends Component {
     };
 
     _onClick(id) {
-        this.state.focusID = id;
-
-        this.state.interval = setInterval(this._focus, 1000);
-    }
-
-    _formatGeoJson(entries) {
-        let formattedFeatures = entries.map(entry => {
-            let [uuid, coordinatePairs] = entry;
-
-            let formattedCoordinates = coordinatePairs.map(coordinatePair => {
-                return [coordinatePair.long, coordinatePair.lat];
-            });
-
-            return {
-                type: 'Feature',
-                geometry: {
-                    type: 'LineString',
-                    coordinates: formattedCoordinates,
-                },
-            };
+        this.setState({
+            focusID: id,
+            interval: setInterval(this._focus, 1000),
         });
-
-        let polylineGeoJSON = {
-            type: 'FeatureCollection',
-            properties: {},
-            features: formattedFeatures,
-        };
-
-        return polylineGeoJSON;
     }
 
     render() {
@@ -252,16 +227,16 @@ class Map extends Component {
                         </thead>
                         <tbody>
                             {usersEntries.map(usersEntry => {
-                                const [userRef, userDetails] = usersEntry;
+                                const [uuid, userDetails] = usersEntry;
 
                                 return (
-                                    <tr>
+                                    <tr key={`tr-${uuid}`}>
                                         <td>{userDetails.alias}</td>
                                         <td>
                                             <button
                                                 className="follow-button"
                                                 onClick={() =>
-                                                    this._onClick(userRef)
+                                                    this._onClick(uuid)
                                                 }
                                             >
                                                 Follow
