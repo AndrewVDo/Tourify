@@ -18,7 +18,7 @@ function Polylines(props) {
     let { entries } = props;
 
     let formattedFeatures = entries.map(entry => {
-        let [uuid, coordinatePairs] = entry;
+        let [, coordinatePairs] = entry;
 
         let formattedCoordinates = coordinatePairs.map(coordinatePair => {
             return [coordinatePair.long, coordinatePair.lat];
