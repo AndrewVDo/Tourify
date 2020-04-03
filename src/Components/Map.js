@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import '../StyleSheets/Map.css';
-import ReactMapGL, { Marker, FlyToInterpolator } from 'react-map-gl';
+import ReactMapGL, {
+    Marker,
+    FlyToInterpolator,
+    Source,
+    Layer,
+} from 'react-map-gl';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -8,6 +13,77 @@ import firebase from 'firebase';
 
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiamFja3lqcyIsImEiOiJjazZjcjNndDAxZXo2M25wanVqNng1MDNsIn0.W3EnhJe_JOD0Cg9OBeTghA';
+
+function Polylines(props) {
+    let { entries } = props;
+
+    let formattedFeatures = entries.map(entry => {
+        let [uuid, coordinatePairs] = entry;
+
+        let formattedCoordinates = coordinatePairs.map(coordinatePair => {
+            return [coordinatePair.long, coordinatePair.lat];
+        });
+
+        return {
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: formattedCoordinates,
+            },
+        };
+    });
+
+    let polylineData = {
+        type: 'FeatureCollection',
+        properties: {},
+        features: formattedFeatures,
+    };
+
+    return (
+        <Source id="route" type="geojson" data={polylineData}>
+            <Layer
+                type="line"
+                layout={{
+                    'line-join': 'round',
+                    'line-cap': 'round',
+                }}
+                paint={{
+                    'line-color': 'rgba(3, 170, 238, 0.5)',
+                    'line-width': 5,
+                }}
+            />
+        </Source>
+    );
+}
+
+function Markers(props) {
+    let { entries, users } = props;
+
+    let markers = entries.map(entry => {
+        // add markers on map with profile pictures
+        const [uuid, coordinatePairs] = entry;
+        const { lat, long } = coordinatePairs[coordinatePairs.length - 1]; //get the last (latest) entry of coordinate pairs
+
+        let imgUrl =
+            users[uuid] === undefined
+                ? defaultProfilePicture
+                : users[uuid].profilePicUrl;
+
+        return (
+            <Marker
+                key={`marker-${uuid}`}
+                latitude={lat}
+                longitude={long}
+                offsetLeft={-20}
+                offsetTop={-10}
+            >
+                <img src={imgUrl} alt="profile icon" className={'marker'} />
+            </Marker>
+        );
+    });
+
+    return markers;
+}
 
 class Map extends Component {
     animation = null;
@@ -39,21 +115,25 @@ class Map extends Component {
         this.eventDoc = firestore.doc(
             `events/${this.props.match.params.eventId}`
         );
-
         this.coordinatesRef
+            .where('timestamp', '>', new Date(Date.now()))
             .orderBy('timestamp', 'desc')
-            .limit(5)
+            .limit(1)
             .onSnapshot(querySnapshot => {
                 querySnapshot.forEach(doc => {
                     const data = doc.data();
                     this.setState(prevState => {
                         let { pointsData, uids } = prevState;
 
-                        //add or update mapping of uuid => { lat, long } to state
-                        pointsData[data.user_uuid] = {
+                        if (!pointsData[data.user_uuid]) {
+                            pointsData[data.user_uuid] = [];
+                        }
+
+                        //add or update mapping of uuid => [ [lat, long], [lat, long], ... ] to state
+                        pointsData[data.user_uuid].push({
                             lat: data.latlng.latitude,
                             long: data.latlng.longitude,
-                        };
+                        });
 
                         //add to the set of uuids for fetching user profile later
                         uids.add(data.user_uuid);
@@ -102,8 +182,8 @@ class Map extends Component {
 
     _focus = () => {
         const data = this.state.pointsData[this.state.focusID];
-        const longitude = data.long;
-        const latitude = data.lat;
+        const longitude = data[data.length - 1].long;
+        const latitude = data[data.length - 1].lat;
         const zoom = 17;
 
         this.setState({
@@ -124,8 +204,36 @@ class Map extends Component {
         this.state.interval = setInterval(this._focus, 1000);
     }
 
+    _formatGeoJson(entries) {
+        let formattedFeatures = entries.map(entry => {
+            let [uuid, coordinatePairs] = entry;
+
+            let formattedCoordinates = coordinatePairs.map(coordinatePair => {
+                return [coordinatePair.long, coordinatePair.lat];
+            });
+
+            return {
+                type: 'Feature',
+                geometry: {
+                    type: 'LineString',
+                    coordinates: formattedCoordinates,
+                },
+            };
+        });
+
+        let polylineGeoJSON = {
+            type: 'FeatureCollection',
+            properties: {},
+            features: formattedFeatures,
+        };
+
+        return polylineGeoJSON;
+    }
+
     render() {
         const { viewport, pointsData, mapSettings, users } = this.state;
+
+        //convert JS object to array
         const entries = Object.entries(pointsData);
         const usersEntries = Object.entries(users);
 
@@ -166,32 +274,8 @@ class Map extends Component {
                     </table>
                 </div>
 
-                {entries.map(entry => {
-                    // add markers on map with profile pictures
-                    const [key, val] = entry;
-                    const { lat, long } = val;
-
-                    let imgUrl =
-                        this.state.users[key] === undefined
-                            ? defaultProfilePicture
-                            : this.state.users[key].profilePicUrl;
-
-                    return (
-                        <Marker
-                            key={key}
-                            latitude={lat}
-                            longitude={long}
-                            offsetLeft={-20}
-                            offsetTop={-10}
-                        >
-                            <img
-                                src={imgUrl}
-                                alt="profile icon"
-                                className={'marker'}
-                            />
-                        </Marker>
-                    );
-                })}
+                <Polylines entries={entries} />
+                <Markers entries={entries} users={this.state.users} />
             </ReactMapGL>
         );
     }
