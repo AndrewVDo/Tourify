@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cors": "^2.8.5",
     "firebase": "^7.9.3",
     "firebase-admin": "^8.9.2"
   },
