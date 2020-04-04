@@ -6,6 +6,7 @@ import ReactMapGL, {
     Source,
     Layer,
 } from 'react-map-gl';
+import { Button } from '@material-ui/core';
 import { firestore } from '../firebase';
 import { getProfileInfo } from '../api';
 import defaultProfilePicture from '../Images/cat.jpg';
@@ -218,6 +219,11 @@ class Map extends Component {
                 {...mapSettings}
                 onViewportChange={this._onViewportChange}
             >
+                <div className={'event-btn-wrapper'}>
+                    <Button variant="contained" href="/events">
+                        Events
+                    </Button>
+                </div>
                 <div className="list-of-racers">
                     <table>
                         <thead>
