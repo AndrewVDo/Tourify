@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const {firebaseConnect, age, stampBirthday, verifyLogin, getUserType} = require('./utils.js')
 const {OAuth2Client} = require('google-auth-library');
+const cors = require('cors')
 
 const firebaseClient = firebaseConnect()
 const authClient = new OAuth2Client(process.env.CLIENT_ID)
@@ -11,8 +12,9 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(pino);
+app.use(cors({origin: '*'}))
 
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -34,7 +36,7 @@ app.post('/login', async (req, res) => {
     res.json(response)
 })
 
-app.post('/register', async (req, res) => {
+app.post('/register', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -66,7 +68,7 @@ app.post('/register', async (req, res) => {
     res.json(response)
 })
 
-app.get('/profile-info/:uid', async (req, res) => {
+app.get('/profile-info/:uid', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -97,7 +99,7 @@ app.get('/profile-info/:uid', async (req, res) => {
     res.json(response)
 });
 
-app.post('/events', async (req, res) => {
+app.post('/events', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -120,7 +122,7 @@ app.post('/events', async (req, res) => {
     res.json(response)
 });
 
-app.put('/update-profile-info', async (req, res)=>{
+app.put('/update-profile-info', async (req, res, next)=>{
     try {
         let userRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
         let updateData = {
@@ -136,6 +138,6 @@ app.put('/update-profile-info', async (req, res)=>{
     }
 });
 
-app.listen(3001, () =>
-    console.log('Express server is running on localhost:3001')
+app.listen(8080, () =>
+    console.log('Express server is running on localhost:8080')
 )
