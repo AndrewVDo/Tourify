@@ -12,9 +12,9 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(pino);
-app.use(cors)
+app.use(cors({origin: 'https://localhost:3000'}))
 
-app.post('/login', async (req, res) => {
+app.post('/login', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -36,7 +36,7 @@ app.post('/login', async (req, res) => {
     res.json(response)
 })
 
-app.post('/register', async (req, res) => {
+app.post('/register', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -68,7 +68,7 @@ app.post('/register', async (req, res) => {
     res.json(response)
 })
 
-app.get('/profile-info/:uid', async (req, res) => {
+app.get('/profile-info/:uid', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -99,7 +99,7 @@ app.get('/profile-info/:uid', async (req, res) => {
     res.json(response)
 });
 
-app.post('/events', async (req, res) => {
+app.post('/events', async (req, res, next) => {
     let response = {
         success: false,
         msg: ''
@@ -122,7 +122,7 @@ app.post('/events', async (req, res) => {
     res.json(response)
 });
 
-app.put('/update-profile-info', async (req, res)=>{
+app.put('/update-profile-info', async (req, res, next)=>{
     try {
         let userRef = firebaseClient.collection("users").doc(`user-${req.body.uid}`)
         let updateData = {
