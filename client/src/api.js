@@ -1,6 +1,6 @@
 import { signOut } from './firebase'
 
-const BASE_URL = ``;
+const BASE_URL = `http://localhost:8080`;
 
 export const register = async (formData, dateOfBirth) => {
     try {
